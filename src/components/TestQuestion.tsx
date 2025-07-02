@@ -4,9 +4,12 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import { Question } from '@/types';
+import { VisualQuestion } from '@/data/visualQuestions';
+import RavenMatrix from './RavenMatrix';
+import CubeQuestion from './CubeQuestion';
 
 interface TestQuestionProps {
-  question: Question;
+  question: Question | VisualQuestion;
   questionNumber: number;
   totalQuestions: number;
   selectedAnswer: number | null;
@@ -123,9 +126,108 @@ export default function TestQuestion({
           transition={{ duration: 0.3 }}
           className="mb-8"
         >
-          <h2 className="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">
-            {question.question}
-          </h2>
+          {/* 質問内容 - 視覚的問題かどうかで分岐 */}
+          {(() => {
+            const visualQuestion = question as VisualQuestion;
+            
+            // 視覚的問題の場合
+            if ('visualType' in visualQuestion && visualQuestion.visualData) {
+              switch (visualQuestion.visualType) {
+                case 'raven_matrix':
+                  return (
+                    <RavenMatrix
+                      matrix={visualQuestion.visualData.matrix || []}
+                      options={visualQuestion.options}
+                      onSelect={onAnswerSelect}
+                      selectedAnswer={selectedAnswer}
+                      title={visualQuestion.question}
+                    />
+                  );
+                
+                case 'cube_spatial':
+                  return (
+                    <CubeQuestion
+                      type={visualQuestion.visualData.cubeType || 'net_to_cube'}
+                      question={visualQuestion.question}
+                      options={visualQuestion.options}
+                      onSelect={onAnswerSelect}
+                      selectedAnswer={selectedAnswer}
+                      netLabels={visualQuestion.visualData.netLabels}
+                      cubeViews={visualQuestion.visualData.cubeViews}
+                    />
+                  );
+                
+                default:
+                  // 通常のテキスト問題
+                  return (
+                    <>
+                      <h2 className="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">
+                        {question.question}
+                      </h2>
+                      <div className="grid gap-3">
+                        {question.options.map((option, index) => (
+                          <motion.button
+                            key={index}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => onAnswerSelect(index)}
+                            disabled={isTimeUp}
+                            className={`
+                              p-4 text-left border-2 rounded-lg transition-all duration-200
+                              ${selectedAnswer === index
+                                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                              }
+                              ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                              flex items-center justify-between
+                            `}
+                          >
+                            <span className="flex-1">{option}</span>
+                            {selectedAnswer === index && (
+                              <CheckCircle className="w-5 h-5 text-blue-500" />
+                            )}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </>
+                  );
+              }
+            } else {
+              // 通常のテキスト問題
+              return (
+                <>
+                  <h2 className="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">
+                    {question.question}
+                  </h2>
+                  <div className="grid gap-3">
+                    {question.options.map((option, index) => (
+                      <motion.button
+                        key={index}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => onAnswerSelect(index)}
+                        disabled={isTimeUp}
+                        className={`
+                          p-4 text-left border-2 rounded-lg transition-all duration-200
+                          ${selectedAnswer === index
+                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          }
+                          ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                          flex items-center justify-between
+                        `}
+                      >
+                        <span className="flex-1">{option}</span>
+                        {selectedAnswer === index && (
+                          <CheckCircle className="w-5 h-5 text-blue-500" />
+                        )}
+                      </motion.button>
+                    ))}
+                  </div>
+                </>
+              );
+            }
+          })()}
 
           {/* Time's up overlay */}
           {isTimeUp && (
@@ -146,33 +248,6 @@ export default function TestQuestion({
               </div>
             </motion.div>
           )}
-
-          {/* Answer Options */}
-          <div className="grid gap-3">
-            {question.options.map((option, index) => (
-              <motion.button
-                key={index}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onAnswerSelect(index)}
-                disabled={isTimeUp}
-                className={`
-                  p-4 text-left border-2 rounded-lg transition-all duration-200
-                  ${selectedAnswer === index
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }
-                  ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                  flex items-center justify-between
-                `}
-              >
-                <span className="flex-1">{option}</span>
-                {selectedAnswer === index && (
-                  <CheckCircle className="w-5 h-5 text-blue-500" />
-                )}
-              </motion.button>
-            ))}
-          </div>
         </motion.div>
       </AnimatePresence>
 

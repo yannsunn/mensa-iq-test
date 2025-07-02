@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Question, TestSession, TestResult, UserAnswer } from '@/types';
 import { generateMensaTestSet } from '@/data/realQuestions';
+import { generateVisualMensaTestSet, VisualQuestion } from '@/data/visualQuestions';
 
 interface TestStore {
   currentSession: TestSession | null;
@@ -26,7 +27,17 @@ export const useTestStore = create<TestStore>((set, get) => ({
 
   startTest: () => {
     const sessionId = `session_${Date.now()}`;
-    const mensaQuestions = generateMensaTestSet(); // 科学的に構成された35問
+    const textQuestions = generateMensaTestSet(); // 20問のテキスト問題
+    const visualQuestions = generateVisualMensaTestSet(); // 15問の視覚問題
+    
+    // テキスト問題と視覚問題を組み合わせて35問構成
+    const allQuestions: (Question | VisualQuestion)[] = [
+      ...textQuestions.slice(0, 20),
+      ...visualQuestions
+    ];
+    
+    // 難易度順にソート
+    const mensaQuestions = allQuestions.sort((a, b) => a.difficulty - b.difficulty);
 
     const newSession: TestSession = {
       id: sessionId,
