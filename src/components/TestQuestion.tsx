@@ -71,7 +71,7 @@ export default function TestQuestion({
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-4 sm:p-6 relative glass-advanced card-3d center-content"
+    <div className="max-w-6xl mx-auto p-6 sm:p-8 lg:p-12 relative glass-advanced"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 sm:mb-8 w-full">
@@ -155,35 +155,29 @@ export default function TestQuestion({
                       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-8 sm:mb-10 leading-relaxed text-display px-2 text-center text-spacing">
                         {question.question}
                       </h2>
-                      <div className="grid gap-3 sm:gap-4 px-2 center-content">
+                      <div className="max-w-4xl mx-auto grid gap-4 sm:gap-6 px-4 sm:px-6">
                         {question.options.map((option, index) => (
-                          <motion.button
+                          <button
                             key={index}
-                            whileHover={{ scale: 1.01, y: -1 }}
-                            whileTap={{ scale: 0.98 }}
                             onClick={() => onAnswerSelect(index)}
                             disabled={isTimeUp}
                             className={`
-                              p-6 text-left border-2 rounded-2xl transition-all duration-200 glass-advanced
+                              p-6 sm:p-8 text-center border-2 rounded-2xl glass-advanced
                               ${selectedAnswer === index
-                                ? 'border-blue-400 bg-blue-400/30 text-white backdrop-blur-sm shadow-2xl neon-glow'
-                                : 'border-white/20 hover:border-white/40 hover:bg-white/15 backdrop-blur-sm'
+                                ? 'border-blue-400 bg-blue-400/30 text-white backdrop-blur-sm shadow-xl'
+                                : 'border-white/20 bg-white/5 backdrop-blur-sm'
                               }
-                              ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                              flex items-center justify-between text-white group relative overflow-hidden
+                              ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-white/30 hover:bg-white/10'}
+                              flex items-center justify-center text-white relative transition-colors duration-200
                             `}
                           >
-                            <span className="flex-1 font-medium text-lg sm:text-xl lg:text-2xl">{option}</span>
-                            {selectedAnswer === index && (
-                              <motion.div
-                                initial={{ scale: 0, rotate: -180 }}
-                                animate={{ scale: 1, rotate: 0 }}
-                                transition={{ type: "spring", stiffness: 150, duration: 0.3 }}
-                              >
-                                <CheckCircle className="w-6 h-6 text-blue-400" />
-                              </motion.div>
-                            )}
-                          </motion.button>
+                            <div className="flex items-center justify-center space-x-3">
+                              <span className="font-medium text-lg sm:text-xl lg:text-2xl text-center">{option}</span>
+                              {selectedAnswer === index && (
+                                <CheckCircle className="w-6 h-6 text-blue-400 ml-3" />
+                              )}
+                            </div>
+                          </button>
                         ))}
                       </div>
                     </>
@@ -193,32 +187,32 @@ export default function TestQuestion({
               // 通常のテキスト問題
               return (
                 <>
-                  <h2 className="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-8 sm:mb-10 leading-relaxed text-center">
                     {question.question}
                   </h2>
-                  <div className="grid gap-3">
+                  <div className="max-w-4xl mx-auto grid gap-4 sm:gap-6 px-4 sm:px-6">
                     {question.options.map((option, index) => (
-                      <motion.button
+                      <button
                         key={index}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                         onClick={() => onAnswerSelect(index)}
                         disabled={isTimeUp}
                         className={`
-                          p-4 text-left border-2 rounded-lg transition-all duration-200
+                          p-6 sm:p-8 text-center border-2 rounded-2xl glass-advanced transition-colors duration-200
                           ${selectedAnswer === index
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                            ? 'border-blue-400 bg-blue-400/30 text-white backdrop-blur-sm shadow-xl'
+                            : 'border-white/20 bg-white/5 backdrop-blur-sm text-white'
                           }
-                          ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                          flex items-center justify-between
+                          ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-white/30 hover:bg-white/10'}
+                          flex items-center justify-center relative
                         `}
                       >
-                        <span className="flex-1">{option}</span>
-                        {selectedAnswer === index && (
-                          <CheckCircle className="w-5 h-5 text-blue-500" />
-                        )}
-                      </motion.button>
+                        <div className="flex items-center justify-center space-x-3">
+                          <span className="font-medium text-lg sm:text-xl lg:text-2xl text-center">{option}</span>
+                          {selectedAnswer === index && (
+                            <CheckCircle className="w-6 h-6 text-blue-400 ml-3" />
+                          )}
+                        </div>
+                      </button>
                     ))}
                   </div>
                 </>
