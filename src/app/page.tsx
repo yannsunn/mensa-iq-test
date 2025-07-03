@@ -136,7 +136,7 @@ export default function Home() {
                   textShadow: '0 4px 20px rgba(0,0,0,0.3)'
                 }}
               >
-                <span className="parallax-text neon-glow" data-text="MENSA">MENSA</span>
+                <span className="parallax-text neon-glow-title" data-text="MENSA">MENSA</span>
                 <br className="block sm:hidden lg:block" />
                 <span className="block sm:inline lg:block mt-2 lg:mt-4">IQテスト</span>
               </motion.h1>
@@ -227,7 +227,7 @@ export default function Home() {
                 
                 {/* Enhanced Floating Stats */}
                 <div className="absolute bottom-4 left-4 glass-advanced p-4 rounded-xl cyberpunk-glow holographic">
-                  <div className="text-white text-sm font-semibold mb-1 neon-glow">AIパワーで解析</div>
+                  <div className="text-white text-sm font-semibold mb-1 neon-glow-subtle">AIパワーで解析</div>
                   <div className="text-white/70 text-xs mb-2">130+ IQ 精度</div>
                   <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full" style={{width: '95%', animation: 'progress-shimmer 2s linear infinite'}}></div>
