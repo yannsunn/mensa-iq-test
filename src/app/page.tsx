@@ -132,11 +132,8 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
                 className="mobile-text tablet-text desktop-text font-bold text-white mb-4 sm:mb-6 lg:mb-8 text-display"
-                style={{
-                  textShadow: '0 4px 20px rgba(0,0,0,0.3)'
-                }}
               >
-                <span className="parallax-text neon-glow-title" data-text="MENSA">MENSA</span>
+                <span className="neon-glow-title-readable">MENSA</span>
                 <br className="block sm:hidden lg:block" />
                 <span className="block sm:inline lg:block mt-2 lg:mt-4">IQテスト</span>
               </motion.h1>

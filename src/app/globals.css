@@ -452,6 +452,67 @@ body {
   animation: neon-pulse-gentle 3s ease-in-out infinite alternate;
 }
 
+/* Highly readable title with gradient and glow */
+.neon-glow-title-readable {
+  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  display: inline-block;
+  font-weight: 900;
+}
+
+.neon-glow-title-readable::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(8px);
+  opacity: 0.6;
+}
+
+.neon-glow-title-readable::after {
+  content: 'MENSA';
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 
+    0 0 20px rgba(102, 126, 234, 0.8),
+    0 0 40px rgba(102, 126, 234, 0.6),
+    0 0 60px rgba(102, 126, 234, 0.4),
+    4px 4px 8px rgba(0, 0, 0, 0.8);
+  animation: neon-pulse-readable 4s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse-readable {
+  from { 
+    text-shadow: 
+      0 0 20px rgba(102, 126, 234, 0.8),
+      0 0 40px rgba(102, 126, 234, 0.6),
+      0 0 60px rgba(102, 126, 234, 0.4),
+      4px 4px 8px rgba(0, 0, 0, 0.8);
+  }
+  to { 
+    text-shadow: 
+      0 0 10px rgba(102, 126, 234, 0.6),
+      0 0 20px rgba(102, 126, 234, 0.4),
+      0 0 30px rgba(102, 126, 234, 0.2),
+      4px 4px 8px rgba(0, 0, 0, 0.8);
+  }
+}
+
 @keyframes neon-pulse-gentle {
   from { 
     text-shadow: 
@@ -737,6 +798,14 @@ body {
       2px 2px 4px rgba(0, 0, 0, 0.7);
   }
   
+  .neon-glow-title-readable::after {
+    text-shadow: 
+      0 0 15px rgba(102, 126, 234, 0.7),
+      0 0 30px rgba(102, 126, 234, 0.5),
+      0 0 45px rgba(102, 126, 234, 0.3),
+      3px 3px 6px rgba(0, 0, 0, 0.7);
+  }
+  
   .neon-glow-subtle {
     text-shadow: 
       0 0 3px rgba(255, 255, 255, 0.3),
@@ -802,6 +871,14 @@ body {
       0 0 24px rgba(102, 126, 234, 0.6),
       0 0 36px rgba(102, 126, 234, 0.4),
       3px 3px 6px rgba(0, 0, 0, 0.7);
+  }
+  
+  .neon-glow-title-readable::after {
+    text-shadow: 
+      0 0 18px rgba(102, 126, 234, 0.8),
+      0 0 36px rgba(102, 126, 234, 0.6),
+      0 0 54px rgba(102, 126, 234, 0.4),
+      4px 4px 8px rgba(0, 0, 0, 0.7);
   }
   
   .neon-glow-subtle {
@@ -873,6 +950,14 @@ body {
       0 0 30px rgba(102, 126, 234, 0.7),
       0 0 45px rgba(102, 126, 234, 0.5),
       4px 4px 8px rgba(0, 0, 0, 0.6);
+  }
+  
+  .neon-glow-title-readable::after {
+    text-shadow: 
+      0 0 22px rgba(102, 126, 234, 0.9),
+      0 0 44px rgba(102, 126, 234, 0.7),
+      0 0 66px rgba(102, 126, 234, 0.5),
+      5px 5px 10px rgba(0, 0, 0, 0.6);
   }
   
   .neon-glow-subtle {
@@ -1189,10 +1274,17 @@ body {
   }
   
   .neon-glow-title,
+  .neon-glow-title-readable,
   .neon-glow-subtle {
     text-shadow: 
       0 0 2px rgba(255, 255, 255, 0.8),
       1px 1px 2px rgba(0, 0, 0, 0.8);
+    animation: none;
+  }
+  
+  .neon-glow-title-readable::before,
+  .neon-glow-title-readable::after {
+    display: none;
   }
   
   .card-3d:hover {
