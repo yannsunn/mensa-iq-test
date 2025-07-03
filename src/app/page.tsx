@@ -83,13 +83,13 @@ export default function Home() {
         <div className="absolute top-1/2 right-1/3 w-20 h-20 bg-pink-500/15 rounded-full blur-lg floating morphing-loader" style={{animationDelay: '3s'}}></div>
       </div>
       
-      <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 py-16 relative z-10 center-content">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-20 section-spacing center-content"
         >
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
@@ -112,14 +112,14 @@ export default function Home() {
               textShadow: '0 4px 20px rgba(0,0,0,0.3)'
             }}
           >
-            <span className="parallax-text neon-glow">MENSA</span> <span className="block sm:inline">IQテスト</span>
+            <span className="parallax-text neon-glow" data-text="MENSA">MENSA</span> <span className="block sm:inline text-spacing">IQテスト</span>
           </motion.h1>
           
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="text-lg sm:text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto text-body font-light leading-relaxed px-4"
+            className="text-lg sm:text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto text-body font-light leading-relaxed px-4 text-spacing center-content"
             style={{
               textShadow: '0 2px 10px rgba(0,0,0,0.2)'
             }}
@@ -132,6 +132,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
+            className="center-content"
           >
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
@@ -150,12 +151,12 @@ export default function Home() {
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-20 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-20 px-4 section-spacing center-content">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.1 }}
-            className="glass-advanced card-3d text-center hover-lift group"
+            className="glass-advanced card-3d text-center hover-lift group card-spacing"
           >
             <div className="relative mb-6">
               <Clock className="w-14 h-14 text-blue-400 mx-auto group-hover:scale-110 transition-transform duration-300" />
@@ -169,7 +170,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="glass-advanced card-3d text-center hover-lift group"
+            className="glass-advanced card-3d text-center hover-lift group card-spacing"
           >
             <div className="relative mb-6">
               <Trophy className="w-14 h-14 text-yellow-400 mx-auto group-hover:scale-110 transition-transform duration-300" />
@@ -183,7 +184,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.3 }}
-            className="glass-advanced card-3d text-center hover-lift group"
+            className="glass-advanced card-3d text-center hover-lift group card-spacing"
           >
             <div className="relative mb-6">
               <Brain className="w-14 h-14 text-purple-400 mx-auto group-hover:scale-110 transition-transform duration-300" />
@@ -197,7 +198,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4 }}
-            className="glass-advanced card-3d text-center hover-lift group"
+            className="glass-advanced card-3d text-center hover-lift group card-spacing"
           >
             <div className="relative mb-6">
               <Users className="w-14 h-14 text-green-400 mx-auto group-hover:scale-110 transition-transform duration-300" />
@@ -213,12 +214,12 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5 }}
-          className="glass-advanced card-3d mb-20"
+          className="glass-advanced card-3d mb-20 section-spacing center-content"
         >
-          <h2 className="text-3xl font-bold text-white mb-8 text-center text-display">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center text-display text-spacing">
             テスト内容
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 center-content">
             {[
               { name: '論理推論', desc: '論理的思考力', color: 'blue', gradient: 'from-blue-400 to-blue-600' },
               { name: '数値パターン', desc: '数学的推理力', color: 'green', gradient: 'from-green-400 to-green-600' },
@@ -250,9 +251,9 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.3 }}
-          className="glass-advanced card-3d border-2 border-white/30"
+          className="glass-advanced card-3d border-2 border-white/30 section-spacing center-content"
         >
-          <h3 className="font-bold text-white mb-6 text-xl text-display flex items-center">
+          <h3 className="font-bold text-white mb-6 text-xl text-display flex items-center justify-center text-spacing">
             <span className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mr-3 text-sm">!</span>
             テスト前の注意事項
           </h3>

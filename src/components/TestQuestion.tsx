@@ -71,10 +71,10 @@ export default function TestQuestion({
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-4 sm:p-6 relative glass-advanced card-3d"
+    <div className="max-w-5xl mx-auto p-4 sm:p-6 relative glass-advanced card-3d center-content"
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 sm:mb-8 w-full">
         <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <span className="text-sm font-medium text-white/80 bg-white/10 px-3 py-1 rounded-full backdrop-blur">
             問題 {questionNumber} / {totalQuestions}
@@ -96,7 +96,7 @@ export default function TestQuestion({
       </div>
 
       {/* Enhanced Progress Bar */}
-      <div className="w-full bg-white/20 rounded-full h-4 mb-10 overflow-hidden backdrop-blur progress-modern">
+      <div className="w-full bg-white/20 rounded-full h-4 mb-8 sm:mb-10 overflow-hidden backdrop-blur progress-modern section-spacing">
         <motion.div
           className="h-4 rounded-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 shadow-lg relative"
           initial={{ width: 0 }}
@@ -152,10 +152,10 @@ export default function TestQuestion({
                   // 通常のテキスト問題
                   return (
                     <>
-                      <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6 sm:mb-8 leading-relaxed text-display px-2">
+                      <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6 sm:mb-8 leading-relaxed text-display px-2 text-center text-spacing">
                         {question.question}
                       </h2>
-                      <div className="grid gap-3 sm:gap-4 px-2">
+                      <div className="grid gap-3 sm:gap-4 px-2 center-content">
                         {question.options.map((option, index) => (
                           <motion.button
                             key={index}
@@ -249,7 +249,7 @@ export default function TestQuestion({
       </AnimatePresence>
 
       {/* Navigation */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 sm:mt-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 sm:mt-8 w-full section-spacing">
         <motion.button
           whileHover={{ scale: canGoPrevious ? 1.05 : 1 }}
           whileTap={{ scale: canGoPrevious ? 0.95 : 1 }}
@@ -267,7 +267,7 @@ export default function TestQuestion({
           <span>前の問題</span>
         </motion.button>
 
-        <div className="text-sm text-white/70 font-medium bg-white/10 px-4 py-2 rounded-full backdrop-blur">
+        <div className="text-sm text-white/70 font-medium bg-white/10 px-4 py-2 rounded-full backdrop-blur order-last sm:order-none center-content">
           {selectedAnswer !== null ? (
             <span className="flex items-center space-x-2">
               <CheckCircle className="w-4 h-4 text-green-400" />
