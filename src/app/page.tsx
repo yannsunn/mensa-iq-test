@@ -224,8 +224,8 @@ export default function Home() {
                 
                 {/* Enhanced Floating Stats */}
                 <div className="absolute bottom-4 left-4 glass-advanced p-4 rounded-xl cyberpunk-glow holographic">
-                  <div className="text-white text-sm font-semibold mb-1 neon-glow-subtle">AIパワーで解析</div>
-                  <div className="text-white/70 text-xs mb-2">130+ IQ 精度</div>
+                  <div className="text-white text-base lg:text-lg font-semibold mb-1 neon-glow-subtle">AIパワーで解析</div>
+                  <div className="text-white/70 text-sm lg:text-base mb-2">130+ IQ 精度</div>
                   <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full" style={{width: '95%', animation: 'progress-shimmer 2s linear infinite'}}></div>
                   </div>
@@ -248,8 +248,8 @@ export default function Home() {
               <Clock className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-blue-400 mx-auto group-hover:scale-110 transition-transform duration-300" />
               <div className="absolute inset-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 mx-auto bg-blue-400/20 rounded-full blur-lg group-hover:blur-xl transition-all"></div>
             </div>
-            <h3 className="font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg lg:text-xl">25分テスト</h3>
-            <p className="text-white/80 text-xs sm:text-sm lg:text-base leading-relaxed">MENSA標準の25分間で35問を解答</p>
+            <h3 className="font-bold text-white mb-2 sm:mb-3 text-lg sm:text-xl lg:text-2xl">25分テスト</h3>
+            <p className="text-white/80 text-sm sm:text-base lg:text-lg leading-relaxed">MENSA標準の25分間で35問を解答</p>
           </motion.div>
 
           <motion.div
@@ -328,8 +328,8 @@ export default function Home() {
                 <div className={`w-20 h-20 bg-gradient-to-br ${category.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="font-semibold text-white mb-2 text-lg">{category.name}</h3>
-                <p className="text-sm text-white/80 leading-relaxed">{category.desc}</p>
+                <h3 className="font-semibold text-white mb-2 text-xl lg:text-2xl">{category.name}</h3>
+                <p className="text-base lg:text-lg text-white/80 leading-relaxed">{category.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -345,10 +345,10 @@ export default function Home() {
           className="glass-advanced card-3d border-2 border-white/30 mobile-spacing tablet-spacing desktop-spacing"
         >
           <h3 className="font-bold text-white mb-4 sm:mb-6 text-lg sm:text-xl lg:text-2xl text-display flex items-center justify-center">
-            <span className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 text-xs sm:text-sm">!</span>
+            <span className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 text-sm sm:text-base">!</span>
             テスト前の注意事項
           </h3>
-          <ul className="text-white/90 space-y-2 sm:space-y-3 text-xs sm:text-sm lg:text-base grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4">
+          <ul className="text-white/90 space-y-2 sm:space-y-3 text-sm sm:text-base lg:text-lg grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4">
             <li className="flex items-start space-x-3">
               <span className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
               <span>静かな環境でテストを受けてください</span>

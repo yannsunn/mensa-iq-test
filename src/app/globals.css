@@ -646,8 +646,8 @@ body {
 }
 
 .mobile-text {
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
   margin: 0.5rem 0;
 }
 
@@ -672,8 +672,8 @@ body {
 }
 
 .tablet-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.2rem;
+  line-height: 1.7;
   margin: 1rem 0;
 }
 
@@ -697,7 +697,7 @@ body {
 }
 
 .desktop-text {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   line-height: 1.8;
   margin: 1.5rem 0;
 }
@@ -740,6 +740,14 @@ body {
 
 /* Mobile Phones (320px - 767px) */
 @media (max-width: 767px) {
+  /* Font size overrides for mobile readability */
+  .text-xs { font-size: 0.875rem !important; }
+  .text-sm { font-size: 1rem !important; }
+  .text-base { font-size: 1.125rem !important; }
+  .text-lg { font-size: 1.25rem !important; }
+  .text-xl { font-size: 1.5rem !important; }
+  .text-2xl { font-size: 2rem !important; }
+  
   .responsive-container {
     padding: 1rem 0.75rem;
   }
@@ -790,6 +798,14 @@ body {
 
 /* Tablets (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+  /* Font size overrides for tablet readability */
+  .text-xs { font-size: 1rem !important; }
+  .text-sm { font-size: 1.125rem !important; }
+  .text-base { font-size: 1.25rem !important; }
+  .text-lg { font-size: 1.375rem !important; }
+  .text-xl { font-size: 1.625rem !important; }
+  .text-2xl { font-size: 2.25rem !important; }
+  
   .neon-glow-title {
     text-shadow: 
       0 0 8px rgba(255, 255, 255, 0.6),
@@ -865,6 +881,14 @@ body {
 
 /* Desktop (1024px - 1439px) */
 @media (min-width: 1024px) and (max-width: 1439px) {
+  /* Font size overrides for desktop readability */
+  .text-xs { font-size: 1rem !important; }
+  .text-sm { font-size: 1.125rem !important; }
+  .text-base { font-size: 1.25rem !important; }
+  .text-lg { font-size: 1.5rem !important; }
+  .text-xl { font-size: 1.75rem !important; }
+  .text-2xl { font-size: 2.5rem !important; }
+  
   .neon-glow-title {
     text-shadow: 
       0 0 12px rgba(255, 255, 255, 0.8),
@@ -944,6 +968,14 @@ body {
 
 /* Ultra-wide Desktop (1440px+) */
 @media (min-width: 1440px) {
+  /* Font size overrides for ultra-wide desktop readability */
+  .text-xs { font-size: 1.125rem !important; }
+  .text-sm { font-size: 1.25rem !important; }
+  .text-base { font-size: 1.375rem !important; }
+  .text-lg { font-size: 1.625rem !important; }
+  .text-xl { font-size: 1.875rem !important; }
+  .text-2xl { font-size: 2.75rem !important; }
+  
   .neon-glow-title {
     text-shadow: 
       0 0 15px rgba(255, 255, 255, 0.9),
