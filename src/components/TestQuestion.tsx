@@ -64,18 +64,6 @@ export default function TestQuestion({
     return 'text-green-500';
   };
 
-  const getCategoryBadgeColor = () => {
-    const colors = {
-      logical: 'bg-blue-100 text-blue-800',
-      numerical: 'bg-green-100 text-green-800',
-      spatial: 'bg-purple-100 text-purple-800',
-      matrix: 'bg-orange-100 text-orange-800',
-      verbal: 'bg-pink-100 text-pink-800',
-      abstract: 'bg-indigo-100 text-indigo-800',
-      memory: 'bg-red-100 text-red-800',
-    };
-    return colors[question.category];
-  };
 
   const getDifficultyStars = () => {
     const stars = Math.ceil(question.difficulty / 4); // 1-5 stars
@@ -83,37 +71,40 @@ export default function TestQuestion({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-4 sm:p-6 relative glass-advanced card-3d"
+    >
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center space-x-4">
-          <span className="text-sm font-medium text-gray-500">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+          <span className="text-sm font-medium text-white/80 bg-white/10 px-3 py-1 rounded-full backdrop-blur">
             問題 {questionNumber} / {totalQuestions}
           </span>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryBadgeColor()}`}>
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg">
             {question.category}
           </span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-white/70">
             難易度: {getDifficultyStars()}
           </span>
         </div>
         
-        <div className="flex items-center space-x-2">
-          <Clock className={`w-4 h-4 ${getTimeColor()}`} />
-          <span className={`font-mono text-lg font-bold ${getTimeColor()}`}>
+        <div className="flex items-center space-x-3 bg-white/10 backdrop-blur px-3 sm:px-4 py-2 rounded-2xl">
+          <Clock className={`w-5 h-5 ${getTimeColor()}`} />
+          <span className={`font-mono text-xl font-bold ${getTimeColor()}`}>
             {formatTime(timeLeft)}
           </span>
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+      {/* Enhanced Progress Bar */}
+      <div className="w-full bg-white/20 rounded-full h-4 mb-10 overflow-hidden backdrop-blur progress-modern">
         <motion.div
-          className="bg-blue-600 h-2 rounded-full"
+          className="h-4 rounded-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 shadow-lg relative"
           initial={{ width: 0 }}
           animate={{ width: `${(questionNumber / totalQuestions) * 100}%` }}
-          transition={{ duration: 0.5 }}
-        />
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+        </motion.div>
       </div>
 
       {/* Question */}
@@ -161,30 +152,36 @@ export default function TestQuestion({
                   // 通常のテキスト問題
                   return (
                     <>
-                      <h2 className="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">
+                      <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6 sm:mb-8 leading-relaxed text-display px-2">
                         {question.question}
                       </h2>
-                      <div className="grid gap-3">
+                      <div className="grid gap-3 sm:gap-4 px-2">
                         {question.options.map((option, index) => (
                           <motion.button
                             key={index}
-                            whileHover={{ scale: 1.02 }}
+                            whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => onAnswerSelect(index)}
                             disabled={isTimeUp}
                             className={`
-                              p-4 text-left border-2 rounded-lg transition-all duration-200
+                              p-6 text-left border-2 rounded-2xl transition-all duration-500 glass-advanced btn-magnetic
                               ${selectedAnswer === index
-                                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                ? 'border-blue-400 bg-blue-400/30 text-white backdrop-blur-sm shadow-2xl neon-glow'
+                                : 'border-white/20 hover:border-white/40 hover:bg-white/15 backdrop-blur-sm'
                               }
                               ${isTimeUp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                              flex items-center justify-between
+                              flex items-center justify-between text-white group relative overflow-hidden
                             `}
                           >
-                            <span className="flex-1">{option}</span>
+                            <span className="flex-1 font-medium">{option}</span>
                             {selectedAnswer === index && (
-                              <CheckCircle className="w-5 h-5 text-blue-500" />
+                              <motion.div
+                                initial={{ scale: 0, rotate: -180 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ type: "spring", stiffness: 200 }}
+                              >
+                                <CheckCircle className="w-6 h-6 text-blue-400" />
+                              </motion.div>
                             )}
                           </motion.button>
                         ))}
@@ -252,40 +249,51 @@ export default function TestQuestion({
       </AnimatePresence>
 
       {/* Navigation */}
-      <div className="flex justify-between items-center mt-8">
-        <button
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 sm:mt-8">
+        <motion.button
+          whileHover={{ scale: canGoPrevious ? 1.05 : 1 }}
+          whileTap={{ scale: canGoPrevious ? 0.95 : 1 }}
           onClick={onPrevious}
           disabled={!canGoPrevious}
           className={`
-            flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors
+            flex items-center space-x-2 px-6 py-3 rounded-2xl transition-all duration-300 glass-advanced
             ${canGoPrevious
-              ? 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-              : 'bg-gray-50 text-gray-400 cursor-not-allowed'
+              ? 'text-white hover:bg-white/20 btn-magnetic'
+              : 'text-white/50 cursor-not-allowed'
             }
           `}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-5 h-5" />
           <span>前の問題</span>
-        </button>
+        </motion.button>
 
-        <div className="text-sm text-gray-500">
-          {selectedAnswer !== null ? '回答済み' : '未回答'}
+        <div className="text-sm text-white/70 font-medium bg-white/10 px-4 py-2 rounded-full backdrop-blur">
+          {selectedAnswer !== null ? (
+            <span className="flex items-center space-x-2">
+              <CheckCircle className="w-4 h-4 text-green-400" />
+              <span>回答済み</span>
+            </span>
+          ) : (
+            <span className="text-orange-300">未回答</span>
+          )}
         </div>
 
-        <button
+        <motion.button
+          whileHover={{ scale: canGoNext ? 1.05 : 1 }}
+          whileTap={{ scale: canGoNext ? 0.95 : 1 }}
           onClick={onNext}
           disabled={!canGoNext}
           className={`
-            flex items-center space-x-2 px-6 py-2 rounded-lg transition-colors font-medium
+            flex items-center space-x-2 px-8 py-3 rounded-2xl transition-all duration-300 font-medium
             ${canGoNext
-              ? 'bg-blue-600 hover:bg-blue-700 text-white'
-              : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              ? 'btn-modern btn-magnetic breathing text-white'
+              : 'glass-advanced text-white/50 cursor-not-allowed'
             }
           `}
         >
           <span>{questionNumber === totalQuestions ? 'テスト完了' : '次の問題'}</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+          <ArrowRight className="w-5 h-5" />
+        </motion.button>
       </div>
     </div>
   );
