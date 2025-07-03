@@ -152,19 +152,19 @@ export default function TestQuestion({
                   // 通常のテキスト問題
                   return (
                     <>
-                      <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6 sm:mb-8 leading-relaxed text-display px-2 text-center text-spacing">
+                      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white mb-8 sm:mb-10 leading-relaxed text-display px-2 text-center text-spacing">
                         {question.question}
                       </h2>
                       <div className="grid gap-3 sm:gap-4 px-2 center-content">
                         {question.options.map((option, index) => (
                           <motion.button
                             key={index}
-                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileHover={{ scale: 1.01, y: -1 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => onAnswerSelect(index)}
                             disabled={isTimeUp}
                             className={`
-                              p-6 text-left border-2 rounded-2xl transition-all duration-500 glass-advanced btn-magnetic
+                              p-6 text-left border-2 rounded-2xl transition-all duration-200 glass-advanced
                               ${selectedAnswer === index
                                 ? 'border-blue-400 bg-blue-400/30 text-white backdrop-blur-sm shadow-2xl neon-glow'
                                 : 'border-white/20 hover:border-white/40 hover:bg-white/15 backdrop-blur-sm'
@@ -173,12 +173,12 @@ export default function TestQuestion({
                               flex items-center justify-between text-white group relative overflow-hidden
                             `}
                           >
-                            <span className="flex-1 font-medium">{option}</span>
+                            <span className="flex-1 font-medium text-lg sm:text-xl lg:text-2xl">{option}</span>
                             {selectedAnswer === index && (
                               <motion.div
                                 initial={{ scale: 0, rotate: -180 }}
                                 animate={{ scale: 1, rotate: 0 }}
-                                transition={{ type: "spring", stiffness: 200 }}
+                                transition={{ type: "spring", stiffness: 150, duration: 0.3 }}
                               >
                                 <CheckCircle className="w-6 h-6 text-blue-400" />
                               </motion.div>

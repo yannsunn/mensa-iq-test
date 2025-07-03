@@ -267,14 +267,14 @@ body {
   animation: shimmer 1.5s infinite;
 }
 
-/* Micro-interactions */
+/* Gentle micro-interactions */
 .hover-lift {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease-out;
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Modern focus styles */
@@ -401,25 +401,24 @@ body {
   100% { background-position: -200% 0; }
 }
 
-/* Interactive 3D card effect */
-.card-3d {
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+/* Subtle card effect for better focus */
+.card-hover {
+  transition: transform 0.2s ease-out;
 }
 
-.card-3d:hover {
-  transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+.card-hover:hover {
+  transform: translateY(-2px);
 }
 
-/* Magnetic button effect */
-.btn-magnetic {
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+/* Subtle button effect */
+.btn-subtle {
+  transition: all 0.2s ease-out;
   cursor: pointer;
 }
 
-.btn-magnetic:hover {
-  transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+.btn-subtle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Optimized neon glow for better readability */
@@ -584,14 +583,14 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Breathing animation for CTAs */
-@keyframes breathe {
+/* Gentle breathing animation */
+@keyframes breathe-gentle {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  50% { transform: scale(1.01); }
 }
 
-.breathing {
-  animation: breathe 3s ease-in-out infinite;
+.breathing-gentle {
+  animation: breathe-gentle 4s ease-in-out infinite;
 }
 
 /* Enhanced parallax text with better readability */
@@ -1083,17 +1082,17 @@ body {
    限界突破レベルの視覚効果
    ============================================ */
 
-/* Holographic Effects */
-.holographic {
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
-  background-size: 200% 200%;
-  animation: holographic-sweep 3s linear infinite;
+/* Subtle Holographic Effects */
+.holographic-subtle {
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+  background-size: 300% 300%;
+  animation: holographic-sweep-subtle 8s linear infinite;
   position: relative;
 }
 
-@keyframes holographic-sweep {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+@keyframes holographic-sweep-subtle {
+  0% { background-position: -300% 0; }
+  100% { background-position: 300% 0; }
 }
 
 /* Particle System */
@@ -1107,29 +1106,29 @@ body {
   pointer-events: none;
 }
 
-.particle {
+.particle-gentle {
   position: absolute;
-  width: 2px;
-  height: 2px;
-  background: rgba(102, 126, 234, 0.6);
+  width: 1px;
+  height: 1px;
+  background: rgba(102, 126, 234, 0.3);
   border-radius: 50%;
-  animation: particle-float 8s linear infinite;
+  animation: particle-float-gentle 15s linear infinite;
 }
 
-@keyframes particle-float {
+@keyframes particle-float-gentle {
   0% {
     transform: translateY(100vh) translateX(0) scale(0);
     opacity: 0;
   }
-  10% {
-    opacity: 1;
+  20% {
+    opacity: 0.5;
     transform: scale(1);
   }
-  90% {
-    opacity: 1;
+  80% {
+    opacity: 0.5;
   }
   100% {
-    transform: translateY(-100vh) translateX(100px) scale(0);
+    transform: translateY(-100vh) translateX(50px) scale(0);
     opacity: 0;
   }
 }
