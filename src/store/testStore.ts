@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Question, TestSession, TestResult, UserAnswer } from '@/types';
 import { generateMensaTestSet } from '@/data/realQuestions';
 import { generateVisualMensaTestSet, VisualQuestion } from '@/data/visualQuestions';
+import { advancedVisualQuestions, AdvancedVisualQuestion, getRandomVisualQuestions } from '@/data/advancedVisualQuestions';
 
 interface TestStore {
   currentSession: TestSession | null;
@@ -30,10 +31,13 @@ export const useTestStore = create<TestStore>((set, get) => ({
     const textQuestions = generateMensaTestSet(); // 20問のテキスト問題
     const visualQuestions = generateVisualMensaTestSet(); // 15問の視覚問題
     
-    // テキスト問題と視覚問題を組み合わせて35問構成
-    const allQuestions: (Question | VisualQuestion)[] = [
+    // 高品質な視覚問題を使用（MENSA本番レベル）
+    const advancedVisualQuestions = getRandomVisualQuestions(15, 18); // 15問、最大難易度18
+    
+    // テキスト問題と高品質視覚問題を組み合わせて35問構成
+    const allQuestions: (Question | VisualQuestion | AdvancedVisualQuestion)[] = [
       ...textQuestions.slice(0, 20),
-      ...visualQuestions
+      ...advancedVisualQuestions
     ];
     
     // 難易度順にソート

@@ -5,11 +5,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import { Question } from '@/types';
 import { VisualQuestion } from '@/data/visualQuestions';
+import { AdvancedVisualQuestion } from '@/data/advancedVisualQuestions';
 import RavenMatrix from './RavenMatrix';
 import CubeQuestion from './CubeQuestion';
+import AdvancedRavenMatrix from './AdvancedRavenMatrix';
+import Advanced3DSpatial from './Advanced3DSpatial';
+import AdvancedPatternSequence from './AdvancedPatternSequence';
 
 interface TestQuestionProps {
-  question: Question | VisualQuestion;
+  question: Question | VisualQuestion | AdvancedVisualQuestion;
   questionNumber: number;
   totalQuestions: number;
   selectedAnswer: number | null;
@@ -119,14 +123,14 @@ export default function TestQuestion({
         >
           {/* 質問内容 - 視覚的問題かどうかで分岐 */}
           {(() => {
-            const visualQuestion = question as VisualQuestion;
+            const visualQuestion = question as VisualQuestion | AdvancedVisualQuestion;
             
             // 視覚的問題の場合
             if ('visualType' in visualQuestion && visualQuestion.visualData) {
               switch (visualQuestion.visualType) {
                 case 'raven_matrix':
                   return (
-                    <RavenMatrix
+                    <AdvancedRavenMatrix
                       matrix={visualQuestion.visualData.matrix || []}
                       options={visualQuestion.options}
                       onSelect={onAnswerSelect}
@@ -137,14 +141,25 @@ export default function TestQuestion({
                 
                 case 'cube_spatial':
                   return (
-                    <CubeQuestion
-                      type={visualQuestion.visualData.cubeType || 'net_to_cube'}
-                      question={visualQuestion.question}
+                    <Advanced3DSpatial
+                      questionType={visualQuestion.visualData.cubeType || 'cube_net'}
+                      questionData={visualQuestion.visualData}
                       options={visualQuestion.options}
                       onSelect={onAnswerSelect}
                       selectedAnswer={selectedAnswer}
-                      netLabels={visualQuestion.visualData.netLabels}
-                      cubeViews={visualQuestion.visualData.cubeViews}
+                      title={visualQuestion.question}
+                    />
+                  );
+                
+                case 'pattern_sequence':
+                  return (
+                    <AdvancedPatternSequence
+                      sequenceType={visualQuestion.visualData.sequenceType || 'numeric'}
+                      sequence={visualQuestion.visualData.sequence || []}
+                      options={visualQuestion.options}
+                      onSelect={onAnswerSelect}
+                      selectedAnswer={selectedAnswer}
+                      title={visualQuestion.question}
                     />
                   );
                 
