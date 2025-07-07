@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, Lightbulb, Brain, Target, AlertTriangle, BookOpen, TrendingUp } from 'lucide-react';
 import { DetailedQuestion } from '@/data/internationalMensaQuestions';
+import { getCognitiveSkillsString, getCommonMistakes, getRelatedConcepts } from '@/utils/dataValidation';
 
 interface PracticeFeedbackProps {
   question: DetailedQuestion;
@@ -141,7 +142,7 @@ export default function PracticeFeedback({
           </motion.div>
 
           {/* よくある間違い */}
-          {!isCorrect && question.practiceMode.commonMistakes.length > 0 && (
+          {!isCorrect && getCommonMistakes(question.practiceMode).length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -154,7 +155,7 @@ export default function PracticeFeedback({
               </div>
               <div className="bg-orange-500/10 border border-orange-400/20 rounded-xl p-4">
                 <ul className="space-y-2">
-                  {question.practiceMode.commonMistakes.map((mistake, index) => (
+                  {getCommonMistakes(question.practiceMode).map((mistake, index) => (
                     <li key={index} className="text-orange-100 flex items-start">
                       <span className="text-orange-400 mr-2">•</span>
                       {mistake}
@@ -178,7 +179,7 @@ export default function PracticeFeedback({
             </div>
             <div className="bg-purple-500/10 border border-purple-400/20 rounded-xl p-4">
               <div className="flex flex-wrap gap-2 mb-3">
-                {question.practiceMode.relatedConcepts.map((concept, index) => (
+                {getRelatedConcepts(question.practiceMode).map((concept, index) => (
                   <span
                     key={index}
                     className="px-3 py-1 bg-purple-400/20 text-purple-200 rounded-full text-sm"
@@ -188,7 +189,7 @@ export default function PracticeFeedback({
                 ))}
               </div>
               <p className="text-purple-100 text-sm">
-                <strong>認知スキル:</strong> {question.cognitiveSkills.join(', ')}
+                <strong>認知スキル:</strong> {getCognitiveSkillsString(question)}
               </p>
             </div>
           </motion.div>

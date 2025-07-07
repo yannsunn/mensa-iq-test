@@ -35,16 +35,18 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* ヘッダーセクション */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="bg-gradient-to-b from-slate-50 to-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Brain className="w-8 h-8 text-blue-600 mr-2" />
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+            <div className="flex items-center justify-center mb-6">
+              <div className="bg-blue-600 p-3 rounded-2xl mr-4">
+                <Brain className="w-8 h-8 text-white" />
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight">
                 MENSA IQ Test
               </h1>
             </div>
@@ -53,22 +55,22 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
             </p>
             
             {/* 信頼性指標（ニューロマーケティング） */}
-            <div className="flex flex-wrap justify-center gap-6 md:gap-12 mt-6">
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats.total}</div>
-                <div className="text-sm text-gray-600">問題数</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-8">
+              <div className="text-center bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">{stats.total}</div>
+                <div className="text-sm text-slate-600">問題数</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats.avgIQ}+</div>
-                <div className="text-sm text-gray-600">平均IQ</div>
+              <div className="text-center bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">{stats.avgIQ}+</div>
+                <div className="text-sm text-slate-600">平均IQ</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats.successRate}%</div>
-                <div className="text-sm text-gray-600">満足度</div>
+              <div className="text-center bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">{stats.successRate}%</div>
+                <div className="text-sm text-slate-600">満足度</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats.users}</div>
-                <div className="text-sm text-gray-600">利用者</div>
+              <div className="text-center bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <div className="text-3xl md:text-4xl font-bold text-slate-900 mb-1">{stats.users}</div>
+                <div className="text-sm text-slate-600">利用者</div>
               </div>
             </div>
           </motion.div>
@@ -76,23 +78,23 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
       </div>
 
       {/* メインコンテンツ */}
-      <div className="flex-1">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+      <div className="flex-1 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {/* 練習モード */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className={`relative bg-white rounded-2xl p-6 md:p-8 cursor-pointer transition-all duration-200 ${
+              transition={{ duration: 0.4 }}
+              className={`relative bg-white rounded-3xl p-8 md:p-10 cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                 selectedMode === 'practice'
-                  ? 'ring-2 ring-blue-600 shadow-lg'
-                  : 'border-2 border-gray-200 hover:border-gray-300 hover:shadow-md'
+                  ? 'ring-2 ring-blue-500 shadow-2xl'
+                  : 'border border-gray-200 hover:shadow-xl hover:border-gray-300'
               }`}
               onClick={() => setSelectedMode('practice')}
             >
               {/* 推奨ラベル */}
-              <div className="absolute -top-3 left-6 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+              <div className="absolute -top-3 left-8 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
                 推奨
               </div>
               
@@ -241,10 +243,10 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       onSelectMode('exam');
                     }
                   }}
-                  className={`group relative inline-flex items-center justify-center px-8 md:px-12 py-4 md:py-5 text-lg md:text-xl font-bold text-white rounded-2xl transition-all duration-200 transform hover:scale-105 active:scale-100 ${
+                  className={`group relative inline-flex items-center justify-center px-12 md:px-16 py-5 md:py-6 text-xl md:text-2xl font-bold text-white rounded-3xl transition-all duration-300 transform hover:scale-105 active:scale-100 shadow-2xl ${
                     selectedMode === 'practice'
-                      ? 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25'
-                      : 'bg-gray-900 hover:bg-gray-800 shadow-lg shadow-gray-900/25'
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-blue-600/30'
+                      : 'bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-900 hover:to-black shadow-slate-900/30'
                   }`}
                 >
                   <span className="relative z-10 flex items-center">

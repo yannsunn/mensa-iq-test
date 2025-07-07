@@ -143,7 +143,7 @@ export default function TestLayout({
             {children}
 
             {/* 認知スキル情報（練習モードのみ） */}
-            {mode === 'practice' && currentQuestion.mensaInfo?.cognitiveSkills && (
+            {mode === 'practice' && currentQuestion.mensaInfo?.cognitiveSkills && Array.isArray(currentQuestion.mensaInfo.cognitiveSkills) && currentQuestion.mensaInfo.cognitiveSkills.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

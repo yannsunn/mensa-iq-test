@@ -7,6 +7,7 @@ import { UnifiedQuestion, TestResult } from '@/types/question';
 import { calculateIQScore, calculatePercentile, calculateCategoryScores } from '@/utils/scoring';
 import { useTimer } from '@/hooks/useTimer';
 import { useQuestionNavigation } from '@/hooks/useQuestionNavigation';
+import { getCognitiveSkills } from '@/utils/dataValidation';
 import TestLayout from './common/TestLayout';
 import QuestionDisplay from './common/QuestionDisplay';
 import PracticeFeedback from './PracticeFeedback';
@@ -167,7 +168,8 @@ export default function BaseTest({
               commonMistakes: [],
               relatedConcepts: [],
               difficultyJustification: ''
-            }
+            },
+            cognitiveSkills: getCognitiveSkills(currentQuestion)
           } as DetailedQuestion}
           userAnswer={selectedAnswer}
           isCorrect={isCorrect}
