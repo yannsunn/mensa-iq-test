@@ -1,6 +1,10 @@
 import { UnifiedQuestion } from '@/types/question';
 import { logicalReasoningQuestions, numericalReasoningQuestions, spatialReasoningQuestions, verbalReasoningQuestions, abstractReasoningQuestions } from './internationalMensaQuestions';
 import { visualQuestions } from './visualQuestions';
+import { expandedLogicalQuestions } from './expandedLogicalQuestions';
+import { expandedNumericalQuestions } from './expandedNumericalQuestions';
+import { expandedSpatialQuestions } from './expandedSpatialQuestions';
+import { expandedMatrixQuestions } from './expandedMatrixQuestions';
 
 // すべての質問を統一フォーマットに変換
 interface QuestionWithPracticeMode {
@@ -97,7 +101,12 @@ export const UNIFIED_QUESTIONS: UnifiedQuestion[] = [
   ...convertToUnifiedFormat(spatialReasoningQuestions as QuestionWithPracticeMode[]),
   ...convertToUnifiedFormat(verbalReasoningQuestions as QuestionWithPracticeMode[]),
   ...convertToUnifiedFormat(abstractReasoningQuestions as QuestionWithPracticeMode[]),
-  ...convertToUnifiedFormat(visualQuestions as QuestionWithPracticeMode[])
+  ...convertToUnifiedFormat(visualQuestions as QuestionWithPracticeMode[]),
+  // 拡充された問題セット
+  ...convertToUnifiedFormat(expandedLogicalQuestions as QuestionWithPracticeMode[]),
+  ...convertToUnifiedFormat(expandedNumericalQuestions as QuestionWithPracticeMode[]),
+  ...convertToUnifiedFormat(expandedSpatialQuestions as QuestionWithPracticeMode[]),
+  ...convertToUnifiedFormat(expandedMatrixQuestions as QuestionWithPracticeMode[])
 ];
 
 // カテゴリ別に質問を取得
