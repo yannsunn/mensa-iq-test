@@ -1,9 +1,9 @@
-import { Question } from '@/types';
+import { BaseQuestion } from '@/types/question';
 
 // 国際MENSA標準・Raven Progressive Matrices準拠の本格問題データベース
 // 世界各国のMENSA（アメリカ、イギリス、日本、ドイツ、フランス、オーストラリア等）の問題形式を網羅
 
-export interface DetailedQuestion extends Question {
+export interface DetailedQuestion extends BaseQuestion {
   practiceMode: {
     immediateExplanation: string;
     detailedSolution: string;

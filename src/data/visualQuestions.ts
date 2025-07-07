@@ -1,7 +1,7 @@
-import { Question } from '@/types';
+import { BaseQuestion } from '@/types/question';
 
 // 拡張した質問タイプ
-export interface VisualQuestion extends Question {
+export interface VisualQuestion extends BaseQuestion {
   visualType: 'raven_matrix' | 'cube_spatial' | 'pattern_sequence' | 'rotation' | 'text_only';
   visualData?: {
     matrix?: (string | null)[][];

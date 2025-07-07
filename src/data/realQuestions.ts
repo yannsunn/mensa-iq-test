@@ -1,7 +1,7 @@
-import { Question } from '@/types';
+import { BaseQuestion } from '@/types/question';
 
 // 実際のMENSA/IQテストパターンに基づいた本格的な問題データベース
-export const realMensaQuestions: Question[] = [
+export const realMensaQuestions: BaseQuestion[] = [
   // ===== 論理推論 (実際のMENSAパターン) =====
   {
     id: 'logical_real_1',
@@ -374,19 +374,19 @@ export const realMensaQuestions: Question[] = [
 ];
 
 // 難易度別に問題を取得する関数
-export const getQuestionsByDifficultyRange = (min: number, max: number): Question[] => {
+export const getQuestionsByDifficultyRange = (min: number, max: number): BaseQuestion[] => {
   return realMensaQuestions.filter(q => q.difficulty >= min && q.difficulty <= max);
 };
 
 // カテゴリ別に問題を取得する関数
-export const getQuestionsByCategory = (category: Question['category']): Question[] => {
+export const getQuestionsByCategory = (category: BaseQuestion['category']): BaseQuestion[] => {
   return realMensaQuestions.filter(q => q.category === category);
 };
 
 // MENSA標準の35問テストセットを生成
-export const generateMensaTestSet = (): Question[] => {
-  const categories: Question['category'][] = ['logical', 'numerical', 'spatial', 'matrix', 'verbal', 'abstract', 'memory'];
-  const testSet: Question[] = [];
+export const generateMensaTestSet = (): BaseQuestion[] => {
+  const categories: BaseQuestion['category'][] = ['logical', 'numerical', 'spatial', 'matrix', 'verbal', 'abstract', 'memory'];
+  const testSet: BaseQuestion[] = [];
   
   // 各カテゴリから5問ずつ、難易度を段階的に上げて選択
   categories.forEach(category => {

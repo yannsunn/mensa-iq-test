@@ -29,5 +29,4 @@ export const LazyComponents = {
   CubeQuestion: () => import('@/components/CubeQuestion'),
   PracticeFeedback: () => import('@/components/PracticeFeedback'),
   ExamResults: () => import('@/components/ExamResults'),
-  TestResults: () => import('@/components/TestResults'),
 };
