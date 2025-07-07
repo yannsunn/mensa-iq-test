@@ -1,35 +1,56 @@
 @import "tailwindcss";
 
-/* Optimized CSS Variables for Performance */
+/* Optimized CSS Variables for Performance & Neuromarketing */
 :root {
-  /* Modern Color Palette - Reduced for Performance */
-  --cyan: #06b6d4;
-  --blue: #3b82f6;
-  --violet: #8b5cf6;
-  --purple: #a855f7;
-  --emerald: #10b981;
-  --amber: #f59e0b;
+  /* Primary Brand Colors - High Contrast for Visibility */
+  --primary: #2563eb; /* Blue - Trust, Intelligence */
+  --primary-dark: #1d4ed8;
+  --primary-light: #3b82f6;
   
-  /* Dark Theme Base */
-  --bg-primary: #020617;
-  --bg-secondary: #0f172a;
-  --bg-tertiary: #1e293b;
+  /* Accent Colors - CTA Optimization */
+  --accent: #10b981; /* Green - Success, Action */
+  --warning: #f59e0b; /* Amber - Attention */
+  --danger: #ef4444; /* Red - Error */
   
-  /* Text Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #94a3b8;
+  /* Neutral Colors - Maximum Readability */
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
   
-  /* Border Colors */
-  --border-primary: #334155;
-  --border-secondary: #475569;
+  /* Semantic Colors */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
   
-  /* Optimized Shadows */
-  --shadow-cyan: 0 10px 40px -10px rgba(6, 182, 212, 0.25);
-  --shadow-violet: 0 10px 40px -10px rgba(139, 92, 246, 0.25);
+  /* Borders & Dividers */
+  --border-light: #e5e7eb;
+  --border-medium: #d1d5db;
+  
+  /* Shadows - Subtle Depth */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Spacing System */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
 }
 
-/* Base Styles - Performance Optimized */
+/* Base Styles - Optimized for Readability */
 * {
   margin: 0;
   padding: 0;
@@ -40,138 +61,250 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px; /* Base font size */
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   color: var(--text-primary);
-  background: var(--bg-primary);
+  background: var(--white);
   min-height: 100vh;
+  letter-spacing: -0.01em; /* Slight tightening for better readability */
 }
 
-/* Utility Classes - Minimal and Efficient */
-.glass-effect {
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-primary);
+/* Typography System - Optimized for Screen Reading */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.02em;
 }
 
-.hover-lift {
-  transition: transform 0.2s ease-out;
+h1 { 
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
-.hover-lift:hover {
-  transform: translateY(-2px);
+h2 { 
+  font-size: 2rem;
+  margin-bottom: 0.875rem;
 }
 
-/* Button Styles - Simplified */
+h3 { 
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+/* Responsive Typography */
+@media (max-width: 640px) {
+  html { font-size: 15px; }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+}
+
+@media (min-width: 1024px) {
+  html { font-size: 17px; }
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.25rem; }
+  h3 { font-size: 1.75rem; }
+}
+
+/* Button Styles - Neuromarketing Optimized */
 .btn-primary {
-  background: linear-gradient(to right, var(--cyan), var(--blue));
-  color: white;
-  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: var(--white);
+  padding: 1rem 2rem;
   border-radius: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1.125rem;
   transition: all 0.2s ease-out;
   border: none;
   cursor: pointer;
+  box-shadow: var(--shadow-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-cyan);
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
-.btn-secondary {
-  background: linear-gradient(to right, var(--violet), var(--purple));
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  font-weight: 500;
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* CTA Button - Maximum Conversion */
+.btn-cta {
+  background: var(--accent);
+  color: var(--white);
+  padding: 1.25rem 2.5rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  font-size: 1.25rem;
   transition: all 0.2s ease-out;
   border: none;
   cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-secondary:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-violet);
+.btn-cta:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl);
 }
 
-/* Card Styles - Clean and Modern */
+/* Card Styles - High Readability */
 .card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
+  background: var(--white);
+  border: 2px solid var(--border-light);
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 2rem;
   transition: all 0.2s ease-out;
+  box-shadow: var(--shadow-sm);
 }
 
 .card:hover {
-  border-color: var(--border-secondary);
-  transform: translateY(-1px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-/* Text Gradient - Simple */
-.text-gradient {
-  background: linear-gradient(to right, var(--cyan), var(--violet));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.card-active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Loading Animation - Lightweight */
+/* Container Styles - Optimal Reading Width */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container { padding: 0 1.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .container { padding: 0 2rem; }
+}
+
+/* Loading Animation - Smooth Pulse */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
 }
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Responsive Typography */
-@media (max-width: 640px) {
-  html { font-size: 14px; }
+/* Success Animation */
+@keyframes success-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
-@media (min-width: 641px) and (max-width: 1024px) {
-  html { font-size: 15px; }
+.animate-success {
+  animation: success-bounce 0.5s ease-out;
 }
 
-@media (min-width: 1025px) {
-  html { font-size: 16px; }
-}
+/* Spacing Utilities */
+.space-y-1 > * + * { margin-top: 0.25rem; }
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.space-y-3 > * + * { margin-top: 0.75rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
+.space-y-6 > * + * { margin-top: 1.5rem; }
+.space-y-8 > * + * { margin-top: 2rem; }
 
-/* Focus Styles */
+/* Text Utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+
+/* Color Utilities */
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-success { color: var(--accent); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+
+.bg-primary { background-color: var(--primary); }
+.bg-gray-50 { background-color: var(--gray-50); }
+.bg-gray-100 { background-color: var(--gray-100); }
+.bg-white { background-color: var(--white); }
+
+/* Focus Styles - Accessibility */
 :focus-visible {
-  outline: 2px solid var(--cyan);
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-secondary);
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-primary);
+button:focus-visible {
+  outline-offset: 4px;
 }
 
-/* Reduced Motion Support */
+/* Selection */
+::selection {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* Scrollbar - Minimal Design */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 5px;
+  border: 2px solid var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* Smooth Scrolling for Better UX */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Accessibility Support */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -179,14 +312,47 @@ body {
   }
 }
 
-/* High Contrast Support */
 @media (prefers-contrast: high) {
+  :root {
+    --primary: #0047ab;
+    --text-primary: #000000;
+    --text-secondary: #000000;
+  }
+  
   .card {
-    border-width: 2px;
+    border-width: 3px;
+    border-color: var(--gray-900);
   }
   
   .btn-primary,
-  .btn-secondary {
-    border: 2px solid white;
+  .btn-cta {
+    border: 3px solid transparent;
+    outline: 3px solid var(--gray-900);
+    outline-offset: 2px;
   }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    color: black;
+    background: white;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
