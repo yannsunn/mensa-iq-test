@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, ArrowLeft, ArrowRight, AlertTriangle, Trophy } from 'lucide-react';
 import { DetailedQuestion, generateExamSet } from '@/data/internationalMensaQuestions';
+import CubeQuestion from './CubeQuestion';
 
 interface ExamTestProps {
   onBack: () => void;
@@ -283,49 +284,120 @@ export default function ExamTest({ onComplete }: ExamTestProps) {
               </span>
             </div>
 
-            {/* 問題文 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-8"
-            >
-              <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-relaxed">
-                {currentQuestion.question}
-              </h2>
-            </motion.div>
-
-            {/* 選択肢 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="grid gap-4 md:gap-6"
-            >
-              {currentQuestion.options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(index)}
-                  className={`
-                    p-6 md:p-8 text-left border-2 rounded-2xl transition-all duration-300
-                    ${answers[currentQuestionIndex] === index
-                      ? 'border-yellow-400 bg-yellow-400/20 text-white shadow-xl backdrop-blur-sm'
-                      : 'border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10 backdrop-blur-sm'
+            {/* 空間問題の特別な表示 */}
+            {currentQuestion.category === 'spatial' && currentQuestion.visualType && currentQuestion.cubeData ? (
+              <CubeQuestion
+                type={currentQuestion.visualType}
+                question={currentQuestion.question}
+                options={currentQuestion.options}
+                onSelect={handleAnswerSelect}
+                selectedAnswer={answers[currentQuestionIndex]}
+                cubeViews={
+                  currentQuestion.visualType === 'cube_rotation' ? [
+                    // 初期状態（前面=A（赤）、上面=B（青）、右面=C（緑））
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#ff6b6b', // A - 赤
+                        top: '#4ecdc4',   // B - 青  
+                        right: '#45b7d1'  // C - 緑
+                      }
+                    },
+                    // 左回転後の状態（右面が前面に移動）
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#45b7d1', // C - 緑（元の右面）
+                        top: '#4ecdc4',   // B - 青（上面は変化なし）
+                        right: '#9c27b0'  // D - 紫（元の後面）
+                      }
+                    },
+                    // 選択肢A: 元の前面
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#ff6b6b', // A - 赤
+                        top: '#4ecdc4',   // B - 青
+                        right: '#ffeb3b'  // 黄
+                      }
+                    },
+                    // 選択肢B: 元の上面
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#4ecdc4', // B - 青
+                        top: '#e67e22',   // オレンジ
+                        right: '#ff6b6b'  // A - 赤
+                      }
+                    },
+                    // 選択肢C: 元の右面（正解）
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#45b7d1', // C - 緑
+                        top: '#4ecdc4',   // B - 青
+                        right: '#9c27b0'  // D - 紫
+                      }
+                    },
+                    // 選択肢D: 反対面
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#9c27b0', // D - 紫
+                        top: '#4ecdc4',   // B - 青
+                        right: '#34495e'  // 灰色
+                      }
                     }
-                  `}
+                  ] : undefined
+                }
+              />
+            ) : (
+              <>
+                {/* 通常の問題文 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-8"
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className={`
-                      w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold
-                      ${answers[currentQuestionIndex] === index ? 'border-yellow-400 bg-yellow-400 text-black' : 'border-white/40 text-white/60'}
-                    `}>
-                      {String.fromCharCode(65 + index)}
-                    </div>
-                    <span className="text-lg md:text-xl">{option}</span>
-                  </div>
-                </button>
-              ))}
-            </motion.div>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-relaxed">
+                    {currentQuestion.question}
+                  </h2>
+                </motion.div>
+
+                {/* 選択肢 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="grid gap-4 md:gap-6"
+                >
+                  {currentQuestion.options.map((option, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleAnswerSelect(index)}
+                      className={`
+                        p-6 md:p-8 text-left border-2 rounded-2xl transition-all duration-300
+                        ${answers[currentQuestionIndex] === index
+                          ? 'border-yellow-400 bg-yellow-400/20 text-white shadow-xl backdrop-blur-sm'
+                          : 'border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10 backdrop-blur-sm'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`
+                          w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold
+                          ${answers[currentQuestionIndex] === index ? 'border-yellow-400 bg-yellow-400 text-black' : 'border-white/40 text-white/60'}
+                        `}>
+                          {String.fromCharCode(65 + index)}
+                        </div>
+                        <span className="text-lg md:text-xl">{option}</span>
+                      </div>
+                    </button>
+                  ))}
+                </motion.div>
+              </>
+            )}
           </motion.div>
         </AnimatePresence>
 

@@ -31,7 +31,7 @@ export default function CubeQuestion({
       case 'net_to_cube':
         return (
           <div className="flex flex-col items-center space-y-4">
-            <h4 className="font-semibold">立方体の展開図：</h4>
+            <h4 className="font-semibold text-white">立方体の展開図：</h4>
             <CubeNet faceLabels={netLabels} />
           </div>
         );
@@ -39,7 +39,7 @@ export default function CubeQuestion({
       case 'cube_rotation':
         return (
           <div className="flex flex-col items-center space-y-4">
-            <h4 className="font-semibold">立方体の回転：</h4>
+            <h4 className="font-semibold text-white">立方体の回転：</h4>
             <div className="flex space-x-8">
               {cubeViews.slice(0, 2).map((view, index) => (
                 <div key={index} className="text-center">
@@ -48,7 +48,7 @@ export default function CubeQuestion({
                     colors={view.colors}
                     size={100}
                   />
-                  <p className="text-sm mt-2">視点 {index + 1}</p>
+                  <p className="text-sm mt-2 text-white">視点 {index + 1}</p>
                 </div>
               ))}
             </div>
@@ -58,9 +58,9 @@ export default function CubeQuestion({
       case 'opposite_faces':
         return (
           <div className="flex flex-col items-center space-y-4">
-            <h4 className="font-semibold">立方体の展開図：</h4>
+            <h4 className="font-semibold text-white">立方体の展開図：</h4>
             <CubeNet faceLabels={netLabels} />
-            <div className="text-sm text-gray-600 max-w-md text-center">
+            <div className="text-sm text-gray-300 max-w-md text-center">
               この展開図を組み立てて立方体にした時の、向かい合う面のペアを考えてください。
             </div>
           </div>
@@ -82,8 +82,8 @@ export default function CubeQuestion({
               className={`
                 p-4 border-2 rounded-lg transition-all duration-200 flex flex-col items-center space-y-2
                 ${selectedAnswer === index
-                  ? 'border-blue-500 bg-blue-50 shadow-md'
-                  : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
+                  ? 'border-blue-400 bg-blue-400/20 shadow-md'
+                  : 'border-white/20 hover:border-white/40 hover:bg-white/10'
                 }
               `}
             >
@@ -94,7 +94,7 @@ export default function CubeQuestion({
                   size={80}
                 />
               )}
-              <span className="text-sm font-medium">{option}</span>
+              <span className="text-sm font-medium text-white">{option}</span>
             </button>
           ))}
         </div>
@@ -110,8 +110,8 @@ export default function CubeQuestion({
             className={`
               p-4 text-left border-2 rounded-lg transition-all duration-200
               ${selectedAnswer === index
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                ? 'border-blue-400 bg-blue-400/20 text-white'
+                : 'border-white/20 hover:border-white/30 hover:bg-white/10 text-white/90'
               }
             `}
           >
@@ -124,25 +124,20 @@ export default function CubeQuestion({
 
   return (
     <div className="space-y-6">
-      {/* 質問文 */}
-      <div className="text-center">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">{question}</h3>
-      </div>
-
       {/* 視覚的要素 */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
+      <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20">
         {renderQuestionVisual()}
       </div>
 
       {/* 選択肢 */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h4 className="text-md font-semibold mb-4">選択肢：</h4>
+      <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20">
+        <h4 className="text-md font-semibold mb-4 text-white">選択肢：</h4>
         {renderOptions()}
       </div>
 
       {/* 空間認識のヒント */}
-      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-        <p className="text-sm text-purple-800">
+      <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-400/30">
+        <p className="text-sm text-purple-200">
           🎲 <strong>空間認識のヒント：</strong> 
           {type === 'net_to_cube' && '展開図を頭の中で折りたたんで立方体を想像してみましょう。'}
           {type === 'cube_rotation' && '立方体の各面の位置関係を3次元的に考えてみましょう。'}

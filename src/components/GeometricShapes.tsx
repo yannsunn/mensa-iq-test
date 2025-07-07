@@ -314,39 +314,93 @@ export const PatternBox = ({
 export const Cube3D = ({ 
   size = 80, 
   showFaces = ['front', 'top', 'right'],
-  colors = { front: '#e0e0e0', top: '#f0f0f0', right: '#d0d0d0' }
+  colors = { front: '#e0e0e0', top: '#f0f0f0', right: '#d0d0d0' },
+  labels = { front: '', top: '', right: '' }
 }: {
   size?: number;
   showFaces?: string[];
   colors?: { [key: string]: string };
+  labels?: { [key: string]: string };
 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100">
     {/* Front face */}
     {showFaces.includes('front') && (
-      <polygon
-        points="20,30 20,80 70,80 70,30"
-        fill={colors.front}
-        stroke="black"
-        strokeWidth="1"
-      />
+      <>
+        <polygon
+          points="20,30 20,80 70,80 70,30"
+          fill={colors.front}
+          stroke="black"
+          strokeWidth="1"
+        />
+        {labels.front && (
+          <text
+            x="45"
+            y="55"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="16"
+            fontWeight="bold"
+            fill="white"
+            stroke="black"
+            strokeWidth="0.5"
+          >
+            {labels.front}
+          </text>
+        )}
+      </>
     )}
     {/* Top face */}
     {showFaces.includes('top') && (
-      <polygon
-        points="20,30 35,15 85,15 70,30"
-        fill={colors.top}
-        stroke="black"
-        strokeWidth="1"
-      />
+      <>
+        <polygon
+          points="20,30 35,15 85,15 70,30"
+          fill={colors.top}
+          stroke="black"
+          strokeWidth="1"
+        />
+        {labels.top && (
+          <text
+            x="52.5"
+            y="22.5"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="14"
+            fontWeight="bold"
+            fill="white"
+            stroke="black"
+            strokeWidth="0.5"
+          >
+            {labels.top}
+          </text>
+        )}
+      </>
     )}
     {/* Right face */}
     {showFaces.includes('right') && (
-      <polygon
-        points="70,30 85,15 85,65 70,80"
-        fill={colors.right}
-        stroke="black"
-        strokeWidth="1"
-      />
+      <>
+        <polygon
+          points="70,30 85,15 85,65 70,80"
+          fill={colors.right}
+          stroke="black"
+          strokeWidth="1"
+        />
+        {labels.right && (
+          <text
+            x="77.5"
+            y="47.5"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="14"
+            fontWeight="bold"
+            fill="white"
+            stroke="black"
+            strokeWidth="0.5"
+            transform="rotate(25 77.5 47.5)"
+          >
+            {labels.right}
+          </text>
+        )}
+      </>
     )}
   </svg>
 );

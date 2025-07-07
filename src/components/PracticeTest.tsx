@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, ArrowLeft, BookOpen } from 'lucide-react';
 import { DetailedQuestion, generatePracticeSet } from '@/data/internationalMensaQuestions';
 import PracticeFeedback from './PracticeFeedback';
+import CubeQuestion from './CubeQuestion';
 
 interface PracticeTestProps {
   difficulty: 'easy' | 'medium' | 'hard';
@@ -20,6 +21,7 @@ export default function PracticeTest({ difficulty, onBack }: PracticeTestProps) 
   const [startTime, setStartTime] = useState(Date.now());
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
 
   useEffect(() => {
     const practiceQuestions = generatePracticeSet(difficulty);
@@ -29,12 +31,29 @@ export default function PracticeTest({ difficulty, onBack }: PracticeTestProps) 
 
   useEffect(() => {
     setStartTime(Date.now());
+    setTimeSpent(0);
+    setTimeRemaining(currentQuestion?.timeLimit || null);
+    
     const interval = setInterval(() => {
-      setTimeSpent(Math.floor((Date.now() - startTime) / 1000));
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      setTimeSpent(elapsed);
+      
+      if (currentQuestion?.timeLimit) {
+        const remaining = currentQuestion.timeLimit - elapsed;
+        setTimeRemaining(remaining > 0 ? remaining : 0);
+        
+        if (remaining <= 0 && !showFeedback) {
+          // 時間切れの場合、自動的に提出
+          if (selectedAnswer === null) {
+            setSelectedAnswer(-1); // 未回答を示す特別な値
+          }
+          handleSubmitAnswer();
+        }
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentQuestionIndex, startTime]);
+  }, [currentQuestionIndex]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -169,56 +188,131 @@ export default function PracticeTest({ difficulty, onBack }: PracticeTestProps) 
               <span className="px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-sm">
                 {currentQuestion.mensaLevel}
               </span>
-              <span className="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm">
-                制限時間: {currentQuestion.timeLimit}秒
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                timeRemaining && timeRemaining <= 10 
+                  ? 'bg-red-500/20 text-red-300 animate-pulse' 
+                  : 'bg-pink-500/20 text-pink-300'
+              }`}>
+                残り時間: {timeRemaining !== null ? timeRemaining : currentQuestion.timeLimit}秒
               </span>
             </div>
 
-            {/* 問題文 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-8"
-            >
-              <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-relaxed">
-                {currentQuestion.question}
-              </h2>
-            </motion.div>
-
-            {/* 選択肢 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="grid gap-4 md:gap-6 mb-8"
-            >
-              {currentQuestion.options.map((option, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleAnswerSelect(index)}
-                  className={`
-                    p-6 md:p-8 text-left border-2 rounded-2xl transition-all duration-300
-                    ${selectedAnswer === index
-                      ? 'border-blue-400 bg-blue-400/20 text-white shadow-xl backdrop-blur-sm'
-                      : 'border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10 backdrop-blur-sm'
+            {/* 空間問題の特別な表示 */}
+            {currentQuestion.category === 'spatial' && currentQuestion.visualType && currentQuestion.cubeData ? (
+              <CubeQuestion
+                type={currentQuestion.visualType}
+                question={currentQuestion.question}
+                options={currentQuestion.options}
+                onSelect={handleAnswerSelect}
+                selectedAnswer={selectedAnswer}
+                cubeViews={
+                  currentQuestion.visualType === 'cube_rotation' ? [
+                    // 初期状態（前面=A（赤）、上面=B（青）、右面=C（緑））
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#ff6b6b', // A - 赤
+                        top: '#4ecdc4',   // B - 青  
+                        right: '#45b7d1'  // C - 緑
+                      }
+                    },
+                    // 左回転後の状態（右面が前面に移動）
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#45b7d1', // C - 緑（元の右面）
+                        top: '#4ecdc4',   // B - 青（上面は変化なし）
+                        right: '#9c27b0'  // D - 紫（元の後面）
+                      }
+                    },
+                    // 選択肢A: 元の前面
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#ff6b6b', // A - 赤
+                        top: '#4ecdc4',   // B - 青
+                        right: '#ffeb3b'  // 黄
+                      }
+                    },
+                    // 選択肢B: 元の上面
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#4ecdc4', // B - 青
+                        top: '#e67e22',   // オレンジ
+                        right: '#ff6b6b'  // A - 赤
+                      }
+                    },
+                    // 選択肢C: 元の右面（正解）
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#45b7d1', // C - 緑
+                        top: '#4ecdc4',   // B - 青
+                        right: '#9c27b0'  // D - 紫
+                      }
+                    },
+                    // 選択肢D: 反対面
+                    {
+                      showFaces: ['front', 'top', 'right'],
+                      colors: {
+                        front: '#9c27b0', // D - 紫
+                        top: '#4ecdc4',   // B - 青
+                        right: '#34495e'  // 灰色
+                      }
                     }
-                  `}
+                  ] : undefined
+                }
+              />
+            ) : (
+              <>
+                {/* 通常の問題文 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-8"
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className={`
-                      w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold
-                      ${selectedAnswer === index ? 'border-blue-400 bg-blue-400 text-white' : 'border-white/40 text-white/60'}
-                    `}>
-                      {String.fromCharCode(65 + index)}
-                    </div>
-                    <span className="text-lg md:text-xl">{option}</span>
-                  </div>
-                </motion.button>
-              ))}
-            </motion.div>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-relaxed">
+                    {currentQuestion.question}
+                  </h2>
+                </motion.div>
+
+                {/* 選択肢 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="grid gap-4 md:gap-6 mb-8"
+                >
+                  {currentQuestion.options.map((option, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleAnswerSelect(index)}
+                      className={`
+                        p-6 md:p-8 text-left border-2 rounded-2xl transition-all duration-300
+                        ${selectedAnswer === index
+                          ? 'border-blue-400 bg-blue-400/20 text-white shadow-xl backdrop-blur-sm'
+                          : 'border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10 backdrop-blur-sm'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`
+                          w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold
+                          ${selectedAnswer === index ? 'border-blue-400 bg-blue-400 text-white' : 'border-white/40 text-white/60'}
+                        `}>
+                          {String.fromCharCode(65 + index)}
+                        </div>
+                        <span className="text-lg md:text-xl">{option}</span>
+                      </div>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              </>
+            )}
 
             {/* 認知スキル情報 */}
             <motion.div

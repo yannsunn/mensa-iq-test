@@ -14,6 +14,19 @@ export interface DetailedQuestion extends Question {
   source: string; // 問題の出典国・機関
   mensaLevel: 'entry' | 'standard' | 'expert' | 'genius';
   cognitiveSkills: string[];
+  visualType?: 'cube_rotation' | 'net_to_cube' | 'opposite_faces';
+  cubeData?: {
+    initialState?: {
+      front: string;
+      top: string;
+      right: string;
+      back?: string;
+      bottom?: string;
+      left?: string;
+    };
+    rotation?: string;
+    netLabels?: string[];
+  };
 }
 
 // === 論理推論問題（Logic & Reasoning）===
@@ -189,9 +202,21 @@ export const spatialReasoningQuestions: DetailedQuestion[] = [
     id: 'spatial_001',
     category: 'spatial',
     difficulty: 10,
-    question: '立方体を左に90度回転させたとき、前面に見える面はどれか？\n現在：前面=A、上面=B、右面=C',
+    question: '立方体を左に90度回転させたとき、前面に見える面はどれか？',
     options: ['A', 'B', 'C', '反対面'],
     correctAnswer: 2,
+    visualType: 'cube_rotation',
+    cubeData: {
+      initialState: {
+        front: 'A',
+        top: 'B',
+        right: 'C',
+        back: 'D',
+        bottom: 'E',
+        left: 'F'
+      },
+      rotation: '左に90度'
+    },
     timeLimit: 120,
     explanation: '3D空間での回転理解',
     practiceMode: {
