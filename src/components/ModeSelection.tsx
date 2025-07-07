@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Trophy, Brain, Sparkles, Timer, Target, CheckCircle, Globe, BarChart3, Award } from 'lucide-react';
-import { getQuestionsStatistics } from '@/data/unifiedQuestions';
+// import { getQuestionsStatistics } from '@/data/unifiedQuestions';
 
 interface ModeSelectionProps {
   onSelectMode: (mode: 'practice' | 'exam', difficulty?: 'easy' | 'medium' | 'hard') => void;
@@ -12,12 +12,15 @@ interface ModeSelectionProps {
 export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
   const [selectedMode, setSelectedMode] = useState<'practice' | 'exam' | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
-  const [stats, setStats] = useState<{ total: number; byCategory: Record<string, number> }>({ total: 0, byCategory: {} });
+  // const [stats, setStats] = useState<{ total: number; byCategory: Record<string, number> }>({ total: 0, byCategory: {} });
 
-  useEffect(() => {
-    const statistics = getQuestionsStatistics();
-    setStats(statistics);
-  }, []);
+  // useEffect(() => {
+  //   const statistics = getQuestionsStatistics();
+  //   setStats(statistics);
+  // }, []);
+  
+  // 一時的に固定値を使用
+  const stats = { total: 268, byCategory: { logical: 50, numerical: 50, spatial: 50, matrix: 50, pattern: 20, verbal: 20, abstract: 20, memory: 8 } };
 
   const practiceFeatures = [
     { icon: CheckCircle, text: '一問一答形式で即座にフィードバック' },
