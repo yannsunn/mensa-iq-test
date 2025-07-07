@@ -40,14 +40,14 @@ export function safeNumber(value: number | undefined | null, fallback: number = 
 export function validateQuestion(question: UnifiedQuestion): UnifiedQuestion {
   return {
     ...question,
-    category: safeString(question.category, '一般'),
+    category: question.category,
     difficulty: safeNumber(question.difficulty, 10),
     options: safeArray(question.options),
     explanation: safeString(question.explanation),
     mensaInfo: question.mensaInfo ? {
       ...question.mensaInfo,
       cognitiveSkills: safeArray(question.mensaInfo.cognitiveSkills),
-      mensaLevel: safeString(question.mensaInfo.mensaLevel, 'Standard')
+      mensaLevel: question.mensaInfo.mensaLevel
     } : undefined,
     practiceDetails: question.practiceDetails ? {
       ...question.practiceDetails,

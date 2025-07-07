@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, XCircle, Lightbulb, Brain, Target, AlertTriangle, BookOpen, TrendingUp } from 'lucide-react';
 import { DetailedQuestion } from '@/data/internationalMensaQuestions';
-import { getCognitiveSkillsString, getCommonMistakes, getRelatedConcepts } from '@/utils/dataValidation';
+import { getCognitiveSkillsString, safeArray } from '@/utils/dataValidation';
 
 interface PracticeFeedbackProps {
   question: DetailedQuestion;
@@ -142,7 +142,7 @@ export default function PracticeFeedback({
           </motion.div>
 
           {/* よくある間違い */}
-          {!isCorrect && getCommonMistakes(question.practiceMode).length > 0 && (
+          {!isCorrect && safeArray(question.practiceMode.commonMistakes).length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -155,7 +155,7 @@ export default function PracticeFeedback({
               </div>
               <div className="bg-orange-500/10 border border-orange-400/20 rounded-xl p-4">
                 <ul className="space-y-2">
-                  {getCommonMistakes(question.practiceMode).map((mistake, index) => (
+                  {safeArray(question.practiceMode.commonMistakes).map((mistake, index) => (
                     <li key={index} className="text-orange-100 flex items-start">
                       <span className="text-orange-400 mr-2">•</span>
                       {mistake}
@@ -179,7 +179,7 @@ export default function PracticeFeedback({
             </div>
             <div className="bg-purple-500/10 border border-purple-400/20 rounded-xl p-4">
               <div className="flex flex-wrap gap-2 mb-3">
-                {getRelatedConcepts(question.practiceMode).map((concept, index) => (
+                {safeArray(question.practiceMode.relatedConcepts).map((concept, index) => (
                   <span
                     key={index}
                     className="px-3 py-1 bg-purple-400/20 text-purple-200 rounded-full text-sm"
