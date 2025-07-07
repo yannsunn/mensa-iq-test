@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, ArrowLeft, ArrowRight, AlertTriangle, Trophy, Target } from 'lucide-react';
+import { Clock, ArrowLeft, ArrowRight, AlertTriangle, Trophy } from 'lucide-react';
 import { DetailedQuestion, generateExamSet } from '@/data/internationalMensaQuestions';
 
 interface ExamTestProps {
@@ -21,7 +21,7 @@ interface ExamResult {
   mensaQualified: boolean;
 }
 
-export default function ExamTest({ onBack, onComplete }: ExamTestProps) {
+export default function ExamTest({ onComplete }: ExamTestProps) {
   const [questions, setQuestions] = useState<DetailedQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
@@ -29,56 +29,30 @@ export default function ExamTest({ onBack, onComplete }: ExamTestProps) {
   const [startTime] = useState(Date.now());
   const [showWarning, setShowWarning] = useState(false);
 
-  useEffect(() => {
-    const examQuestions = generateExamSet();
-    setQuestions(examQuestions);
-    setAnswers(new Array(examQuestions.length).fill(null));
-  }, []);
-
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      handleSubmitTest();
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft]);
-
-  // 5分前警告
-  useEffect(() => {
-    if (timeLeft === 5 * 60 && !showWarning) {
-      setShowWarning(true);
-      setTimeout(() => setShowWarning(false), 5000);
-    }
-  }, [timeLeft, showWarning]);
-
-  const currentQuestion = questions[currentQuestionIndex];
-
-  const handleAnswerSelect = (answerIndex: number) => {
-    const newAnswers = [...answers];
-    newAnswers[currentQuestionIndex] = answerIndex;
-    setAnswers(newAnswers);
+  const calculatePercentile = (iq: number): number => {
+    if (iq >= 160) return 99.99;
+    if (iq >= 155) return 99.98;
+    if (iq >= 150) return 99.96;
+    if (iq >= 145) return 99.87;
+    if (iq >= 140) return 99.62;
+    if (iq >= 135) return 99.0;
+    if (iq >= 130) return 98.0;
+    if (iq >= 125) return 95.0;
+    if (iq >= 120) return 91.0;
+    if (iq >= 115) return 84.0;
+    if (iq >= 110) return 75.0;
+    if (iq >= 105) return 63.0;
+    if (iq >= 100) return 50.0;
+    if (iq >= 95) return 37.0;
+    if (iq >= 90) return 25.0;
+    if (iq >= 85) return 16.0;
+    if (iq >= 80) return 9.0;
+    return Math.max(1.0, (iq - 55) * 0.32);
   };
 
-  const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-  };
-
-  const handleSubmitTest = () => {
-    const totalScore = answers.reduce((score, answer, index) => {
-      return score + (answer === questions[index].correctAnswer ? 1 : 0);
+  const handleSubmitTest = useCallback(() => {
+    const totalScore = answers.reduce((score: number, answer, index) => {
+      return score + (answer !== null && answer === questions[index]?.correctAnswer ? 1 : 0);
     }, 0);
 
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
@@ -89,7 +63,7 @@ export default function ExamTest({ onBack, onComplete }: ExamTestProps) {
     
     categories.forEach(category => {
       const categoryQuestions = questions.filter(q => q.category === category);
-      const categoryCorrect = categoryQuestions.reduce((count, question, index) => {
+      const categoryCorrect = categoryQuestions.reduce((count, question) => {
         const questionIndex = questions.findIndex(q => q.id === question.id);
         return count + (answers[questionIndex] === question.correctAnswer ? 1 : 0);
       }, 0);
@@ -127,28 +101,64 @@ export default function ExamTest({ onBack, onComplete }: ExamTestProps) {
     };
 
     onComplete(result);
+  }, [answers, questions, startTime, onComplete]);
+
+  useEffect(() => {
+    const examQuestions = generateExamSet();
+    setQuestions(examQuestions);
+    setAnswers(new Array(examQuestions.length).fill(null));
+  }, []);
+
+  useEffect(() => {
+    if (timeLeft <= 0 && questions.length > 0) {
+      handleSubmitTest();
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, handleSubmitTest, questions.length])
+
+  // 5分前警告
+  useEffect(() => {
+    if (timeLeft === 5 * 60 && !showWarning) {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 5000);
+    }
+  }, [timeLeft, showWarning]);
+
+  const currentQuestion = questions[currentQuestionIndex];
+
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
+        <div className="text-white text-xl">問題を読み込み中...</div>
+      </div>
+    );
+  }
+
+  const handleAnswerSelect = (answerIndex: number) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestionIndex] = answerIndex;
+    setAnswers(newAnswers);
   };
 
-  const calculatePercentile = (iq: number): number => {
-    if (iq >= 160) return 99.99;
-    if (iq >= 155) return 99.98;
-    if (iq >= 150) return 99.96;
-    if (iq >= 145) return 99.87;
-    if (iq >= 140) return 99.62;
-    if (iq >= 135) return 99.0;
-    if (iq >= 130) return 98.0;
-    if (iq >= 125) return 95.0;
-    if (iq >= 120) return 91.0;
-    if (iq >= 115) return 84.0;
-    if (iq >= 110) return 75.0;
-    if (iq >= 105) return 63.0;
-    if (iq >= 100) return 50.0;
-    if (iq >= 95) return 37.0;
-    if (iq >= 90) return 25.0;
-    if (iq >= 85) return 16.0;
-    if (iq >= 80) return 9.0;
-    return Math.max(1.0, (iq - 55) * 0.32);
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
   };
+
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  // Functions moved before useEffect above
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -315,7 +325,7 @@ export default function ExamTest({ onBack, onComplete }: ExamTestProps) {
                   </div>
                 </button>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
 

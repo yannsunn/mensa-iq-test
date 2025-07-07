@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import ModeSelection from '@/components/ModeSelection';
 import PracticeTest from '@/components/PracticeTest';
 import ExamTest from '@/components/ExamTest';

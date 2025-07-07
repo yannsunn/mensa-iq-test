@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, ArrowLeft, ArrowRight, RotateCcw, BookOpen } from 'lucide-react';
+import { Clock, ArrowLeft, BookOpen } from 'lucide-react';
 import { DetailedQuestion, generatePracticeSet } from '@/data/internationalMensaQuestions';
 import PracticeFeedback from './PracticeFeedback';
 
@@ -34,7 +34,7 @@ export default function PracticeTest({ difficulty, onBack }: PracticeTestProps) 
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, startTime]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
