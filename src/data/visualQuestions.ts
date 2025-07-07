@@ -345,3 +345,6 @@ export const generateVisualMensaTestSet = (): VisualQuestion[] => {
   
   return testSet.sort((a, b) => a.difficulty - b.difficulty);
 };
+
+// エクスポート
+export const visualQuestions = visualMensaQuestions;

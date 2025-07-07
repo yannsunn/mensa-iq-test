@@ -18,7 +18,6 @@ interface CubeQuestionProps {
 
 export default function CubeQuestion({
   type,
-  question,
   options,
   onSelect,
   selectedAnswer,

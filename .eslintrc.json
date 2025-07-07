@@ -1,0 +1,15 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    // 未使用の変数・インポートを警告
+    "@typescript-eslint/no-unused-vars": ["warn", { 
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+    // 未使用のインポートを自動削除
+    "unused-imports/no-unused-imports": "error",
+    // React Hooks の依存関係
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "plugins": ["unused-imports"]
+}
