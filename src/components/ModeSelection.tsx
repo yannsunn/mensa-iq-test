@@ -57,7 +57,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Brain className="w-8 h-8 text-white" />
               </motion.div>
-              <GlowText size="2xl" variant="primary" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+              <GlowText size="2xl" variant="primary" className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
                 MENSA IQ Test
               </GlowText>
             </div>
@@ -66,22 +66,22 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
             </p>
             
             {/* 信頼性指標（ニューロマーケティング） */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mt-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <Card variant="glass" className="text-center p-4" hover={false}>
+                <Card variant="glass" className="text-center card-compact" hover={false}>
                   <motion.div 
-                    className="text-3xl md:text-4xl font-bold text-primary mb-1"
+                    className="text-2xl md:text-3xl font-bold text-primary mb-2"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                   >
                     {stats.total}
                   </motion.div>
-                  <div className="text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
                     <TrendingUp className="w-3 h-3" />
                     問題数
                   </div>
@@ -92,7 +92,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Card variant="glass" className="text-center p-4" hover={false}>
+                <Card variant="glass" className="text-center card-compact" hover={false}>
                   <motion.div 
                     className="text-3xl md:text-4xl font-bold text-accent mb-1"
                     initial={{ scale: 0 }}
@@ -101,7 +101,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.avgIQ}+
                   </motion.div>
-                  <div className="text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
                     <Brain className="w-3 h-3" />
                     平均IQ
                   </div>
@@ -112,7 +112,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card variant="glass" className="text-center p-4" hover={false}>
+                <Card variant="glass" className="text-center card-compact" hover={false}>
                   <motion.div 
                     className="text-3xl md:text-4xl font-bold text-warning mb-1"
                     initial={{ scale: 0 }}
@@ -121,7 +121,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.successRate}%
                   </motion.div>
-                  <div className="text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
                     <Star className="w-3 h-3" />
                     満足度
                   </div>
@@ -132,7 +132,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Card variant="glass" className="text-center p-4" hover={false}>
+                <Card variant="glass" className="text-center card-compact" hover={false}>
                   <motion.div 
                     className="text-3xl md:text-4xl font-bold text-purple-400 mb-1"
                     initial={{ scale: 0 }}
@@ -141,7 +141,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.users}
                   </motion.div>
-                  <div className="text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
                     <Users className="w-3 h-3" />
                     利用者
                   </div>
@@ -167,7 +167,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               <Card
                 variant={selectedMode === 'practice' ? 'gradient' : 'glass'}
                 active={selectedMode === 'practice'}
-                className="relative cursor-pointer p-8 md:p-10"
+                className="relative cursor-pointer card-spacious"
                 glow={selectedMode === 'practice'}
               >
                 {/* 推奨ラベル */}
@@ -254,7 +254,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               <Card
                 variant={selectedMode === 'exam' ? 'gradient' : 'glass'}
                 active={selectedMode === 'exam'}
-                className="relative cursor-pointer p-6 md:p-8"
+                className="relative cursor-pointer card-lg"
                 glow={selectedMode === 'exam'}
               >
                 <div className="mb-6">
@@ -338,7 +338,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       onSelectMode('exam');
                     }
                   }}
-                  className="text-xl md:text-2xl px-12 md:px-16 py-5 md:py-6"
+                  className="text-lg md:text-xl px-8 md:px-12 py-4 md:py-5"
                 >
                   {selectedMode === 'practice' 
                     ? `練習開始（${selectedDifficulty === 'easy' ? '初級' : selectedDifficulty === 'medium' ? '中級' : '上級'}）` 

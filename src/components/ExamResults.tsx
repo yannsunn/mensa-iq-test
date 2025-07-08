@@ -76,7 +76,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
-      <Container className="relative z-10 py-6">
+      <Container className="relative z-elevated py-6">
         {/* メインヘッダー */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}
@@ -91,7 +91,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
             >
               <Trophy className="w-16 h-16 text-yellow-400" />
             </motion.div>
-            <GlowText size="2xl" variant="accent" className="text-4xl md:text-6xl font-bold">
+            <GlowText size="2xl" variant="accent" className="text-3xl md:text-5xl font-bold">
               テスト完了
             </GlowText>
             <motion.div
@@ -112,7 +112,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <Card variant="gradient" className="p-8 mb-8" glow>
+          <Card variant="gradient" className="card-spacious mb-8" glow>
             <div className="text-center mb-8">
               <motion.div
                 initial={{ scale: 0 }}
@@ -122,7 +122,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
               >
                 <IconComponent className="w-12 h-12 text-yellow-400" />
                 <div>
-                  <GlowText size="2xl" variant="accent" className={`text-6xl md:text-8xl font-bold bg-gradient-to-r ${iqLevel.color} bg-clip-text text-transparent`}>
+                  <GlowText size="2xl" variant="accent" className={`text-5xl md:text-7xl font-bold bg-gradient-to-r ${iqLevel.color} bg-clip-text text-transparent`}>
                     {result.iqScore}
                   </GlowText>
                   <div className="text-2xl font-semibold text-text-primary mt-2">IQスコア</div>
@@ -158,13 +158,13 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
               </motion.div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 text-center">
+            <div className="grid md:grid-cols-3 gap-4 md:gap-6 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
               >
-                <Card variant="solid" className="p-6" hover={false}>
+                <Card variant="solid" className="card-lg" hover={false}>
                   <Target className="w-8 h-8 text-primary mx-auto mb-3" />
                   <div className="text-3xl font-bold text-text-primary">{result.totalScore}</div>
                   <div className="text-text-secondary">正解数 / {result.totalQuestions}</div>
@@ -179,7 +179,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9 }}
               >
-                <Card variant="solid" className="p-6" hover={false}>
+                <Card variant="solid" className="card-lg" hover={false}>
                   <Clock className="w-8 h-8 text-success mx-auto mb-3" />
                   <div className="text-3xl font-bold text-text-primary">{formatTime(result.timeSpent)}</div>
                   <div className="text-text-secondary">使用時間</div>
@@ -194,7 +194,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.0 }}
               >
-                <Card variant="solid" className="p-6" hover={false}>
+                <Card variant="solid" className="card-lg" hover={false}>
                   <BarChart3 className="w-8 h-8 text-purple-400 mx-auto mb-3" />
                   <div className="text-3xl font-bold text-text-primary">{result.percentile.toFixed(1)}</div>
                   <div className="text-text-secondary">パーセンタイル</div>
@@ -213,13 +213,13 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <Card variant="glass" className="p-8 mb-8">
+          <Card variant="glass" className="card-spacious mb-8">
             <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center">
               <Brain className="w-6 h-6 text-primary mr-3" />
               認知領域別パフォーマンス
             </h2>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {Object.entries(result.categoryScores).map(([category, score], index) => (
                 <motion.div
                   key={category}
@@ -227,7 +227,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
                 >
-                  <Card variant="solid" className="p-4" hover={false}>
+                  <Card variant="solid" className="card-compact" hover={false}>
                     <div className="flex justify-between items-center mb-3">
                       <h3 className="text-text-primary font-semibold">{categoryNames[category] || category}</h3>
                       <Badge variant="primary">
@@ -268,7 +268,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <Card variant="glass" className="p-8 mb-8 text-center">
+          <Card variant="glass" className="card-spacious mb-8 text-center">
             <h2 className="text-2xl font-bold text-text-primary mb-4 flex items-center justify-center gap-2">
               <Sparkles className="w-6 h-6 text-accent" />
               総合評価
@@ -283,7 +283,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
                 animate={{ scale: 1 }}
                 transition={{ delay: 1.2, type: "spring" }}
               >
-                <Card variant="gradient" className="mt-6 p-6 border-accent/30">
+                <Card variant="gradient" className="mt-6 card-lg border-accent/30">
                   <h3 className="text-xl font-bold text-accent mb-2 flex items-center justify-center gap-2">
                     <Crown className="w-6 h-6" />
                     MENSA入会資格獲得

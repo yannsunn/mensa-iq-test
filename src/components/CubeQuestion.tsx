@@ -79,7 +79,7 @@ export default function CubeQuestion({
               key={index}
               onClick={() => onSelect(index)}
               className={`
-                p-4 border-2 rounded-lg transition-all duration-200 flex flex-col items-center space-y-2
+                p-responsive-md border-2 rounded-lg transition-all duration-200 flex flex-col items-center space-y-2
                 ${selectedAnswer === index
                   ? 'border-blue-400 bg-blue-400/20 shadow-md'
                   : 'border-white/20 hover:border-white/40 hover:bg-white/10'
@@ -107,7 +107,7 @@ export default function CubeQuestion({
             key={index}
             onClick={() => onSelect(index)}
             className={`
-              p-4 text-left border-2 rounded-lg transition-all duration-200
+              p-responsive-md text-left border-2 rounded-lg transition-all duration-200
               ${selectedAnswer === index
                 ? 'border-blue-400 bg-blue-400/20 text-white'
                 : 'border-white/20 hover:border-white/30 hover:bg-white/10 text-white/90'
@@ -124,18 +124,18 @@ export default function CubeQuestion({
   return (
     <div className="space-y-6">
       {/* 視覚的要素 */}
-      <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20">
+      <div className="bg-white/10 backdrop-blur-md p-responsive-lg rounded-lg border border-white/20">
         {renderQuestionVisual()}
       </div>
 
       {/* 選択肢 */}
-      <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20">
+      <div className="bg-white/10 backdrop-blur-md p-responsive-lg rounded-lg border border-white/20">
         <h4 className="text-md font-semibold mb-4 text-white">選択肢：</h4>
         {renderOptions()}
       </div>
 
       {/* 空間認識のヒント */}
-      <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-400/30">
+      <div className="bg-purple-500/20 p-responsive-md rounded-lg border border-purple-400/30">
         <p className="text-sm text-purple-200">
           🎲 <strong>空間認識のヒント：</strong> 
           {type === 'net_to_cube' && '展開図を頭の中で折りたたんで立方体を想像してみましょう。'}

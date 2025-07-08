@@ -35,7 +35,7 @@ export default function PracticeFeedback({
           initial={{ y: 50 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl"
+          className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-responsive-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl"
         >
           {/* ヘッダー：正解/不正解 */}
           <div className="flex items-center justify-center mb-8">
@@ -44,7 +44,7 @@ export default function PracticeFeedback({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                className="flex items-center space-x-4 bg-green-500/20 border border-green-400/30 rounded-2xl px-6 py-4"
+                className="flex items-center space-x-4 bg-green-500/20 border border-green-400/30 rounded-2xl px-responsive-lg py-4"
               >
                 <CheckCircle className="w-8 h-8 text-green-400" />
                 <div>
@@ -57,7 +57,7 @@ export default function PracticeFeedback({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                className="flex items-center space-x-4 bg-red-500/20 border border-red-400/30 rounded-2xl px-6 py-4"
+                className="flex items-center space-x-4 bg-red-500/20 border border-red-400/30 rounded-2xl px-responsive-lg py-4"
               >
                 <XCircle className="w-8 h-8 text-red-400" />
                 <div>
@@ -73,7 +73,7 @@ export default function PracticeFeedback({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mb-6 p-6 bg-white/5 rounded-2xl border border-white/10"
+            className="mb-6 p-responsive-lg bg-white/5 rounded-2xl border border-white/10"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">

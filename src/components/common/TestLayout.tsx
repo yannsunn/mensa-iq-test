@@ -48,7 +48,7 @@ export default function TestLayout({
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
-      <Container className="relative z-10 py-6">
+      <Container className="relative z-elevated py-6">
         {/* ヘッダー */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -56,7 +56,7 @@ export default function TestLayout({
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <Card variant="glass" className="mb-8">
-            <div className="flex flex-col lg:flex-row justify-between items-center">
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-6">
               <div className="flex items-center space-x-4 mb-4 lg:mb-0">
                 <motion.div 
                   className="p-3 bg-gradient-primary rounded-xl shadow-glow"
@@ -75,9 +75,9 @@ export default function TestLayout({
                 </div>
               </div>
 
-              <div className="flex items-center space-x-6">
+              <div className="flex flex-wrap items-center gap-4 md:gap-6">
                 {mode === 'exam' && (
-                  <Card variant="solid" className="px-4 py-2" hover={false}>
+                  <Card variant="solid" className="card-compact" hover={false}>
                     <div className="flex items-center gap-3">
                       <Target className="w-5 h-5 text-accent" />
                       <div>
@@ -93,7 +93,7 @@ export default function TestLayout({
                 {timeRemaining !== undefined && (
                   <Card 
                     variant="solid" 
-                    className={`px-4 py-2 ${timeWarning === 'danger' ? 'border-danger animate-pulse' : ''}`}
+                    className={`card-compact ${timeWarning === 'danger' ? 'border-danger animate-pulse' : ''}`}
                     hover={false}
                   >
                     <div className="flex items-center space-x-2">
@@ -139,8 +139,8 @@ export default function TestLayout({
           >
             <Card variant="glass" className="p-8 mb-8" glow>
               {/* 問題メタデータ */}
-              <Card variant="solid" className="mb-6 p-4" hover={false}>
-                <div className="flex flex-wrap items-center gap-3">
+              <Card variant="solid" className="mb-6 card-compact" hover={false}>
+                <div className="flex flex-wrap items-center gap-2 md:gap-3">
                   <Badge variant="primary">
                     <span className="mr-1">{categoryInfo.icon}</span>
                     {categoryInfo.name}

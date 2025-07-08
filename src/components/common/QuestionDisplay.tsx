@@ -51,7 +51,7 @@ export default function QuestionDisplay({
         transition={{ delay: 0.2 }}
         className="mb-8"
       >
-        <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6 leading-relaxed whitespace-pre-line">
+        <h2 className="text-xl md:text-2xl font-semibold text-white mb-6 leading-relaxed whitespace-pre-line">
           {question.question}
         </h2>
       </motion.div>
@@ -61,7 +61,7 @@ export default function QuestionDisplay({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="grid gap-4 md:gap-6"
+        className="grid gap-responsive-md"
       >
         {question.options.map((option, index) => (
           <motion.button
@@ -71,7 +71,7 @@ export default function QuestionDisplay({
             onClick={() => onAnswerSelect(index)}
             disabled={showExplanation}
             className={`
-              p-6 md:p-8 text-left border-2 rounded-2xl transition-all duration-300
+              p-responsive-lg text-left border-2 rounded-2xl transition-all duration-300
               ${getOptionStyle(index, selectedAnswer, showExplanation, isCorrect, question.correctAnswer)}
             `}
           >
@@ -82,7 +82,7 @@ export default function QuestionDisplay({
               `}>
                 {String.fromCharCode(65 + index)}
               </div>
-              <span className="text-lg md:text-xl">{option}</span>
+              <span className="text-responsive-lg">{option}</span>
             </div>
           </motion.button>
         ))}
@@ -93,7 +93,7 @@ export default function QuestionDisplay({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-6 bg-white/10 backdrop-blur-md rounded-xl border border-white/20"
+          className="mt-6 p-responsive-lg bg-white/10 backdrop-blur-md rounded-xl border border-white/20"
         >
           <h3 className="text-lg font-semibold text-white mb-2">解説:</h3>
           <p className="text-white/80">{question.explanation}</p>

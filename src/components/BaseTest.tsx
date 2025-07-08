@@ -182,13 +182,13 @@ export default function BaseTest({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 mt-8"
+        className="flex flex-col sm:flex-row justify-between items-center gap-responsive-md p-responsive-lg bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 mt-8"
       >
         <button
           onClick={handlePrevious}
           disabled={navigation.isFirst}
           className={`
-            flex items-center space-x-2 px-6 py-3 rounded-xl transition-all duration-300
+            flex items-center space-x-2 px-responsive-lg py-3 rounded-xl transition-all duration-300
             ${navigation.isFirst
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
               : 'bg-white/10 text-white hover:bg-white/20'
@@ -205,7 +205,7 @@ export default function BaseTest({
               onClick={handleSubmitAnswer}
               disabled={selectedAnswer === null}
               className={`
-                px-8 py-3 rounded-xl font-bold transition-all duration-300
+                px-responsive-xl py-3 rounded-xl font-bold transition-all duration-300
                 ${selectedAnswer === null
                   ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700'
@@ -219,7 +219,7 @@ export default function BaseTest({
           {mode === 'exam' && (
             <button
               onClick={handleSubmitTest}
-              className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold px-responsive-xl py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
             >
               テスト終了
             </button>
@@ -230,7 +230,7 @@ export default function BaseTest({
           onClick={handleNext}
           disabled={navigation.isLast || (mode === 'practice' && !showFeedback && selectedAnswer === null)}
           className={`
-            flex items-center space-x-2 px-6 py-3 rounded-xl transition-all duration-300
+            flex items-center space-x-2 px-responsive-lg py-3 rounded-xl transition-all duration-300
             ${navigation.isLast || (mode === 'practice' && !showFeedback && selectedAnswer === null)
               ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700'

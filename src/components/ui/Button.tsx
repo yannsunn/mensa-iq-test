@@ -53,19 +53,19 @@ export default function Button({
     <motion.button
       className={buttonClasses}
       disabled={disabled || loading}
-      whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
-      whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
+      whileHover={{ scale: disabled || loading ? 1 : 1.01 }}
+      whileTap={{ scale: disabled || loading ? 1 : 0.99 }}
       transition={{ duration: 0.1 }}
       {...props}
     >
       {Icon && iconPosition === 'left' && !loading && (
-        <Icon className="w-4 h-4" />
+        <Icon className="w-4 h-4 mr-2 flex-shrink-0" />
       )}
       <span className={loading ? 'opacity-0' : ''}>
         {children}
       </span>
       {Icon && iconPosition === 'right' && !loading && (
-        <Icon className="w-4 h-4" />
+        <Icon className="w-4 h-4 ml-2 flex-shrink-0" />
       )}
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center">
