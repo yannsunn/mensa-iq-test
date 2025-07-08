@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Trophy, Brain, Activity, Target } from 'lucide-react';
+import { Clock, Brain, Activity, Target } from 'lucide-react';
 import { UnifiedQuestion, QUESTION_CATEGORIES } from '@/types/question';
 import { formatTime, getTimeWarningLevel } from '@/hooks/useTimer';
 import { Card, Badge, Progress, GlowText, Container } from '@/components/ui';
