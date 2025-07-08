@@ -303,8 +303,8 @@ export const PatternBox = ({
   };
 
   return (
-    <svg width={size} height={size} viewBox="0 0 100 100" className="border border-gray-300">
-      <rect x="0" y="0" width="100" height="100" fill="white" />
+    <svg width={size} height={size} viewBox="0 0 100 100" className="border border-white/20 rounded">
+      <rect x="0" y="0" width="100" height="100" fill="rgba(255, 255, 255, 0.02)" />
       {renderPattern()}
     </svg>
   );
