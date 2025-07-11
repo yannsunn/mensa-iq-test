@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { UnifiedQuestion, TestResult } from '@/types/question';
@@ -55,7 +55,11 @@ export default function BaseTest({
   });
 
   const currentQuestion = questions[navigation.currentIndex];
-  const getAnsweredCount = () => answers.filter(answer => answer !== null).length;
+  
+  // メモ化された回答済み数の計算
+  const answeredCount = useMemo(() => {
+    return answers.filter(answer => answer !== null).length;
+  }, [answers]);
 
   // 解答選択
   const handleAnswerSelect = useCallback((answerIndex: number) => {
@@ -84,12 +88,15 @@ export default function BaseTest({
     setShowFeedback(true);
   }, [selectedAnswer, currentQuestion, answers, navigation.currentIndex]);
 
-  // テスト終了
-  const handleSubmitTest = useCallback(() => {
-    const totalScore = answers.reduce<number>((score, answer, index) => {
+  // メモ化された正解数の計算
+  const totalScore = useMemo(() => {
+    return answers.reduce<number>((score, answer, index) => {
       return score + (answer === questions[index].correctAnswer ? 1 : 0);
     }, 0);
+  }, [answers, questions]);
 
+  // テスト終了
+  const handleSubmitTest = useCallback(() => {
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
     const iqScore = calculateIQScore(totalScore, questions.length);
     const percentile = calculatePercentile(iqScore);
@@ -107,7 +114,7 @@ export default function BaseTest({
     };
 
     onComplete?.(result);
-  }, [answers, questions, startTime, mode, onComplete]);
+  }, [totalScore, answers, questions, startTime, mode, onComplete]);
 
   // 次の問題へ（練習モード）
   const handleContinue = useCallback(() => {
@@ -146,7 +153,7 @@ export default function BaseTest({
       totalQuestions={questions.length}
       timeRemaining={timeLimit ? timer.time : undefined}
       totalTime={timeLimit}
-      answeredCount={mode === 'exam' ? getAnsweredCount() : undefined}
+      answeredCount={mode === 'exam' ? answeredCount : undefined}
     >
       {/* 問題表示 */}
       <QuestionDisplay

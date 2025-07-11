@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import BaseTest from './BaseTest';
 import { UnifiedQuestion } from '@/types/question';
-import { loadPracticeQuestions } from '@/lib/lazyLoad';
+import { loadPracticeQuestions } from '@/lib/questionLoader';
 
 interface PracticeTestProps {
   difficulty: 'easy' | 'medium' | 'hard';

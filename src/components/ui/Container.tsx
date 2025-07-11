@@ -8,7 +8,7 @@ interface ContainerProps {
   children: React.ReactNode;
 }
 
-export default function Container({
+const Container = React.memo(function Container({
   size = 'xl',
   className = '',
   children
@@ -26,4 +26,6 @@ export default function Container({
       {children}
     </div>
   );
-}
+});
+
+export default Container;

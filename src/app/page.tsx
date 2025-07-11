@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import ModeSelection from '@/components/ModeSelection';
-import PracticeTest from '@/components/PracticeTest';
-import ExamTest from '@/components/ExamTest';
-import ExamResults from '@/components/ExamResults';
+import { Skeleton } from '@/components/ui';
+
+// 重いコンポーネントの遅延読み込み
+const PracticeTest = lazy(() => import('@/components/PracticeTest'));
+const ExamTest = lazy(() => import('@/components/ExamTest'));
+const ExamResults = lazy(() => import('@/components/ExamResults'));
 
 type AppMode = 'home' | 'practice' | 'exam' | 'results';
 
@@ -17,6 +20,25 @@ interface ExamResult {
   timeSpent: number;
   difficulty: string;
   mensaQualified: boolean;
+}
+
+// ローディングコンポーネント
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-radial">
+      <div className="text-center">
+        <div className="mb-8">
+          <Skeleton className="w-64 h-12 mx-auto mb-4" />
+          <Skeleton className="w-96 h-8 mx-auto mb-2" />
+          <Skeleton className="w-80 h-8 mx-auto" />
+        </div>
+        <div className="animate-pulse">
+          <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto mb-4" />
+          <p className="text-text-secondary">読み込み中...</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Home() {
@@ -51,29 +73,35 @@ export default function Home() {
   // 各モードの表示
   if (currentMode === 'practice') {
     return (
-      <PracticeTest
-        difficulty={practiceDifficulty}
-        onBack={handleBackToHome}
-      />
+      <Suspense fallback={<LoadingFallback />}>
+        <PracticeTest
+          difficulty={practiceDifficulty}
+          onBack={handleBackToHome}
+        />
+      </Suspense>
     );
   }
 
   if (currentMode === 'exam') {
     return (
-      <ExamTest
-        onBack={handleBackToHome}
-        onComplete={handleExamComplete}
-      />
+      <Suspense fallback={<LoadingFallback />}>
+        <ExamTest
+          onBack={handleBackToHome}
+          onComplete={handleExamComplete}
+        />
+      </Suspense>
     );
   }
 
   if (currentMode === 'results' && examResult) {
     return (
-      <ExamResults
-        result={examResult}
-        onRestart={handleRestart}
-        onBackToHome={handleBackToHome}
-      />
+      <Suspense fallback={<LoadingFallback />}>
+        <ExamResults
+          result={examResult}
+          onRestart={handleRestart}
+          onBackToHome={handleBackToHome}
+        />
+      </Suspense>
     );
   }
 

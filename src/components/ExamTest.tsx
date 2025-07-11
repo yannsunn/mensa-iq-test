@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import BaseTest from './BaseTest';
 import { UnifiedQuestion, TestResult } from '@/types/question';
-import { loadExamQuestions } from '@/lib/lazyLoad';
+import { loadExamQuestions } from '@/lib/questionLoader';
 
 interface ExamTestProps {
   onBack: () => void;

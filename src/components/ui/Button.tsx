@@ -14,7 +14,7 @@ interface ButtonProps extends Omit<HTMLMotionProps<"button">, 'size'> {
   children: React.ReactNode;
 }
 
-export default function Button({
+const Button = React.memo(function Button({
   variant = 'primary',
   size = 'md',
   icon: Icon,
@@ -74,4 +74,6 @@ export default function Button({
       )}
     </motion.button>
   );
-}
+});
+
+export default Button;

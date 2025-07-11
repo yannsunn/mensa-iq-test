@@ -96,7 +96,7 @@ body {
   position: relative;
 }
 
-/* Ambient Background Effect */
+/* Ambient Background Effect - Optimized with will-change */
 body::before {
   content: '';
   position: fixed;
@@ -110,11 +110,13 @@ body::before {
   animation: ambient 20s ease-in-out infinite;
   pointer-events: none;
   z-index: var(--z-background);
+  will-change: transform;
+  transform: translateZ(0); /* Hardware acceleration */
 }
 
 @keyframes ambient {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.1); }
+  0%, 100% { transform: rotate(0deg) scale(1) translateZ(0); }
+  50% { transform: rotate(180deg) scale(1.1) translateZ(0); }
 }
 
 /* Typography System - Optimized for Screen Reading */
@@ -586,14 +588,35 @@ p {
   }
 }
 
-/* Animation Utilities */
-.animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-.animate-fadeInUp { animation: fadeInUp 0.5s ease-out; }
-.animate-fadeInDown { animation: fadeInDown 0.5s ease-out; }
-.animate-scaleIn { animation: scaleIn 0.3s ease-out; }
-.animate-slideInRight { animation: slideInRight 0.3s ease-out; }
-.animate-pulse { animation: pulse 2s ease-in-out infinite; }
-.animate-glow { animation: glow 2s ease-in-out infinite; }
+/* Animation Utilities - Optimized with will-change and GPU acceleration */
+.animate-fadeIn { 
+  animation: fadeIn 0.5s ease-out;
+  will-change: opacity;
+}
+.animate-fadeInUp { 
+  animation: fadeInUp 0.5s ease-out;
+  will-change: opacity, transform;
+}
+.animate-fadeInDown { 
+  animation: fadeInDown 0.5s ease-out;
+  will-change: opacity, transform;
+}
+.animate-scaleIn { 
+  animation: scaleIn 0.3s ease-out;
+  will-change: opacity, transform;
+}
+.animate-slideInRight { 
+  animation: slideInRight 0.3s ease-out;
+  will-change: opacity, transform;
+}
+.animate-pulse { 
+  animation: pulse 2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.animate-glow { 
+  animation: glow 2s ease-in-out infinite;
+  will-change: box-shadow;
+}
 
 /* Skeleton Loading */
 .skeleton {

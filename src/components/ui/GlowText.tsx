@@ -10,7 +10,7 @@ interface GlowTextProps {
   className?: string;
 }
 
-export default function GlowText({
+const GlowText = React.memo(function GlowText({
   children,
   variant = 'primary',
   size = 'md',
@@ -47,4 +47,6 @@ export default function GlowText({
       {children}
     </motion.span>
   );
-}
+});
+
+export default GlowText;

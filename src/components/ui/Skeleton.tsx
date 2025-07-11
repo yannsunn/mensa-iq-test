@@ -9,7 +9,7 @@ interface SkeletonProps {
   className?: string;
 }
 
-export default function Skeleton({
+const Skeleton = React.memo(function Skeleton({
   variant = 'text',
   width,
   height,
@@ -37,4 +37,6 @@ export default function Skeleton({
       style={style}
     />
   );
-}
+});
+
+export default Skeleton;

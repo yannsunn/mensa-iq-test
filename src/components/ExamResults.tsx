@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Brain, Target, Clock, Star, Award, TrendingUp, BarChart3, Medal, Crown, Sparkles, ChevronRight } from 'lucide-react';
 import { Button, Card, Container, Badge, Progress, GlowText, Divider } from '@/components/ui';
@@ -21,7 +22,7 @@ interface ExamResultsProps {
   onBackToHome: () => void;
 }
 
-export default function ExamResults({ result, onRestart, onBackToHome }: ExamResultsProps) {
+const ExamResults = React.memo(function ExamResults({ result, onRestart, onBackToHome }: ExamResultsProps) {
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -45,7 +46,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
   const iqLevel = getIQLevel(result.iqScore);
   const IconComponent = iqLevel.icon;
 
-  const categoryNames: { [key: string]: string } = {
+  const categoryNames: { [key: string]: string } = useMemo(() => ({
     logical: '論理推論',
     numerical: '数的推論', 
     spatial: '空間認識',
@@ -53,7 +54,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
     verbal: '言語推理',
     abstract: '抽象推論',
     memory: '作業記憶'
-  };
+  }), []);
 
   const getPerformanceMessage = () => {
     if (result.mensaQualified) {
@@ -69,11 +70,20 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
 
   return (
     <div className="min-h-screen bg-gradient-radial relative overflow-hidden">
-      {/* 背景エフェクト */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* 背景エフェクト - パフォーマンス最適化済み */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div 
+          className="absolute top-20 left-20 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl opacity-60" 
+          style={{ transform: 'translateZ(0)' }} 
+        />
+        <div 
+          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl opacity-60" 
+          style={{ transform: 'translateZ(0)' }} 
+        />
+        <div 
+          className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-60" 
+          style={{ transform: 'translateZ(0)', left: '50%', transform: 'translate(-50%, -50%) translateZ(0)' }} 
+        />
       </div>
 
       <Container className="relative z-elevated py-6">
@@ -220,7 +230,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {Object.entries(result.categoryScores).map(([category, score], index) => (
+              {useMemo(() => Object.entries(result.categoryScores).map(([category, score], index) => (
                 <motion.div
                   key={category}
                   initial={{ opacity: 0, x: -20 }}
@@ -257,7 +267,7 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
                     </Badge>
                   </Card>
                 </motion.div>
-              ))}
+              )), [result.categoryScores, categoryNames])}
             </div>
           </Card>
         </motion.div>
@@ -341,4 +351,6 @@ export default function ExamResults({ result, onRestart, onBackToHome }: ExamRes
       </Container>
     </div>
   );
-}
+});
+
+export default ExamResults;

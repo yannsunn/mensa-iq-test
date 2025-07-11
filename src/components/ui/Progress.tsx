@@ -12,7 +12,7 @@ interface ProgressProps {
   className?: string;
 }
 
-export default function Progress({
+const Progress = React.memo(function Progress({
   value,
   max = 100,
   showLabel = false,
@@ -51,4 +51,6 @@ export default function Progress({
       )}
     </div>
   );
-}
+});
+
+export default Progress;

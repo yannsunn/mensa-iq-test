@@ -18,7 +18,7 @@ interface TestLayoutProps {
   answeredCount?: number;
 }
 
-export default function TestLayout({
+const TestLayout = React.memo(function TestLayout({
   children,
   mode,
   currentQuestion,
@@ -42,10 +42,16 @@ export default function TestLayout({
 
   return (
     <div className="min-h-screen bg-gradient-radial relative overflow-hidden">
-      {/* 背景エフェクト */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      {/* 背景エフェクト - パフォーマンス最適化済み */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50" 
+          style={{ transform: 'translateZ(0)' }} 
+        />
+        <div 
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-50" 
+          style={{ transform: 'translateZ(0)' }} 
+        />
       </div>
 
       <Container className="relative z-elevated py-6">
@@ -197,7 +203,9 @@ export default function TestLayout({
       </Container>
     </div>
   );
-}
+});
+
+export default TestLayout;
 
 function getTimeColorClass(level: 'normal' | 'warning' | 'danger'): string {
   switch (level) {

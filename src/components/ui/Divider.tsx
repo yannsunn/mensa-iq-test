@@ -8,7 +8,7 @@ interface DividerProps {
   className?: string;
 }
 
-export default function Divider({
+const Divider = React.memo(function Divider({
   orientation = 'horizontal',
   variant = 'default',
   className = ''
@@ -29,4 +29,6 @@ export default function Divider({
       role="separator"
     />
   );
-}
+});
+
+export default Divider;

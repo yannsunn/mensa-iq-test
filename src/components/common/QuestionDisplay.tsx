@@ -13,7 +13,7 @@ interface QuestionDisplayProps {
   isCorrect?: boolean;
 }
 
-export default function QuestionDisplay({
+const QuestionDisplay = React.memo(function QuestionDisplay({
   question,
   selectedAnswer,
   onAnswerSelect,
@@ -101,7 +101,9 @@ export default function QuestionDisplay({
       )}
     </>
   );
-}
+});
+
+export default QuestionDisplay;
 
 // 選択肢のスタイルを取得
 function getOptionStyle(

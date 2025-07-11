@@ -10,7 +10,7 @@ interface BadgeProps {
   className?: string;
 }
 
-export default function Badge({
+const Badge = React.memo(function Badge({
   variant = 'default',
   size = 'md',
   children,
@@ -39,4 +39,6 @@ export default function Badge({
       {children}
     </motion.span>
   );
-}
+});
+
+export default Badge;

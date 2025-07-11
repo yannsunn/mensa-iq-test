@@ -11,7 +11,7 @@ interface CardProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;
 }
 
-export default function Card({
+const Card = React.memo(function Card({
   variant = 'default',
   hover = true,
   active = false,
@@ -46,4 +46,6 @@ export default function Card({
       {children}
     </motion.div>
   );
-}
+});
+
+export default Card;
