@@ -51,7 +51,7 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
         transition={{ delay: 0.2 }}
         className="mb-8"
       >
-        <h2 className="text-xl md:text-2xl font-semibold text-white mb-6 leading-relaxed whitespace-pre-line">
+        <h2 className="question-text text-xl md:text-2xl font-semibold text-white mb-6 leading-relaxed whitespace-pre-line">
           {question.question}
         </h2>
       </motion.div>
@@ -71,7 +71,7 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
             onClick={() => onAnswerSelect(index)}
             disabled={showExplanation}
             className={`
-              p-responsive-lg text-left border-2 rounded-2xl transition-all duration-300
+              option-button p-responsive-lg text-left border-2 rounded-2xl transition-all duration-300
               ${getOptionStyle(index, selectedAnswer, showExplanation, isCorrect, question.correctAnswer)}
             `}
           >
@@ -82,7 +82,7 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
               `}>
                 {String.fromCharCode(65 + index)}
               </div>
-              <span className="text-responsive-lg">{option}</span>
+              <span className="text-responsive flex-1">{option}</span>
             </div>
           </motion.button>
         ))}

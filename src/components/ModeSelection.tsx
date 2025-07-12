@@ -37,44 +37,44 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
     <div className="min-h-screen bg-gradient-radial flex flex-col relative overflow-hidden">
       {/* 背景エフェクト */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute -top-40 -right-40 w-60 h-60 md:w-80 md:h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-60 h-60 md:w-80 md:h-80 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       {/* ヘッダーセクション */}
       <div className="relative z-10">
-        <Container className="py-12 md:py-16">
+        <Container className="py-responsive-lg">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center">
-            <div className="flex items-center justify-center mb-6">
+            <div className="flex items-center justify-center mb-4 md:mb-6">
               <motion.div 
-                className="bg-gradient-primary p-3 rounded-2xl mr-4 shadow-glow"
+                className="bg-gradient-primary p-2 md:p-3 rounded-2xl mr-3 md:mr-4 shadow-glow"
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               >
-                <Brain className="w-8 h-8 text-white" />
+                <Brain className="w-6 h-6 md:w-8 md:h-8 text-white" />
               </motion.div>
-              <GlowText size="2xl" variant="primary" className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
+              <GlowText size="2xl" variant="primary" className="heading-responsive font-extrabold tracking-tight">
                 MENSA IQ Test
               </GlowText>
             </div>
-            <p className="text-lg md:text-xl text-text-secondary font-medium">
+            <p className="text-responsive text-text-secondary font-medium">
               国際MENSA基準であなたのIQを測定
             </p>
             
             {/* 信頼性指標（ニューロマーケティング） */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mt-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-responsive-md mt-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <Card variant="glass" className="text-center card-compact" hover={false}>
+                <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-2xl md:text-3xl font-bold text-primary mb-2"
+                    className="text-xl md:text-2xl lg:text-3xl font-bold text-primary mb-1 md:mb-2"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
@@ -82,7 +82,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.total}
                   </motion.div>
                   <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
-                    <TrendingUp className="w-3 h-3" />
+                    <TrendingUp className="w-3 h-3 md:w-4 md:h-4" />
                     問題数
                   </div>
                 </Card>
@@ -92,9 +92,9 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Card variant="glass" className="text-center card-compact" hover={false}>
+                <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-3xl md:text-4xl font-bold text-accent mb-1"
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-accent mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
@@ -102,7 +102,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.avgIQ}+
                   </motion.div>
                   <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
-                    <Brain className="w-3 h-3" />
+                    <Brain className="w-3 h-3 md:w-4 md:h-4" />
                     平均IQ
                   </div>
                 </Card>
@@ -112,9 +112,9 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card variant="glass" className="text-center card-compact" hover={false}>
+                <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-3xl md:text-4xl font-bold text-warning mb-1"
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-warning mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
@@ -122,7 +122,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.successRate}%
                   </motion.div>
                   <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
-                    <Star className="w-3 h-3" />
+                    <Star className="w-3 h-3 md:w-4 md:h-4" />
                     満足度
                   </div>
                 </Card>
@@ -132,9 +132,9 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Card variant="glass" className="text-center card-compact" hover={false}>
+                <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-3xl md:text-4xl font-bold text-purple-400 mb-1"
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-purple-400 mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
@@ -142,7 +142,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.users}
                   </motion.div>
                   <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
-                    <Users className="w-3 h-3" />
+                    <Users className="w-3 h-3 md:w-4 md:h-4" />
                     利用者
                   </div>
                 </Card>
@@ -154,8 +154,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
 
       {/* メインコンテンツ */}
       <div className="flex-1 relative z-10">
-        <Container className="py-12 md:py-16">
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <Container className="py-responsive-lg">
+          <div className="grid md:grid-cols-2 gap-responsive-lg">
             {/* 練習モード */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -163,32 +163,33 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               transition={{ duration: 0.4 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => setSelectedMode('practice')}
+              className="w-full"
             >
               <Card
                 variant={selectedMode === 'practice' ? 'gradient' : 'glass'}
                 active={selectedMode === 'practice'}
-                className="relative cursor-pointer card-spacious"
+                className="relative cursor-pointer p-responsive-lg"
                 glow={selectedMode === 'practice'}
               >
                 {/* 推奨ラベル */}
-                <Badge variant="accent" className="absolute -top-3 left-8">
-                  <Star className="w-3 h-3 mr-1" />
+                <Badge variant="accent" className="absolute -top-3 left-6 md:left-8">
+                  <Star className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                   推奨
                 </Badge>
               
-                <div className="mb-6">
+                <div className="mb-4 md:mb-6">
                   <div className="flex items-center mb-3">
                     <div className="p-3 bg-primary/20 rounded-xl mr-3 backdrop-blur-sm">
-                      <BookOpen className="w-6 h-6 text-primary" />
+                      <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-text-primary">練習モード</h2>
-                      <p className="text-sm text-text-secondary">初めての方におすすめ</p>
+                      <h2 className="text-responsive font-bold text-text-primary">練習モード</h2>
+                      <p className="text-responsive text-text-secondary">初めての方におすすめ</p>
                     </div>
                   </div>
                 </div>
               
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mb-4 md:mb-6">
                   {practiceFeatures.map((feature, index) => (
                     <motion.div 
                       key={index} 
@@ -197,14 +198,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <div className={`p-1.5 rounded-lg mr-3 backdrop-blur-sm ${
+                      <div className={`p-2 md:p-1.5 rounded-lg mr-3 backdrop-blur-sm ${
                         feature.highlight ? 'bg-primary/20' : 'bg-white/5'
                       }`}>
-                        <feature.icon className={`w-4 h-4 ${
+                        <feature.icon className={`w-4 h-4 md:w-5 md:h-5 ${
                           feature.highlight ? 'text-primary' : 'text-text-secondary'
                         }`} />
                       </div>
-                      <span className={`text-sm md:text-base ${
+                      <span className={`text-responsive ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
                       }`}>{feature.text}</span>
                     </motion.div>
@@ -218,10 +219,10 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-border-default pt-4"
+                      className="border-t border-border-default pt-3 md:pt-4"
                     >
-                      <p className="text-sm font-medium text-text-secondary mb-3">難易度を選択</p>
-                      <div className="grid grid-cols-3 gap-2">
+                      <p className="text-responsive font-medium text-text-secondary mb-3">難易度を選択</p>
+                      <div className="grid grid-cols-3 gap-responsive-sm">
                         {(['easy', 'medium', 'hard'] as const).map((difficulty) => (
                           <Button
                             key={difficulty}
@@ -232,6 +233,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                               setSelectedDifficulty(difficulty);
                             }}
                             className="w-full"
+                            style={{ minHeight: 'var(--min-touch-target)' }}
                           >
                             {difficulty === 'easy' ? '初級' : difficulty === 'medium' ? '中級' : '上級'}
                           </Button>
@@ -250,26 +252,27 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               transition={{ duration: 0.4, delay: 0.1 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => setSelectedMode('exam')}
+              className="w-full"
             >
               <Card
                 variant={selectedMode === 'exam' ? 'gradient' : 'glass'}
                 active={selectedMode === 'exam'}
-                className="relative cursor-pointer card-lg"
+                className="relative cursor-pointer p-responsive-lg"
                 glow={selectedMode === 'exam'}
               >
-                <div className="mb-6">
+                <div className="mb-4 md:mb-6">
                   <div className="flex items-center mb-3">
                     <div className="p-3 bg-warning/20 rounded-xl mr-3 backdrop-blur-sm">
-                      <Trophy className="w-6 h-6 text-warning" />
+                      <Trophy className="w-5 h-5 md:w-6 md:h-6 text-warning" />
                     </div>
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-text-primary">本番モード</h2>
-                      <p className="text-sm text-text-secondary">正式なIQスコアを測定</p>
+                      <h2 className="text-responsive font-bold text-text-primary">本番モード</h2>
+                      <p className="text-responsive text-text-secondary">正式なIQスコアを測定</p>
                     </div>
                   </div>
                 </div>
               
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mb-4 md:mb-6">
                   {examFeatures.map((feature, index) => (
                     <motion.div 
                       key={index} 
@@ -278,14 +281,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <div className={`p-1.5 rounded-lg mr-3 backdrop-blur-sm ${
+                      <div className={`p-2 md:p-1.5 rounded-lg mr-3 backdrop-blur-sm ${
                         feature.highlight ? 'bg-warning/20' : 'bg-white/5'
                       }`}>
-                        <feature.icon className={`w-4 h-4 ${
+                        <feature.icon className={`w-4 h-4 md:w-5 md:h-5 ${
                           feature.highlight ? 'text-warning' : 'text-text-secondary'
                         }`} />
                       </div>
-                      <span className={`text-sm md:text-base ${
+                      <span className={`text-responsive ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
                       }`}>{feature.text}</span>
                     </motion.div>
@@ -299,14 +302,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="border-t border-border-default pt-4"
+                      className="border-t border-border-default pt-3 md:pt-4"
                     >
-                      <Card variant="solid" className="p-3" hover={false}>
+                      <Card variant="solid" className="p-responsive-sm" hover={false}>
                         <div className="flex items-center text-warning mb-1">
-                          <Timer className="w-4 h-4 mr-2" />
-                          <span className="text-sm font-medium">制限時間: 45分</span>
+                          <Timer className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                          <span className="text-responsive font-medium">制限時間: 45分</span>
                         </div>
-                        <p className="text-text-secondary text-xs">
+                        <p className="text-text-secondary text-responsive">
                           集中できる環境で挑戦してください
                         </p>
                       </Card>
@@ -325,7 +328,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="mt-12 text-center"
+                className="mt-8 md:mt-12 text-center"
               >
                 <Button
                   variant="cta"
@@ -338,7 +341,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       onSelectMode('exam');
                     }
                   }}
-                  className="text-lg md:text-xl px-8 md:px-12 py-4 md:py-5"
+                  className="text-responsive px-responsive-xl py-responsive-md"
+                  style={{ minHeight: 'var(--min-touch-target)' }}
                 >
                   {selectedMode === 'practice' 
                     ? `練習開始（${selectedDifficulty === 'easy' ? '初級' : selectedDifficulty === 'medium' ? '中級' : '上級'}）` 
@@ -348,7 +352,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 
                 {/* 信頼性メッセージ */}
                 <motion.p 
-                  className="mt-4 text-sm text-text-secondary flex items-center justify-center gap-2"
+                  className="mt-4 text-responsive text-text-secondary flex items-center justify-center gap-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}

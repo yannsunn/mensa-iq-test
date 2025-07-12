@@ -45,50 +45,50 @@ const TestLayout = React.memo(function TestLayout({
       {/* 背景エフェクト - パフォーマンス最適化済み */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50" 
+          className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96 bg-primary/10 rounded-full blur-2xl sm:blur-3xl opacity-30 sm:opacity-50" 
           style={{ transform: 'translateZ(0)' }} 
         />
         <div 
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-50" 
+          className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96 bg-accent/10 rounded-full blur-2xl sm:blur-3xl opacity-30 sm:opacity-50" 
           style={{ transform: 'translateZ(0)' }} 
         />
       </div>
 
-      <Container className="relative z-elevated py-6">
+      <Container className="relative z-elevated py-4 sm:py-6">
         {/* ヘッダー */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Card variant="glass" className="mb-8">
-            <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-6">
-              <div className="flex items-center space-x-4 mb-4 lg:mb-0">
+          <Card variant="glass" className="mb-4 sm:mb-6 lg:mb-8">
+            <div className="flex flex-col lg:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 lg:gap-6">
+              <div className="flex items-center space-x-2 sm:space-x-4 w-full lg:w-auto">
                 <motion.div 
-                  className="p-3 bg-gradient-primary rounded-xl shadow-glow"
+                  className="p-2 sm:p-3 bg-gradient-primary rounded-xl shadow-glow flex-shrink-0"
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 >
-                  <Brain className="w-6 h-6 text-white" />
+                  <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </motion.div>
-                <div>
-                  <GlowText size="xl" variant={mode === 'practice' ? 'primary' : 'accent'} className="text-2xl font-bold">
+                <div className="min-w-0 flex-1">
+                  <GlowText size="xl" variant={mode === 'practice' ? 'primary' : 'accent'} className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
                     {mode === 'practice' ? 'MENSA 練習モード' : 'MENSA 本番テスト'}
                   </GlowText>
-                  <p className="text-text-secondary text-sm mt-1">
+                  <p className="text-text-secondary text-xs sm:text-sm mt-0.5 sm:mt-1">
                     問題 {currentIndex + 1} / {totalQuestions}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 md:gap-6">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 w-full lg:w-auto justify-end">
                 {mode === 'exam' && (
                   <Card variant="solid" className="card-compact" hover={false}>
-                    <div className="flex items-center gap-3">
-                      <Target className="w-5 h-5 text-accent" />
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <Target className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
                       <div>
                         <div className="text-text-tertiary text-xs">回答済み</div>
-                        <div className="text-text-primary font-bold">
+                        <div className="text-text-primary font-bold text-sm sm:text-base">
                           {answeredCount} / {totalQuestions}
                         </div>
                       </div>
@@ -102,9 +102,9 @@ const TestLayout = React.memo(function TestLayout({
                     className={`card-compact ${timeWarning === 'danger' ? 'border-danger animate-pulse' : ''}`}
                     hover={false}
                   >
-                    <div className="flex items-center space-x-2">
-                      <Clock className={`w-5 h-5 ${getTimeColorClass(timeWarning)}`} />
-                      <span className={`font-mono text-lg font-bold ${getTimeColorClass(timeWarning)}`}>
+                    <div className="flex items-center space-x-1.5 sm:space-x-2">
+                      <Clock className={`w-4 h-4 sm:w-5 sm:h-5 ${getTimeColorClass(timeWarning)}`} />
+                      <span className={`font-mono text-base sm:text-lg font-bold ${getTimeColorClass(timeWarning)}`}>
                         {formatTime(timeRemaining)}
                       </span>
                     </div>
@@ -120,11 +120,11 @@ const TestLayout = React.memo(function TestLayout({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="mb-8"
+          className="mb-4 sm:mb-6 lg:mb-8"
         >
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-text-secondary text-sm flex items-center gap-2">
-              <Activity className="w-4 h-4" />
+          <div className="flex justify-between items-center mb-1.5 sm:mb-2">
+            <span className="text-text-secondary text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2">
+              <Activity className="w-3 h-3 sm:w-4 sm:h-4" />
               進捗状況
             </span>
             <Badge variant="primary" size="sm">
@@ -143,26 +143,27 @@ const TestLayout = React.memo(function TestLayout({
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Card variant="glass" className="p-8 mb-8" glow>
+            <Card variant="glass" className="p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8" glow>
               {/* 問題メタデータ */}
-              <Card variant="solid" className="mb-6 card-compact" hover={false}>
-                <div className="flex flex-wrap items-center gap-2 md:gap-3">
-                  <Badge variant="primary">
-                    <span className="mr-1">{categoryInfo.icon}</span>
+              <Card variant="solid" className="mb-4 sm:mb-6 card-compact" hover={false}>
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 md:gap-3">
+                  <Badge variant="primary" size="sm" className="text-xs sm:text-sm">
+                    <span className="mr-0.5 sm:mr-1">{categoryInfo.icon}</span>
                     {categoryInfo.name}
                   </Badge>
-                  <Badge variant="accent">
+                  <Badge variant="accent" size="sm" className="text-xs sm:text-sm">
                     難易度: {currentQuestion.difficulty}/20
                   </Badge>
                   {currentQuestion.mensaInfo && (
-                    <Badge variant="default">
+                    <Badge variant="default" size="sm" className="text-xs sm:text-sm">
                       {currentQuestion.mensaInfo.mensaLevel}
                     </Badge>
                   )}
                   {timeRemaining !== undefined && totalTime && (
                     <Badge 
                       variant={timeWarning === 'danger' ? 'danger' : timeWarning === 'warning' ? 'warning' : 'success'}
-                      className={timeWarning === 'danger' ? 'animate-pulse' : ''}
+                      className={`${timeWarning === 'danger' ? 'animate-pulse' : ''} text-xs sm:text-sm`}
+                      size="sm"
                     >
                       残り時間: {formatTime(timeRemaining)}
                     </Badge>
@@ -182,14 +183,14 @@ const TestLayout = React.memo(function TestLayout({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <Card variant="gradient" className="mt-6 p-4 border-primary/20" hover={false}>
-                    <h3 className="text-text-primary font-semibold mb-3 flex items-center gap-2">
-                      <Brain className="w-4 h-4 text-primary" />
+                  <Card variant="gradient" className="mt-4 sm:mt-6 p-3 sm:p-4 border-primary/20" hover={false}>
+                    <h3 className="text-text-primary font-semibold mb-2 sm:mb-3 flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base">
+                      <Brain className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                       この問題で測定される認知スキル
                     </h3>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {currentQuestion.mensaInfo.cognitiveSkills.map((skill, index) => (
-                        <Badge key={index} variant="primary" size="sm">
+                        <Badge key={index} variant="primary" size="sm" className="text-xs sm:text-sm">
                           {skill}
                         </Badge>
                       ))}

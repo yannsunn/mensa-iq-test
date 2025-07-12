@@ -185,39 +185,43 @@ export default function BaseTest({
         />
       )}
 
-      {/* ナビゲーションボタン */}
+      {/* ナビゲーションボタン - レスポンシブ改善 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row justify-between items-center gap-responsive-md p-responsive-lg bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 mt-8"
+        className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 mt-6 sm:mt-8"
       >
         <button
           onClick={handlePrevious}
           disabled={navigation.isFirst}
           className={`
-            flex items-center space-x-2 px-responsive-lg py-3 rounded-xl transition-all duration-300
+            flex items-center justify-center sm:justify-start space-x-2 px-4 sm:px-6 py-3.5 sm:py-3 rounded-xl transition-all duration-300 w-full sm:w-auto
+            text-sm sm:text-base font-medium
             ${navigation.isFirst
-              ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-              : 'bg-white/10 text-white hover:bg-white/20'
+              ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-60'
+              : 'bg-white/10 text-white hover:bg-white/20 active:scale-95'
             }
           `}
+          style={{ minHeight: 'var(--min-touch-target)' }}
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span>前の問題</span>
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+          <span className="text-sm sm:text-base">前の問題</span>
         </button>
 
-        <div className="text-center">
+        <div className="text-center order-first sm:order-none w-full sm:w-auto">
           {mode === 'practice' && !showFeedback && (
             <button
               onClick={handleSubmitAnswer}
               disabled={selectedAnswer === null}
               className={`
-                px-responsive-xl py-3 rounded-xl font-bold transition-all duration-300
+                px-6 sm:px-8 py-3.5 sm:py-3 rounded-xl font-bold transition-all duration-300 w-full sm:w-auto
+                text-sm sm:text-base
                 ${selectedAnswer === null
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700'
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-60'
+                  : 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 active:scale-95 shadow-lg'
                 }
               `}
+              style={{ minHeight: 'var(--min-touch-target)' }}
             >
               解答を確認
             </button>
@@ -226,7 +230,8 @@ export default function BaseTest({
           {mode === 'exam' && (
             <button
               onClick={handleSubmitTest}
-              className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold px-responsive-xl py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold px-6 sm:px-8 py-3.5 sm:py-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg w-full sm:w-auto text-sm sm:text-base"
+              style={{ minHeight: 'var(--min-touch-target)' }}
             >
               テスト終了
             </button>
@@ -237,15 +242,17 @@ export default function BaseTest({
           onClick={handleNext}
           disabled={navigation.isLast || (mode === 'practice' && !showFeedback && selectedAnswer === null)}
           className={`
-            flex items-center space-x-2 px-responsive-lg py-3 rounded-xl transition-all duration-300
+            flex items-center justify-center sm:justify-start space-x-2 px-4 sm:px-6 py-3.5 sm:py-3 rounded-xl transition-all duration-300 w-full sm:w-auto
+            text-sm sm:text-base font-medium
             ${navigation.isLast || (mode === 'practice' && !showFeedback && selectedAnswer === null)
-              ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700'
+              ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-60'
+              : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 active:scale-95 shadow-lg'
             }
           `}
+          style={{ minHeight: 'var(--min-touch-target)' }}
         >
-          <span>{navigation.isLast && mode === 'practice' && showFeedback ? 'テスト終了' : '次の問題'}</span>
-          <ArrowRight className="w-5 h-5" />
+          <span className="text-sm sm:text-base">{navigation.isLast && mode === 'practice' && showFeedback ? 'テスト終了' : '次の問題'}</span>
+          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
         </button>
       </motion.div>
     </TestLayout>
