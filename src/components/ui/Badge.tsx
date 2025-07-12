@@ -19,7 +19,7 @@ const Badge = React.memo(function Badge({
   const variants = {
     default: 'badge',
     primary: 'badge badge-primary',
-    accent: 'badge badge-accent',
+    accent: 'badge bg-accent text-bg-primary border border-accent/50',
     success: 'badge bg-green-500/20 text-green-400',
     warning: 'badge bg-amber-500/20 text-amber-400',
     danger: 'badge bg-red-500/20 text-red-400'

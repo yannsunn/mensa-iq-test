@@ -172,10 +172,15 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 glow={selectedMode === 'practice'}
               >
                 {/* 推奨ラベル */}
-                <Badge variant="accent" className="absolute -top-3 left-6 md:left-8 z-10">
-                  <Star className="w-3 h-3 md:w-4 md:h-4 mr-1" />
-                  推奨
-                </Badge>
+                <div className="absolute -top-3 left-4 md:left-6 z-20">
+                  <Badge 
+                    variant="accent" 
+                    className="bg-accent text-black font-bold shadow-xl border-2 border-white/20 px-3 py-1.5"
+                  >
+                    <Star className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                    推奨
+                  </Badge>
+                </div>
               
                 <div className="mb-4 md:mb-6">
                   <div className="flex items-center mb-3">
