@@ -8,13 +8,15 @@ interface BadgeProps {
   size?: 'sm' | 'md';
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const Badge = React.memo(function Badge({
   variant = 'default',
   size = 'md',
   children,
-  className = ''
+  className = '',
+  style
 }: BadgeProps) {
   const variants = {
     default: 'badge',
@@ -35,6 +37,7 @@ const Badge = React.memo(function Badge({
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       className={`${variants[variant]} ${sizes[size]} ${className}`.trim()}
+      style={style}
     >
       {children}
     </motion.span>

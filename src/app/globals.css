@@ -389,9 +389,10 @@ p {
   border-radius: 1.25rem;
   padding: clamp(1.25rem, 3vw, 2rem);
   transition: all var(--transition-base) var(--ease-out);
-  overflow: hidden;
+  overflow: visible;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  z-index: 1;
 }
 
 /* Card spacing variants */
@@ -1004,7 +1005,7 @@ select:focus-visible {
   backdrop-filter: blur(8px);
   white-space: nowrap;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   text-overflow: ellipsis;
 }
 
@@ -1126,22 +1127,28 @@ select:focus-visible {
 :root {
   --z-background: -1;
   --z-default: 0;
+  --z-card: 1;
   --z-elevated: 10;
   --z-dropdown: 20;
   --z-sticky: 30;
   --z-modal: 40;
   --z-popover: 50;
   --z-tooltip: 60;
+  --z-badge: 999;
+  --z-overlay: 1000;
 }
 
 .z-background { z-index: var(--z-background); }
 .z-default { z-index: var(--z-default); }
+.z-card { z-index: var(--z-card); }
 .z-elevated { z-index: var(--z-elevated); }
 .z-dropdown { z-index: var(--z-dropdown); }
 .z-sticky { z-index: var(--z-sticky); }
 .z-modal { z-index: var(--z-modal); }
 .z-popover { z-index: var(--z-popover); }
 .z-tooltip { z-index: var(--z-tooltip); }
+.z-badge { z-index: var(--z-badge); }
+.z-overlay { z-index: var(--z-overlay); }
 
 /* Width & Height */
 .w-full { width: 100%; }

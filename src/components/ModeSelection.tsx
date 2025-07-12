@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Trophy, Brain, ChevronRight, Timer, CheckCircle, Zap, Shield, Star, TrendingUp, Users, Award } from 'lucide-react';
-import { Button, Card, Container, Badge, GlowText } from '@/components/ui';
+import { Button, Card, Container, GlowText } from '@/components/ui';
 
 interface ModeSelectionProps {
   onSelectMode: (mode: 'practice' | 'exam', difficulty?: 'easy' | 'medium' | 'hard') => void;
@@ -34,7 +34,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-radial flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-radial flex flex-col relative" style={{ overflow: 'visible' }}>
       {/* 背景エフェクト */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-60 h-60 md:w-80 md:h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
@@ -162,24 +162,23 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}
               whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedMode('practice')}
-              className="w-full"
+              className="w-full cursor-pointer"
             >
               <Card
                 variant={selectedMode === 'practice' ? 'gradient' : 'glass'}
                 active={selectedMode === 'practice'}
-                className="relative cursor-pointer p-responsive-lg pt-8"
+                className="relative cursor-pointer p-responsive-lg min-h-[280px] md:min-h-[320px]"
                 glow={selectedMode === 'practice'}
+                style={{ overflow: 'visible', position: 'relative', paddingTop: '2rem' }}
               >
-                {/* 推奨ラベル */}
-                <div className="absolute -top-3 left-4 md:left-6 z-20">
-                  <Badge 
-                    variant="accent" 
-                    className="bg-accent text-black font-bold shadow-xl border-2 border-white/20 px-3 py-1.5"
-                  >
-                    <Star className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                {/* 推奨ラベル - レスポンシブ完全対応版 */}
+                <div className="absolute left-4 md:left-6 -top-3 z-40">
+                  <div className="inline-flex items-center gap-1 md:gap-2 px-2 md:px-3 lg:px-4 py-1 md:py-1.5 lg:py-2 text-xs md:text-sm lg:text-base font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border border-white/30 md:border-2 whitespace-nowrap">
+                    <Star className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     推奨
-                  </Badge>
+                  </div>
                 </div>
               
                 <div className="mb-4 md:mb-6">
@@ -256,13 +255,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
               whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedMode('exam')}
-              className="w-full"
+              className="w-full cursor-pointer"
             >
               <Card
                 variant={selectedMode === 'exam' ? 'gradient' : 'glass'}
                 active={selectedMode === 'exam'}
-                className="relative cursor-pointer p-responsive-lg"
+                className="relative cursor-pointer p-responsive-lg min-h-[280px] md:min-h-[320px]"
                 glow={selectedMode === 'exam'}
               >
                 <div className="mb-4 md:mb-6">
