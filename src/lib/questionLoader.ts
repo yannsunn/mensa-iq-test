@@ -6,7 +6,8 @@ const questionCache = new Map<string, UnifiedQuestion[]>();
 const loadingPromises = new Map<string, Promise<UnifiedQuestion[]>>();
 
 // カテゴリ別の動的インポート
-async function loadCategoryData(category: string): Promise<UnifiedQuestion[]> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadCategoryData(category: string): Promise<any[]> {
   switch (category) {
     case 'logical':
       const [{ expandedLogicalQuestions }, { logicalReasoningQuestions }] = await Promise.all([
@@ -75,11 +76,11 @@ export async function loadQuestionsByCategory(category: string): Promise<Unified
         mensaLevel: q.mensaLevel || 'standard',
         cognitiveSkills: q.cognitiveSkills || []
       },
-      visualData: q.visualData || q.visualType ? {
-        type: q.visualData?.type || 'pattern',
-        data: q.visualData?.data,
-        visualType: q.visualType,
-        cubeData: q.cubeData
+      visualData: (q.visualData || q.visualType || q.cubeType) ? {
+        type: (q.visualData?.type || (q.cubeType ? 'cube' : 'pattern')) as 'matrix' | 'pattern' | 'cube' | 'geometric',
+        data: q.visualData?.data || q.visualData,
+        visualType: q.visualType || q.cubeType,
+        cubeData: q.cubeData || (q.netLabels ? { netLabels: q.netLabels } : undefined)
       } : undefined
     } as UnifiedQuestion));
 

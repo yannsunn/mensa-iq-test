@@ -82,7 +82,7 @@ const ExamResults = React.memo(function ExamResults({ result, onRestart, onBackT
         />
         <div 
           className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-60" 
-          style={{ transform: 'translateZ(0)', left: '50%', transform: 'translate(-50%, -50%) translateZ(0)' }} 
+          style={{ transform: 'translate(-50%, -50%) translateZ(0)' }} 
         />
       </div>
 
