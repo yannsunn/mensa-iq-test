@@ -66,7 +66,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
             </p>
             
             {/* 信頼性指標（ニューロマーケティング） */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-responsive-md mt-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-responsive-md mt-8 mb-12">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -74,14 +74,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-xl md:text-2xl lg:text-3xl font-bold text-primary mb-1 md:mb-2"
+                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                   >
                     {stats.total}
                   </motion.div>
-                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
                     <TrendingUp className="w-3 h-3 md:w-4 md:h-4" />
                     問題数
                   </div>
@@ -101,7 +101,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.avgIQ}+
                   </motion.div>
-                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
                     <Brain className="w-3 h-3 md:w-4 md:h-4" />
                     平均IQ
                   </div>
@@ -121,7 +121,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.successRate}%
                   </motion.div>
-                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
                     <Star className="w-3 h-3 md:w-4 md:h-4" />
                     満足度
                   </div>
@@ -141,7 +141,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.users}
                   </motion.div>
-                  <div className="text-xs md:text-sm text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
                     <Users className="w-3 h-3 md:w-4 md:h-4" />
                     利用者
                   </div>
@@ -154,7 +154,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
 
       {/* メインコンテンツ */}
       <div className="flex-1 relative z-10">
-        <Container className="py-responsive-lg">
+        <Container className="pt-8 pb-responsive-lg">
           <div className="grid md:grid-cols-2 gap-responsive-lg">
             {/* 練習モード */}
             <motion.div
@@ -168,11 +168,11 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               <Card
                 variant={selectedMode === 'practice' ? 'gradient' : 'glass'}
                 active={selectedMode === 'practice'}
-                className="relative cursor-pointer p-responsive-lg"
+                className="relative cursor-pointer p-responsive-lg pt-8"
                 glow={selectedMode === 'practice'}
               >
                 {/* 推奨ラベル */}
-                <Badge variant="accent" className="absolute -top-3 left-6 md:left-8">
+                <Badge variant="accent" className="absolute -top-3 left-6 md:left-8 z-10">
                   <Star className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                   推奨
                 </Badge>
