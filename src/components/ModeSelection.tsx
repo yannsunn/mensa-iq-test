@@ -175,7 +175,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 {/* 推奨ラベル - レスポンシブ完全対応版 */}
                 <div className="absolute left-4 md:left-6 -top-3 z-40">
-                  <div className="inline-flex items-center gap-1 md:gap-2 px-3 md:px-4 lg:px-5 py-1.5 md:py-2 lg:py-2.5 text-sm md:text-base lg:text-lg font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border border-white/30 md:border-2 whitespace-nowrap">
+                  <div className="inline-flex items-center gap-1 md:gap-2 px-3 md:px-4 lg:px-5 py-1.5 md:py-2 lg:py-2.5 text-base md:text-lg lg:text-xl font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border border-white/30 md:border-2 whitespace-nowrap">
                     <Star className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     推奨
                   </div>
@@ -231,7 +231,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                           <Button
                             key={difficulty}
                             variant={selectedDifficulty === difficulty ? 'primary' : 'secondary'}
-                            size="sm"
+                            size="md"
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedDifficulty(difficulty);
