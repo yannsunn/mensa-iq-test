@@ -61,7 +61,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 MENSA IQ Test
               </GlowText>
             </div>
-            <p className="text-responsive text-text-secondary font-medium">
+            <p className="text-base md:text-lg text-text-secondary font-medium">
               国際MENSA基準であなたのIQを測定
             </p>
             
@@ -81,7 +81,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.total}
                   </motion.div>
-                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
                     <TrendingUp className="w-3 h-3 md:w-4 md:h-4" />
                     問題数
                   </div>
@@ -101,7 +101,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.avgIQ}+
                   </motion.div>
-                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
                     <Brain className="w-3 h-3 md:w-4 md:h-4" />
                     平均IQ
                   </div>
@@ -121,7 +121,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.successRate}%
                   </motion.div>
-                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
                     <Star className="w-3 h-3 md:w-4 md:h-4" />
                     満足度
                   </div>
@@ -141,7 +141,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.users}
                   </motion.div>
-                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
                     <Users className="w-3 h-3 md:w-4 md:h-4" />
                     利用者
                   </div>
@@ -175,7 +175,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 {/* 推奨ラベル - レスポンシブ完全対応版 */}
                 <div className="absolute left-4 md:left-6 -top-3 z-40">
-                  <div className="inline-flex items-center gap-1 md:gap-2 px-2 md:px-3 lg:px-4 py-1 md:py-1.5 lg:py-2 text-xs md:text-sm lg:text-base font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border border-white/30 md:border-2 whitespace-nowrap">
+                  <div className="inline-flex items-center gap-1 md:gap-2 px-3 md:px-4 lg:px-5 py-1.5 md:py-2 lg:py-2.5 text-sm md:text-base lg:text-lg font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border border-white/30 md:border-2 whitespace-nowrap">
                     <Star className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     推奨
                   </div>
@@ -187,8 +187,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-responsive font-bold text-text-primary">練習モード</h2>
-                      <p className="text-responsive text-text-secondary">初めての方におすすめ</p>
+                      <h2 className="text-lg md:text-xl font-bold text-text-primary">練習モード</h2>
+                      <p className="text-base md:text-lg text-text-secondary">初めての方におすすめ</p>
                     </div>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                           feature.highlight ? 'text-primary' : 'text-text-secondary'
                         }`} />
                       </div>
-                      <span className={`text-responsive ${
+                      <span className={`text-base md:text-lg ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
                       }`}>{feature.text}</span>
                     </motion.div>
@@ -225,7 +225,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       transition={{ duration: 0.2 }}
                       className="border-t border-border-default pt-3 md:pt-4"
                     >
-                      <p className="text-responsive font-medium text-text-secondary mb-3">難易度を選択</p>
+                      <p className="text-base md:text-lg font-medium text-text-secondary mb-3">難易度を選択</p>
                       <div className="grid grid-cols-3 gap-responsive-sm">
                         {(['easy', 'medium', 'hard'] as const).map((difficulty) => (
                           <Button
@@ -271,8 +271,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <Trophy className="w-5 h-5 md:w-6 md:h-6 text-warning" />
                     </div>
                     <div>
-                      <h2 className="text-responsive font-bold text-text-primary">本番モード</h2>
-                      <p className="text-responsive text-text-secondary">正式なIQスコアを測定</p>
+                      <h2 className="text-lg md:text-xl font-bold text-text-primary">本番モード</h2>
+                      <p className="text-base md:text-lg text-text-secondary">正式なIQスコアを測定</p>
                     </div>
                   </div>
                 </div>
@@ -293,7 +293,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                           feature.highlight ? 'text-warning' : 'text-text-secondary'
                         }`} />
                       </div>
-                      <span className={`text-responsive ${
+                      <span className={`text-base md:text-lg ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
                       }`}>{feature.text}</span>
                     </motion.div>
@@ -312,9 +312,9 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <Card variant="solid" className="p-responsive-sm" hover={false}>
                         <div className="flex items-center text-warning mb-1">
                           <Timer className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                          <span className="text-responsive font-medium">制限時間: 45分</span>
+                          <span className="text-base md:text-lg font-medium">制限時間: 45分</span>
                         </div>
-                        <p className="text-text-secondary text-responsive">
+                        <p className="text-text-secondary text-base md:text-lg">
                           集中できる環境で挑戦してください
                         </p>
                       </Card>
@@ -346,7 +346,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       onSelectMode('exam');
                     }
                   }}
-                  className="text-responsive px-responsive-xl py-responsive-md"
+                  className="text-base md:text-lg px-responsive-xl py-responsive-md"
                   style={{ minHeight: 'var(--min-touch-target)' }}
                 >
                   {selectedMode === 'practice' 
@@ -357,7 +357,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 
                 {/* 信頼性メッセージ */}
                 <motion.p 
-                  className="mt-4 text-responsive text-text-secondary flex items-center justify-center gap-2"
+                  className="mt-4 text-base md:text-lg text-text-secondary flex items-center justify-center gap-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}

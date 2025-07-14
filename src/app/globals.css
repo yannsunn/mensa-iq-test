@@ -171,14 +171,14 @@ p {
 
   .btn {
     padding: 0.875rem 1.75rem;
-    font-size: 0.9375rem;
+    font-size: 1rem;
     min-height: 44px;
     min-width: 44px;
   }
 
   .btn-lg {
     padding: 1.125rem 2.25rem;
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
   }
 
   .card {
@@ -202,10 +202,8 @@ p {
     display: none;
   }
 
-  /* Text adjustments */
-  .text-responsive {
-    font-size: clamp(0.875rem, 2.5vw, 1rem);
-  }
+  /* Text adjustments - removed as handled by responsive.css */
+  /* .text-responsive handled by responsive.css */
 
   /* Prevent overflow */
   * {
@@ -995,8 +993,8 @@ select:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.375rem 0.875rem;
-  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.2;
   border-radius: 9999px;
