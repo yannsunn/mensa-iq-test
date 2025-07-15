@@ -2,7 +2,7 @@
 
 ## 概要
 
-このプロジェクトでは、MidJourneyのAPIを使用してIQ問題に対応する画像を自動生成する機能を実装しています。ImagineAPIを通じてMidJourneyの画像生成機能を利用し、問題ごとに適切な画像を生成・キャッシュします。
+このプロジェクトでは、**Stability AI**（推奨）またはImagineAPIを使用してIQ問題に対応する画像を自動生成する機能を実装しています。高品質な画像生成と効率的なコスト管理を実現し、問題ごとに適切な画像を生成・キャッシュします。
 
 ## 機能
 
@@ -23,14 +23,28 @@
 
 ### 1. APIキーの取得
 
-1. [ImagineAPI](https://www.imagineapi.dev/)にアクセス
+#### Stability AI（推奨）
+1. [Stability AI Platform](https://platform.stability.ai/)にアクセス
 2. アカウントを作成してAPIキーを取得
-3. `.env.local`ファイルを作成し、APIキーを設定
+3. `.env.local`ファイルにAPIキーを設定
 
 ```bash
 # .env.local
-IMAGINE_API_KEY=your_api_key_here
+STABILITY_API_KEY=your_stability_api_key_here
 NEXT_PUBLIC_ENABLE_IMAGE_GENERATION=true
+NEXT_PUBLIC_IMAGE_PROVIDER=stabilityai
+```
+
+#### ImagineAPI（代替）
+1. [ImagineAPI](https://www.imagineapi.dev/)にアクセス
+2. アカウントを作成してAPIキーを取得
+3. `.env.local`ファイルにAPIキーを設定
+
+```bash
+# .env.local
+IMAGINE_API_KEY=your_imagine_api_key_here
+NEXT_PUBLIC_ENABLE_IMAGE_GENERATION=true
+NEXT_PUBLIC_IMAGE_PROVIDER=imagineapi
 ```
 
 ### 2. 環境変数の設定
@@ -39,7 +53,9 @@ NEXT_PUBLIC_ENABLE_IMAGE_GENERATION=true
 # コピーして設定
 cp .env.example .env.local
 
-# APIキーを設定
+# APIキーを設定（いずれか一つ）
+STABILITY_API_KEY=your_stability_api_key_here  # 推奨
+# または
 IMAGINE_API_KEY=your_imagine_api_key_here
 ```
 
@@ -205,7 +221,22 @@ console.log('Image generation request:', requestData);
 
 ## 料金について
 
-ImagineAPIの料金体系：
+### Stability AI（推奨）
+| モデル | コスト | 用途 |
+|--------|--------|------|
+| SD 1.6 | $0.001/枚 | サムネイル、低解像度 |
+| SDXL 1.0 | $0.002/枚 | 開発・テスト用 |
+| SD 3.5 Medium | $0.035/枚 | 本番環境推奨 |
+| SD 3.5 Large | $0.065/枚 | 高品質要求時 |
+| Stable Image Core | $0.03/枚 | プロ仕様 |
+| Stable Image Ultra | $0.08/枚 | 最高品質、8K対応 |
+
+**月間コスト試算：**
+- 少量利用（100枚/月）: 約$3.50
+- 中規模（1000枚/月）: 約$35.00（SD 3.5 Medium使用時）
+- 大規模（10000枚/月）: 約$20.00（SDXL 1.0使用時）
+
+### ImagineAPI
 - 無料プラン: 月50枚まで
 - 有料プラン: $30/月で無制限
 - 詳細は [ImagineAPI料金ページ](https://www.imagineapi.dev/pricing) を参照
@@ -248,7 +279,7 @@ src/
 
 ## 注意事項
 
-1. **利用規約**: MidJourneyおよびImagineAPIの利用規約を遵守してください
+1. **利用規約**: Stability AI、ImagineAPIの各サービスの利用規約を遵守してください
 2. **画像権利**: 生成された画像の著作権について確認してください
 3. **API制限**: レート制限や月間制限に注意してください
 4. **キャッシュ**: 重要な画像は別途バックアップを取ってください

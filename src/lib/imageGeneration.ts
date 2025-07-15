@@ -9,17 +9,25 @@ import {
   PROMPT_TEMPLATES,
   PromptTemplate
 } from '@/types/image';
+import { stabilityImageService } from './stabilityImageGeneration';
 
 class ImageGenerationService {
-  private apiKey: string;
+  private provider: 'imagineapi' | 'stabilityai';
+  private imagineApiKey: string;
   private baseUrl: string = 'https://cl.imagineapi.dev/items/images/';
   private cache: Map<string, ImageCache> = new Map();
   private readonly CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24時間
 
   constructor() {
-    this.apiKey = process.env.IMAGINE_API_KEY || '';
-    if (!this.apiKey) {
-      console.warn('IMAGINE_API_KEY not found in environment variables');
+    // プロバイダーの選択（Stability AIを優先）
+    if (process.env.STABILITY_API_KEY) {
+      this.provider = 'stabilityai';
+    } else if (process.env.IMAGINE_API_KEY) {
+      this.provider = 'imagineapi';
+      this.imagineApiKey = process.env.IMAGINE_API_KEY;
+    } else {
+      this.provider = 'stabilityai'; // デフォルト
+      console.warn('No API keys found for image generation');
     }
   }
 
@@ -72,7 +80,7 @@ class ImageGenerationService {
       const response = await fetch(this.baseUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          'Authorization': `Bearer ${this.imagineApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(request),
@@ -92,6 +100,12 @@ class ImageGenerationService {
 
   // 画像生成のメイン関数
   async generateImage(request: ImageGenerationRequest): Promise<ImageGenerationResponse> {
+    // Stability AIを使用する場合は委譲
+    if (this.provider === 'stabilityai') {
+      return stabilityImageService.generateImage(request);
+    }
+
+    // 以下はImagineAPI用の処理
     const { questionId, prompt, style = 'minimal', aspectRatio = '1:1', quality = 'standard' } = request;
 
     // キャッシュから既存画像を確認
@@ -106,10 +120,10 @@ class ImageGenerationService {
       };
     }
 
-    if (!this.apiKey) {
+    if (!this.imagineApiKey) {
       return {
         success: false,
-        error: 'API key not configured',
+        error: 'ImagineAPI key not configured',
         generatedAt: new Date().toISOString(),
         prompt,
         style
@@ -191,6 +205,12 @@ class ImageGenerationService {
 
   // 特定の問題カテゴリ向けの画像生成
   async generateQuestionImage(questionId: string, category: string, description: string, style: string = 'minimal'): Promise<ImageGenerationResponse> {
+    // Stability AIを使用する場合は委譲
+    if (this.provider === 'stabilityai') {
+      return stabilityImageService.generateQuestionImage(questionId, category, description, style);
+    }
+
+    // ImagineAPI用の処理
     const prompt = this.applyPromptTemplate(category, description);
     
     return this.generateImage({
@@ -203,20 +223,34 @@ class ImageGenerationService {
   }
 
   // キャッシュの統計情報
-  getCacheStats(): { size: number; entries: number; oldestEntry?: string } {
+  getCacheStats(): { size: number; entries: number; oldestEntry?: string; provider: string } {
+    if (this.provider === 'stabilityai') {
+      const stats = stabilityImageService.getCacheStats();
+      return { ...stats, provider: 'stabilityai' };
+    }
+
     const entries = Array.from(this.cache.values());
     return {
       size: entries.length,
       entries: entries.length,
       oldestEntry: entries.length > 0 ? 
         entries.sort((a, b) => new Date(a.generatedAt).getTime() - new Date(b.generatedAt).getTime())[0].generatedAt : 
-        undefined
+        undefined,
+      provider: 'imagineapi'
     };
   }
 
   // キャッシュのクリア
   clearCache(): void {
+    if (this.provider === 'stabilityai') {
+      stabilityImageService.clearCache();
+    }
     this.cache.clear();
+  }
+
+  // 現在のプロバイダーを取得
+  getCurrentProvider(): string {
+    return this.provider;
   }
 }
 
