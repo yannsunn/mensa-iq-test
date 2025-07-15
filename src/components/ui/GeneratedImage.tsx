@@ -84,6 +84,7 @@ export default function GeneratedImage({
   // 初回読み込み
   useEffect(() => {
     generateImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionId, category, description, style]);
 
   // 再試行ハンドラ

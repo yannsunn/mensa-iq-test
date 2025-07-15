@@ -1,10 +1,10 @@
 // 画像キャッシュ管理API
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { imageGenerationService } from '@/lib/imageGeneration';
 
 // キャッシュ統計の取得
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const stats = imageGenerationService.getCacheStats();
     
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 }
 
 // キャッシュのクリア
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     imageGenerationService.clearCache();
     

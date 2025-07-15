@@ -216,7 +216,7 @@ class ImageGenerationService {
     return this.generateImage({
       questionId,
       prompt,
-      style: style as any,
+      style: style as 'minimal' | 'detailed' | 'abstract' | 'geometric',
       aspectRatio: '1:1',
       quality: 'standard'
     });

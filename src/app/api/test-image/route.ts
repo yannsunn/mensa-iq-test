@@ -1,9 +1,9 @@
 // 画像生成テストAPI
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { imageGenerationService } from '@/lib/imageGeneration';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // テスト用のプロンプト
     const testPrompt = "minimalist geometric pattern for IQ test, 3x3 grid with shapes, black and white, clean lines";

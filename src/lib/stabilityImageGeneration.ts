@@ -292,7 +292,7 @@ class StabilityImageGenerationService {
     return this.generateImage({
       questionId,
       prompt,
-      style: style as any,
+      style: style as 'minimal' | 'detailed' | 'abstract' | 'geometric',
       quality: process.env.NODE_ENV === 'production' ? 'standard' : 'draft'
     });
   }
