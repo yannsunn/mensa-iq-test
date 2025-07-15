@@ -13,7 +13,7 @@ import { stabilityImageService } from './stabilityImageGeneration';
 
 class ImageGenerationService {
   private provider: 'imagineapi' | 'stabilityai';
-  private imagineApiKey: string;
+  private imagineApiKey: string = '';
   private baseUrl: string = 'https://cl.imagineapi.dev/items/images/';
   private cache: Map<string, ImageCache> = new Map();
   private readonly CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24時間
