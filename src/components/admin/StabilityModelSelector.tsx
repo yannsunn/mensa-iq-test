@@ -4,8 +4,8 @@
 
 import { useState } from 'react';
 import { STABILITY_AI_MODELS, StabilityAIModel } from '@/types/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import Card from '@/components/ui/Card';
+import Badge from '@/components/ui/Badge';
 import { stabilityImageService } from '@/lib/stabilityImageGeneration';
 
 export default function StabilityModelSelector() {
@@ -25,14 +25,14 @@ export default function StabilityModelSelector() {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Stability AI モデル選択</CardTitle>
-          <CardDescription>
+      <Card variant="glass" className="p-6">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Stability AI モデル選択</h3>
+          <p className="text-sm text-gray-600 mt-1">
             用途に応じて最適なモデルを選択してください
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {models.map((model) => (
               <div
@@ -117,7 +117,7 @@ export default function StabilityModelSelector() {
               </div>
             </div>
           </div>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );

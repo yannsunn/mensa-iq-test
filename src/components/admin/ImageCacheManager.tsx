@@ -3,9 +3,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
 import { Trash2, RefreshCw, BarChart3, Image as ImageIcon } from 'lucide-react';
 import { useImageCache } from '@/hooks/useImageCache';
 
@@ -43,17 +43,17 @@ export default function ImageCacheManager() {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <Card variant="glass" className="p-6">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold flex items-center gap-2">
             <ImageIcon className="h-5 w-5" />
             画像キャッシュ管理
-          </CardTitle>
-          <CardDescription>
+          </h3>
+          <p className="text-sm text-gray-600 mt-1">
             生成された画像のキャッシュ状況を管理します
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-blue-50 p-4 rounded-lg">
               <div className="flex items-center justify-between">
@@ -115,14 +115,14 @@ export default function ImageCacheManager() {
               {isClearing ? 'クリア中...' : 'キャッシュをクリア'}
             </Button>
           </div>
-        </CardContent>
+        </div>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>キャッシュについて</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Card variant="glass" className="p-6">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">キャッシュについて</h3>
+        </div>
+        <div>
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Badge variant="outline">自動管理</Badge>
@@ -143,7 +143,7 @@ export default function ImageCacheManager() {
               </span>
             </div>
           </div>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );
