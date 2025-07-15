@@ -206,7 +206,7 @@ function shouldShowGeneratedImage(question: UnifiedQuestion): boolean {
   }
   
   // 特定のカテゴリで画像生成を有効にする
-  const imageCategories = ['pattern', 'spatial', 'abstract', 'geometric'];
+  const imageCategories = ['pattern', 'spatial', 'abstract'];
   return imageCategories.includes(question.category);
 }
 
@@ -223,8 +223,6 @@ function generateImageDescription(question: UnifiedQuestion): string {
       return `spatial reasoning diagram showing ${questionText.includes('回転') ? 'rotation' : questionText.includes('展開') ? 'unfolding' : 'spatial relationship'}, 3D perspective`;
     case 'abstract':
       return `abstract reasoning visualization showing ${questionText.includes('関係') ? 'relationship' : 'logical connection'}, conceptual diagram`;
-    case 'geometric':
-      return `geometric problem showing ${questionText.includes('図形') ? 'shapes' : 'geometric relationship'}, clean lines, mathematical`;
     default:
       return `IQ test visualization for ${question.category} problem, clean educational diagram`;
   }
@@ -239,8 +237,6 @@ function getImageStyle(category: string): 'minimal' | 'detailed' | 'abstract' | 
       return 'minimal';
     case 'abstract':
       return 'abstract';
-    case 'geometric':
-      return 'geometric';
     default:
       return 'minimal';
   }
