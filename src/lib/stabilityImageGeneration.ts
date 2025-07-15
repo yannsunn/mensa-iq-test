@@ -15,7 +15,7 @@ import { getEnvVariable, initializeEnv, isVercelEnvironment } from '@/lib/env';
 
 class StabilityImageGenerationService {
   private apiKey: string;
-  private baseUrl: string = 'https://api.stability.ai/v1/generation';
+  private baseUrl: string = 'https://api.stability.ai/v2beta/stable-image/generate';
   private cache: Map<string, ImageCache> = new Map();
   private readonly CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24時間
 
@@ -144,8 +144,7 @@ class StabilityImageGenerationService {
 
   // Stability AI API呼び出し
   private async callStabilityAPI(model: StabilityAIModel, request: StabilityAIRequest): Promise<StabilityAIResponse> {
-    const modelConfig = STABILITY_AI_MODELS[model];
-    const endpoint = `${this.baseUrl}/${modelConfig.endpoint}/text-to-image`;
+    const endpoint = `${this.baseUrl}/${model}`;
 
     console.log('[StabilityAI] API Call:', {
       model,
@@ -164,12 +163,8 @@ class StabilityImageGenerationService {
           'Authorization': `Bearer ${this.apiKey}`,
         },
         body: JSON.stringify({
-          text_prompts: [
-            {
-              text: request.prompt,
-              weight: 1
-            }
-          ],
+          prompt: request.prompt,
+          negative_prompt: request.negative_prompt,
           cfg_scale: request.cfg_scale || 7,
           height: request.height,
           width: request.width,
@@ -259,8 +254,28 @@ class StabilityImageGenerationService {
 
       const response = await this.callStabilityAPI(model, apiRequest);
       
-      if (response.images && response.images.length > 0) {
-        const imageUrl = this.base64ToDataUrl(response.images[0].base64);
+      // レスポンスのデバッグ情報を出力
+      console.log('[StabilityAI] API Response:', {
+        hasImages: !!(response.images && response.images.length > 0),
+        hasImage: !!response.image,
+        responseKeys: Object.keys(response),
+        status: response.status,
+        message: response.message
+      });
+      
+      let imageBase64: string | null = null;
+      
+      // 新しいAPI形式（単一のimage）をチェック
+      if (response.image) {
+        imageBase64 = response.image;
+      } 
+      // 古いAPI形式（imagesの配列）をチェック
+      else if (response.images && response.images.length > 0) {
+        imageBase64 = response.images[0].base64;
+      }
+      
+      if (imageBase64) {
+        const imageUrl = this.base64ToDataUrl(imageBase64);
         
         // キャッシュに保存
         this.setCachedImage(questionId, imageUrl, prompt, style);
@@ -275,7 +290,7 @@ class StabilityImageGenerationService {
       } else {
         return {
           success: false,
-          error: 'No images generated',
+          error: `No images generated. Response: ${JSON.stringify(response)}`,
           generatedAt: new Date().toISOString(),
           prompt,
           style

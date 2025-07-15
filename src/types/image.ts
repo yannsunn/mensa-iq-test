@@ -38,20 +38,28 @@ export interface ImageGenerationSettings {
 // Stability AI専用の型定義
 export interface StabilityAIRequest {
   prompt: string;
-  model?: 'stable-image-ultra' | 'stable-image-core' | 'sd-3.5-large' | 'sd-3.5-large-turbo' | 'sd-3.5-medium' | 'sdxl-1.0' | 'sd-1.6';
+  negative_prompt?: string;
   cfg_scale?: number;
   steps?: number;
   width?: number;
   height?: number;
   samples?: number;
-  negative_prompt?: string;
 }
 
 export interface StabilityAIResponse {
-  images: Array<{
+  images?: Array<{
     base64: string;
-    seed: number;
-    finishReason: string;
+    seed?: number;
+    finishReason?: string;
+  }>;
+  image?: string; // Base64エンコードされた画像データ
+  id?: string;
+  status?: string;
+  message?: string;
+  errors?: Array<{
+    id: string;
+    message: string;
+    name: string;
   }>;
 }
 

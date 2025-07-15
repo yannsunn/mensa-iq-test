@@ -34,7 +34,7 @@ export async function GET() {
     try {
       console.log('[TEST] Making test API call to Stability AI...');
       
-      const response = await fetch('https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image', {
+      const response = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,12 +42,8 @@ export async function GET() {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          text_prompts: [
-            {
-              text: 'A simple test image, minimalist design',
-              weight: 1
-            }
-          ],
+          prompt: 'A simple test image, minimalist design',
+          negative_prompt: 'text, words, letters, numbers, watermark',
           cfg_scale: 7,
           height: 512,
           width: 512,
