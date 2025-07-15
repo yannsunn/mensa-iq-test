@@ -48,7 +48,7 @@ export default function StabilityModelSelector() {
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-semibold text-sm">{model.name}</h3>
-                  <Badge variant={selectedModel === model.id ? 'default' : 'outline'} className="text-xs">
+                  <Badge variant={selectedModel === model.id ? 'primary' : 'default'} className="text-xs">
                     ${model.cost}/画像
                   </Badge>
                 </div>
@@ -104,15 +104,15 @@ export default function StabilityModelSelector() {
             <h4 className="font-semibold text-sm mb-2">推奨設定</h4>
             <div className="text-sm space-y-1">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">開発</Badge>
+                <Badge variant="default" className="text-xs">開発</Badge>
                 <span>SDXL 1.0 - コスト最小化</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">本番</Badge>
+                <Badge variant="default" className="text-xs">本番</Badge>
                 <span>SD 3.5 Medium - バランス重視</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">高品質</Badge>
+                <Badge variant="default" className="text-xs">高品質</Badge>
                 <span>Stable Image Core - プロ仕様</span>
               </div>
             </div>

@@ -97,7 +97,7 @@ export default function ImageCacheManager() {
 
           <div className="flex gap-3">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={refreshStats}
               className="flex items-center gap-2"
             >
@@ -125,19 +125,19 @@ export default function ImageCacheManager() {
         <div>
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Badge variant="outline">自動管理</Badge>
+              <Badge variant="default">自動管理</Badge>
               <span className="text-sm text-gray-600">
                 画像は24時間自動でキャッシュされます
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">最大50件</Badge>
+              <Badge variant="default">最大50件</Badge>
               <span className="text-sm text-gray-600">
                 キャッシュサイズが上限に達すると古いものから削除されます
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">ローカル保存</Badge>
+              <Badge variant="default">ローカル保存</Badge>
               <span className="text-sm text-gray-600">
                 キャッシュはブラウザのローカルストレージに保存されます
               </span>
