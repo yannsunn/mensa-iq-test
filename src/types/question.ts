@@ -27,6 +27,13 @@ export interface VisualData {
     rotation?: string;
     netLabels?: string[];
   };
+  // 画像生成関連の設定
+  generatedImage?: {
+    url: string;
+    prompt: string;
+    generatedAt: string;
+    style?: 'minimal' | 'detailed' | 'abstract' | 'geometric';
+  };
 }
 
 // 練習モード用の詳細情報

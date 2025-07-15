@@ -57,11 +57,11 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Brain className="w-6 h-6 md:w-8 md:h-8 text-white" />
               </motion.div>
-              <GlowText size="2xl" variant="primary" className="heading-responsive font-extrabold tracking-tight">
+              <GlowText size="xl" variant="primary" className="text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight">
                 MENSA IQ Test
               </GlowText>
             </div>
-            <p className="text-base md:text-lg text-text-secondary font-medium">
+            <p className="text-sm md:text-base text-text-secondary font-medium">
               国際MENSA基準であなたのIQを測定
             </p>
             
@@ -74,14 +74,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-1"
+                    className="text-lg md:text-xl lg:text-2xl font-bold text-primary mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                   >
                     {stats.total}
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <TrendingUp className="w-3 h-3 md:w-4 md:h-4 text-primary" />
                     問題数
                   </div>
@@ -94,14 +94,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-accent mb-1"
+                    className="text-lg md:text-xl lg:text-2xl font-bold text-accent mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                   >
                     {stats.avgIQ}+
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <Brain className="w-3 h-3 md:w-4 md:h-4 text-accent" />
                     平均IQ
                   </div>
@@ -114,14 +114,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-warning mb-1"
+                    className="text-lg md:text-xl lg:text-2xl font-bold text-warning mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
                   >
                     {stats.successRate}%
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <Star className="w-3 h-3 md:w-4 md:h-4 text-warning" />
                     満足度
                   </div>
@@ -134,14 +134,14 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 <Card variant="glass" className="text-center p-responsive-sm" hover={false}>
                   <motion.div 
-                    className="text-2xl md:text-3xl lg:text-4xl font-bold text-purple-400 mb-1"
+                    className="text-lg md:text-xl lg:text-2xl font-bold text-purple-400 mb-1"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
                   >
                     {stats.users}
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
+                  <div className="text-sm md:text-base text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <Users className="w-3 h-3 md:w-4 md:h-4 text-purple-400" />
                     利用者
                   </div>
@@ -175,7 +175,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 {/* 推奨ラベル - レスポンシブ完全対応版 */}
                 <div className="absolute left-4 md:left-6 -top-3 z-40">
-                  <div className="inline-flex items-center gap-2 px-4 md:px-5 lg:px-6 py-2 md:py-2.5 lg:py-3 text-base md:text-lg lg:text-xl font-bold text-white bg-gradient-to-r from-accent/90 to-accent-light/90 rounded-full shadow-glow-accent border-2 border-white/30 whitespace-nowrap backdrop-blur-sm" style={{ lineHeight: '1.5' }}>
+                  <div className="inline-flex items-center gap-1 px-3 md:px-4 lg:px-5 py-1.5 md:py-2 lg:py-2.5 text-sm md:text-base lg:text-lg font-bold text-white bg-gradient-to-r from-accent/90 to-accent-light/90 rounded-full shadow-glow-accent border-2 border-white/30 whitespace-nowrap backdrop-blur-sm" style={{ lineHeight: '1.5' }}>
                     <Star className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     推奨
                   </div>
@@ -187,8 +187,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text-primary" style={{ lineHeight: '1.5' }}>練習モード</h2>
-                      <p className="text-base md:text-lg text-text-secondary" style={{ lineHeight: '1.5' }}>初めての方におすすめ</p>
+                      <h2 className="text-base md:text-lg lg:text-xl font-bold text-text-primary" style={{ lineHeight: '1.5' }}>練習モード</h2>
+                      <p className="text-sm md:text-base text-text-secondary" style={{ lineHeight: '1.5' }}>初めての方におすすめ</p>
                     </div>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                           feature.highlight ? 'text-primary' : 'text-text-secondary'
                         }`} />
                       </div>
-                      <span className={`text-base md:text-lg ${
+                      <span className={`text-sm md:text-base ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
                       }`} style={{ lineHeight: '1.5' }}>{feature.text}</span>
                     </motion.div>
@@ -225,7 +225,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       transition={{ duration: 0.2 }}
                       className="border-t border-border-default pt-3 md:pt-4"
                     >
-                      <p className="text-base md:text-lg font-medium text-text-secondary mb-4" style={{ lineHeight: '1.5' }}>難易度を選択</p>
+                      <p className="text-sm md:text-base font-medium text-text-secondary mb-4" style={{ lineHeight: '1.5' }}>難易度を選択</p>
                       <div className="grid grid-cols-3 gap-responsive-sm">
                         {(['easy', 'medium', 'hard'] as const).map((difficulty) => (
                           <Button
@@ -271,8 +271,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <Trophy className="w-5 h-5 md:w-6 md:h-6 text-warning" />
                     </div>
                     <div>
-                      <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text-primary" style={{ lineHeight: '1.5' }}>本番モード</h2>
-                      <p className="text-base md:text-lg text-text-secondary" style={{ lineHeight: '1.5' }}>正式なIQスコアを測定</p>
+                      <h2 className="text-base md:text-lg lg:text-xl font-bold text-text-primary" style={{ lineHeight: '1.5' }}>本番モード</h2>
+                      <p className="text-sm md:text-base text-text-secondary" style={{ lineHeight: '1.5' }}>正式なIQスコアを測定</p>
                     </div>
                   </div>
                 </div>
@@ -293,7 +293,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                           feature.highlight ? 'text-warning' : 'text-text-secondary'
                         }`} />
                       </div>
-                      <span className={`text-base md:text-lg ${
+                      <span className={`text-sm md:text-base ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
                       }`} style={{ lineHeight: '1.5' }}>{feature.text}</span>
                     </motion.div>

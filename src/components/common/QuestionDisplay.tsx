@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { UnifiedQuestion } from '@/types/question';
 import CubeQuestion from '../CubeQuestion';
+import GeneratedImage from '../ui/GeneratedImage';
 
 interface QuestionDisplayProps {
   question: UnifiedQuestion;
@@ -55,6 +56,24 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
           {question.question}
         </h2>
       </motion.div>
+
+      {/* 生成画像の表示 */}
+      {shouldShowGeneratedImage(question) && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="mb-8"
+        >
+          <GeneratedImage
+            questionId={question.id}
+            category={question.category}
+            description={generateImageDescription(question)}
+            style={getImageStyle(question.category)}
+            className="max-w-md mx-auto"
+          />
+        </motion.div>
+      )}
 
       {/* 選択肢 */}
       <motion.div
@@ -177,4 +196,52 @@ function generateCubeViews(question: UnifiedQuestion): CubeView[] {
     }
     // 他のビューも追加
   ];
+}
+
+// 画像生成が必要かどうかを判定
+function shouldShowGeneratedImage(question: UnifiedQuestion): boolean {
+  // 既にビジュアルデータがある場合は生成画像を表示しない
+  if (question.visualData?.type === 'cube' || question.visualData?.type === 'matrix') {
+    return false;
+  }
+  
+  // 特定のカテゴリで画像生成を有効にする
+  const imageCategories = ['pattern', 'spatial', 'abstract', 'geometric'];
+  return imageCategories.includes(question.category);
+}
+
+// 画像描述を生成
+function generateImageDescription(question: UnifiedQuestion): string {
+  // 問題文から画像生成用の説明を抽出
+  const questionText = question.question.toLowerCase();
+  
+  // カテゴリ別の説明生成
+  switch (question.category) {
+    case 'pattern':
+      return `pattern sequence showing ${questionText.includes('次') ? 'next pattern in sequence' : 'pattern relationship'}, geometric shapes, logical progression`;
+    case 'spatial':
+      return `spatial reasoning diagram showing ${questionText.includes('回転') ? 'rotation' : questionText.includes('展開') ? 'unfolding' : 'spatial relationship'}, 3D perspective`;
+    case 'abstract':
+      return `abstract reasoning visualization showing ${questionText.includes('関係') ? 'relationship' : 'logical connection'}, conceptual diagram`;
+    case 'geometric':
+      return `geometric problem showing ${questionText.includes('図形') ? 'shapes' : 'geometric relationship'}, clean lines, mathematical`;
+    default:
+      return `IQ test visualization for ${question.category} problem, clean educational diagram`;
+  }
+}
+
+// カテゴリに応じた画像スタイル
+function getImageStyle(category: string): 'minimal' | 'detailed' | 'abstract' | 'geometric' {
+  switch (category) {
+    case 'pattern':
+      return 'geometric';
+    case 'spatial':
+      return 'minimal';
+    case 'abstract':
+      return 'abstract';
+    case 'geometric':
+      return 'geometric';
+    default:
+      return 'minimal';
+  }
 }
