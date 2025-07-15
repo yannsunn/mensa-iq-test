@@ -82,7 +82,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.total}
                   </motion.div>
                   <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
-                    <TrendingUp className="w-3 h-3 md:w-4 md:h-4" />
+                    <TrendingUp className="w-3 h-3 md:w-4 md:h-4 text-primary" />
                     問題数
                   </div>
                 </Card>
@@ -102,7 +102,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.avgIQ}+
                   </motion.div>
                   <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
-                    <Brain className="w-3 h-3 md:w-4 md:h-4" />
+                    <Brain className="w-3 h-3 md:w-4 md:h-4 text-accent" />
                     平均IQ
                   </div>
                 </Card>
@@ -122,7 +122,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.successRate}%
                   </motion.div>
                   <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
-                    <Star className="w-3 h-3 md:w-4 md:h-4" />
+                    <Star className="w-3 h-3 md:w-4 md:h-4 text-warning" />
                     満足度
                   </div>
                 </Card>
@@ -142,7 +142,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                     {stats.users}
                   </motion.div>
                   <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
-                    <Users className="w-3 h-3 md:w-4 md:h-4" />
+                    <Users className="w-3 h-3 md:w-4 md:h-4 text-purple-400" />
                     利用者
                   </div>
                 </Card>
@@ -175,7 +175,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 {/* 推奨ラベル - レスポンシブ完全対応版 */}
                 <div className="absolute left-4 md:left-6 -top-3 z-40">
-                  <div className="inline-flex items-center gap-2 px-4 md:px-5 lg:px-6 py-2 md:py-2.5 lg:py-3 text-base md:text-lg lg:text-xl font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border-2 border-white/30 whitespace-nowrap" style={{ lineHeight: '1.5' }}>
+                  <div className="inline-flex items-center gap-2 px-4 md:px-5 lg:px-6 py-2 md:py-2.5 lg:py-3 text-base md:text-lg lg:text-xl font-bold text-white bg-gradient-to-r from-accent/90 to-accent-light/90 rounded-full shadow-glow-accent border-2 border-white/30 whitespace-nowrap backdrop-blur-sm" style={{ lineHeight: '1.5' }}>
                     <Star className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     推奨
                   </div>

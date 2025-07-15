@@ -33,8 +33,8 @@
   /* Text Colors */
   --text-primary: #ffffff;
   --text-secondary: #a3a3a3;
-  --text-tertiary: #737373;
-  --text-muted: #525252;
+  --text-tertiary: #8b8b8b;
+  --text-muted: #6b6b6b;
   
   /* Borders */
   --border-default: rgba(255, 255, 255, 0.08);
