@@ -106,7 +106,7 @@ export default function ImageCacheManager() {
             </Button>
             
             <Button
-              variant="destructive"
+              variant="danger"
               onClick={handleClearCache}
               disabled={isClearing || cacheStats.totalImages === 0}
               className="flex items-center gap-2"
