@@ -81,7 +81,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.total}
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <TrendingUp className="w-3 h-3 md:w-4 md:h-4" />
                     問題数
                   </div>
@@ -101,7 +101,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.avgIQ}+
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <Brain className="w-3 h-3 md:w-4 md:h-4" />
                     平均IQ
                   </div>
@@ -121,7 +121,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.successRate}%
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <Star className="w-3 h-3 md:w-4 md:h-4" />
                     満足度
                   </div>
@@ -141,7 +141,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                   >
                     {stats.users}
                   </motion.div>
-                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1">
+                  <div className="text-base md:text-lg text-text-secondary flex items-center justify-center gap-1" style={{ lineHeight: '1.5' }}>
                     <Users className="w-3 h-3 md:w-4 md:h-4" />
                     利用者
                   </div>
@@ -175,7 +175,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
               >
                 {/* 推奨ラベル - レスポンシブ完全対応版 */}
                 <div className="absolute left-4 md:left-6 -top-3 z-40">
-                  <div className="inline-flex items-center gap-1 md:gap-2 px-3 md:px-4 lg:px-5 py-1.5 md:py-2 lg:py-2.5 text-base md:text-lg lg:text-xl font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border border-white/30 md:border-2 whitespace-nowrap">
+                  <div className="inline-flex items-center gap-2 px-4 md:px-5 lg:px-6 py-2 md:py-2.5 lg:py-3 text-base md:text-lg lg:text-xl font-bold text-black bg-gradient-to-r from-accent to-accent-light rounded-full shadow-glow-accent border-2 border-white/30 whitespace-nowrap" style={{ lineHeight: '1.5' }}>
                     <Star className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     推奨
                   </div>
@@ -187,8 +187,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-lg md:text-xl font-bold text-text-primary">練習モード</h2>
-                      <p className="text-base md:text-lg text-text-secondary">初めての方におすすめ</p>
+                      <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text-primary" style={{ lineHeight: '1.5' }}>練習モード</h2>
+                      <p className="text-base md:text-lg text-text-secondary" style={{ lineHeight: '1.5' }}>初めての方におすすめ</p>
                     </div>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       </div>
                       <span className={`text-base md:text-lg ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
-                      }`}>{feature.text}</span>
+                      }`} style={{ lineHeight: '1.5' }}>{feature.text}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -225,7 +225,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       transition={{ duration: 0.2 }}
                       className="border-t border-border-default pt-3 md:pt-4"
                     >
-                      <p className="text-base md:text-lg font-medium text-text-secondary mb-3">難易度を選択</p>
+                      <p className="text-base md:text-lg font-medium text-text-secondary mb-4" style={{ lineHeight: '1.5' }}>難易度を選択</p>
                       <div className="grid grid-cols-3 gap-responsive-sm">
                         {(['easy', 'medium', 'hard'] as const).map((difficulty) => (
                           <Button
@@ -271,8 +271,8 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       <Trophy className="w-5 h-5 md:w-6 md:h-6 text-warning" />
                     </div>
                     <div>
-                      <h2 className="text-lg md:text-xl font-bold text-text-primary">本番モード</h2>
-                      <p className="text-base md:text-lg text-text-secondary">正式なIQスコアを測定</p>
+                      <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-text-primary" style={{ lineHeight: '1.5' }}>本番モード</h2>
+                      <p className="text-base md:text-lg text-text-secondary" style={{ lineHeight: '1.5' }}>正式なIQスコアを測定</p>
                     </div>
                   </div>
                 </div>
@@ -295,7 +295,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                       </div>
                       <span className={`text-base md:text-lg ${
                         feature.highlight ? 'text-text-primary font-medium' : 'text-text-secondary'
-                      }`}>{feature.text}</span>
+                      }`} style={{ lineHeight: '1.5' }}>{feature.text}</span>
                     </motion.div>
                   ))}
                 </div>
