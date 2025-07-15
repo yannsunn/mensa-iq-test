@@ -26,7 +26,7 @@ export async function GET() {
       expectedLength: 43 // Stability AIのAPIキーは通常43文字
     },
     envStatus,
-    testApiCall: null as any
+    testApiCall: null as Record<string, unknown> | null
   };
   
   // APIキーが存在する場合、実際にAPIを呼び出してみる

@@ -5,7 +5,7 @@ export function getEnvVariable(key: string): string | undefined {
   // 複数の方法で環境変数を取得
   const value = process.env[key] || 
                 process.env[`${key}`] || 
-                (typeof window === 'undefined' ? undefined : (window as any).env?.[key]);
+                (typeof window === 'undefined' ? undefined : (window as unknown as { env?: Record<string, string> }).env?.[key]);
   
   if (!value && typeof window === 'undefined') {
     console.warn(`[ENV] Variable ${key} not found in server environment`);
