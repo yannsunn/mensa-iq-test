@@ -32,7 +32,7 @@
 
 2. 以下の情報を入力：
    - **Key (Name)**: `STABILITY_API_KEY`
-   - **Value**: `sk-UdV4Y6kiwUp2HfKfKWm6WajTEgop6MFVy3YCDrxnhY5dhfvS`
+   - **Value**: `[YOUR_STABILITY_API_KEY]` （Stability AIダッシュボードから取得）
    - **Environment**: 
      - ☑ Production
      - ☑ Preview  

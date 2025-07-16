@@ -144,33 +144,70 @@ class StabilityImageGenerationService {
 
   // Stability AI API呼び出し
   private async callStabilityAPI(model: StabilityAIModel, request: StabilityAIRequest): Promise<StabilityAIResponse> {
-    const endpoint = `${this.baseUrl}/${model}`;
+    // モデルに応じた適切なエンドポイントを使用
+    const endpointMap: Record<string, string> = {
+      'stable-image-core': 'core',
+      'stable-image-ultra': 'ultra',
+      'sd-3.5-large': 'sd3',
+      'sd-3.5-large-turbo': 'sd3',
+      'sd-3.5-medium': 'sd3',
+      'sdxl-1.0': 'core', // SDXLはcore endpointで処理
+      'sd-1.6': 'core'   // SD1.6もcore endpointで処理
+    };
+    
+    const modelEndpoint = endpointMap[model] || 'core';
+    const endpoint = `${this.baseUrl}/${modelEndpoint}`;
 
     console.log('[StabilityAI] API Call:', {
       model,
+      modelEndpoint,
       endpoint,
       hasApiKey: !!this.apiKey,
-      apiKeyLength: this.apiKey ? this.apiKey.length : 0,
-      requestSize: JSON.stringify(request).length
+      apiKeyLength: this.apiKey ? this.apiKey.length : 0
     });
 
     try {
+      // multipart/form-dataでリクエストを送信
+      const formData = new FormData();
+      formData.append('prompt', request.prompt);
+      
+      // モデル名をmodel パラメータとして追加（エンドポイントによって必要）
+      if (modelEndpoint === 'sd3') {
+        formData.append('model', model);
+      }
+      
+      if (request.negative_prompt) {
+        formData.append('negative_prompt', request.negative_prompt);
+      }
+      
+      if (request.cfg_scale) {
+        formData.append('cfg_scale', request.cfg_scale.toString());
+      }
+      
+      if (request.height) {
+        formData.append('height', request.height.toString());
+      }
+      
+      if (request.width) {
+        formData.append('width', request.width.toString());
+      }
+      
+      if (request.steps) {
+        formData.append('steps', request.steps.toString());
+      }
+      
+      if (request.samples) {
+        formData.append('samples', request.samples.toString());
+      }
+      
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
+          // Content-TypeはFormDataが自動で設定するため指定しない
         },
-        body: JSON.stringify({
-          prompt: request.prompt,
-          negative_prompt: request.negative_prompt,
-          cfg_scale: request.cfg_scale || 7,
-          height: request.height,
-          width: request.width,
-          steps: request.steps || 30,
-          samples: request.samples || 1,
-        }),
+        body: formData,
       });
 
       if (!response.ok) {

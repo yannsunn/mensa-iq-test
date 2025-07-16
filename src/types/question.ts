@@ -1,55 +1,66 @@
-// 統一された質問インターフェース
+// 統一された質問インターフェース（最適化版）
+export type QuestionCategory = 'logical' | 'numerical' | 'spatial' | 'pattern' | 'verbal' | 'abstract' | 'memory' | 'matrix';
+
 export interface BaseQuestion {
-  id: string;
-  category: 'logical' | 'numerical' | 'spatial' | 'pattern' | 'verbal' | 'abstract' | 'memory' | 'matrix';
-  difficulty: number; // 1-20
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  timeLimit: number;
-  explanation: string;
+  readonly id: string;
+  readonly category: QuestionCategory;
+  readonly difficulty: number; // 1-20
+  readonly question: string;
+  readonly options: readonly string[];
+  readonly correctAnswer: number;
+  readonly timeLimit: number;
+  readonly explanation: string;
 }
 
-// ビジュアル要素を持つ質問
+// ビジュアル要素を持つ質問（最適化版）
+export type VisualType = 'matrix' | 'pattern' | 'cube' | 'geometric';
+export type CubeVisualType = 'cube_rotation' | 'net_to_cube' | 'opposite_faces';
+export type ImageStyle = 'minimal' | 'detailed' | 'abstract' | 'geometric';
+
+export interface CubeData {
+  readonly initialState?: {
+    readonly front: string;
+    readonly top: string;
+    readonly right: string;
+    readonly back?: string;
+    readonly bottom?: string;
+    readonly left?: string;
+  };
+  readonly rotation?: string;
+  readonly netLabels?: readonly string[];
+}
+
+export interface GeneratedImage {
+  readonly url: string;
+  readonly prompt: string;
+  readonly generatedAt: string;
+  readonly style?: ImageStyle;
+}
+
 export interface VisualData {
-  type: 'matrix' | 'pattern' | 'cube' | 'geometric';
-  data?: unknown;
-  visualType?: 'cube_rotation' | 'net_to_cube' | 'opposite_faces';
-  cubeData?: {
-    initialState?: {
-      front: string;
-      top: string;
-      right: string;
-      back?: string;
-      bottom?: string;
-      left?: string;
-    };
-    rotation?: string;
-    netLabels?: string[];
-  };
-  // 画像生成関連の設定
-  generatedImage?: {
-    url: string;
-    prompt: string;
-    generatedAt: string;
-    style?: 'minimal' | 'detailed' | 'abstract' | 'geometric';
-  };
+  readonly type: VisualType;
+  readonly data?: unknown;
+  readonly visualType?: CubeVisualType;
+  readonly cubeData?: CubeData;
+  readonly generatedImage?: GeneratedImage;
 }
 
-// 練習モード用の詳細情報
+// 練習モード用の詳細情報（最適化版）
+export type MensaLevel = 'entry' | 'standard' | 'expert' | 'genius';
+
 export interface PracticeDetails {
-  immediateExplanation: string;
-  detailedSolution: string;
-  commonMistakes: string[];
-  relatedConcepts: string[];
-  difficultyJustification: string;
+  readonly immediateExplanation: string;
+  readonly detailedSolution: string;
+  readonly commonMistakes: readonly string[];
+  readonly relatedConcepts: readonly string[];
+  readonly difficultyJustification: string;
 }
 
-// MENSA関連情報
+// MENSA関連情報（最適化版）
 export interface MensaInfo {
-  source: string;
-  mensaLevel: 'entry' | 'standard' | 'expert' | 'genius';
-  cognitiveSkills: string[];
+  readonly source: string;
+  readonly mensaLevel: MensaLevel;
+  readonly cognitiveSkills: readonly string[];
 }
 
 // 統一された質問タイプ
@@ -63,26 +74,32 @@ export interface UnifiedQuestion extends BaseQuestion {
 export type QuestionDifficulty = 'easy' | 'medium' | 'hard';
 export type TestMode = 'practice' | 'exam' | 'custom';
 
-// テスト結果
-export interface TestResult {
-  totalScore: number;
-  totalQuestions: number;
-  iqScore: number;
-  percentile: number;
-  categoryScores: {
-    [key: string]: {
-      correct: number;
-      total: number;
-      percentage: number;
-    };
-  };
-  timeSpent: number;
-  difficulty: string;
-  mensaQualified: boolean;
+// テスト結果（最適化版）
+export interface CategoryScore {
+  readonly correct: number;
+  readonly total: number;
+  readonly percentage: number;
 }
 
-// カテゴリ情報
-export const QUESTION_CATEGORIES = {
+export interface TestResult {
+  readonly totalScore: number;
+  readonly totalQuestions: number;
+  readonly iqScore: number;
+  readonly percentile: number;
+  readonly categoryScores: Record<string, CategoryScore>;
+  readonly timeSpent: number;
+  readonly difficulty: string;
+  readonly mensaQualified: boolean;
+}
+
+// カテゴリ情報（最適化版）
+export interface CategoryInfo {
+  readonly name: string;
+  readonly icon: string;
+  readonly color: string;
+}
+
+export const QUESTION_CATEGORIES: Record<QuestionCategory, CategoryInfo> = {
   logical: { name: '論理推論', icon: '🧠', color: 'blue' },
   numerical: { name: '数的推論', icon: '🔢', color: 'green' },
   spatial: { name: '空間認識', icon: '🎲', color: 'purple' },

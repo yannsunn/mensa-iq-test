@@ -1,9 +1,11 @@
 // 改善された質問データの遅延読み込みシステム
 import { UnifiedQuestion } from '@/types/question';
 
-// キャッシュ管理
+// キャッシュ管理（最適化版）
 const questionCache = new Map<string, UnifiedQuestion[]>();
 const loadingPromises = new Map<string, Promise<UnifiedQuestion[]>>();
+const CACHE_EXPIRATION = 30 * 60 * 1000; // 30分
+const cacheTimestamps = new Map<string, number>();
 
 // カテゴリ別の動的インポート
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,9 +55,16 @@ async function loadCategoryData(category: string): Promise<any[]> {
 
 // カテゴリ別の質問を取得（キャッシュ付き）
 export async function loadQuestionsByCategory(category: string): Promise<UnifiedQuestion[]> {
-  // キャッシュから取得
+  // キャッシュから取得（有効性チェック付き）
   if (questionCache.has(category)) {
-    return questionCache.get(category)!;
+    const timestamp = cacheTimestamps.get(category);
+    if (timestamp && Date.now() - timestamp < CACHE_EXPIRATION) {
+      return questionCache.get(category)!;
+    } else {
+      // キャッシュが期限切れの場合はクリア
+      questionCache.delete(category);
+      cacheTimestamps.delete(category);
+    }
   }
 
   // 既に読み込み中の場合は、その Promise を返す
@@ -84,8 +93,9 @@ export async function loadQuestionsByCategory(category: string): Promise<Unified
       } : undefined
     } as UnifiedQuestion));
 
-    // キャッシュに保存
+    // キャッシュに保存（タイムスタンプ付き）
     questionCache.set(category, unifiedQuestions);
+    cacheTimestamps.set(category, Date.now());
     loadingPromises.delete(category);
     
     return unifiedQuestions;
@@ -164,9 +174,23 @@ export async function loadExamQuestions(count: number = 45): Promise<UnifiedQues
 export function clearQuestionCache(category?: string) {
   if (category) {
     questionCache.delete(category);
+    cacheTimestamps.delete(category);
   } else {
     questionCache.clear();
+    cacheTimestamps.clear();
   }
+}
+
+// キャッシュサイズ管理
+export function getCacheStats(): { categories: number; totalQuestions: number; oldestCache?: string } {
+  const totalQuestions = Array.from(questionCache.values()).reduce((sum, questions) => sum + questions.length, 0);
+  const oldestTimestamp = Math.min(...Array.from(cacheTimestamps.values()));
+  
+  return {
+    categories: questionCache.size,
+    totalQuestions,
+    oldestCache: oldestTimestamp !== Infinity ? new Date(oldestTimestamp).toISOString() : undefined
+  };
 }
 
 // プリロード機能（事前読み込み）

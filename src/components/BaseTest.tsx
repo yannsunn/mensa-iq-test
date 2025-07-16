@@ -56,23 +56,30 @@ export default function BaseTest({
 
   const currentQuestion = questions[navigation.currentIndex];
   
-  // メモ化された回答済み数の計算
-  const answeredCount = useMemo(() => {
-    return answers.filter(answer => answer !== null).length;
-  }, [answers]);
+  // メモ化された統計情報（パフォーマンス最適化）
+  const { answeredCount, totalScore } = useMemo(() => {
+    const answeredCount = answers.filter(answer => answer !== null).length;
+    const totalScore = answers.reduce<number>((score, answer, index) => {
+      return score + (answer === questions[index].correctAnswer ? 1 : 0);
+    }, 0);
+    
+    return { answeredCount, totalScore };
+  }, [answers, questions]);
 
-  // 解答選択
+  // 解答選択（最適化版）
   const handleAnswerSelect = useCallback((answerIndex: number) => {
     if (showFeedback) return;
     setSelectedAnswer(answerIndex);
     
     if (mode === 'exam') {
       // 試験モードでは即座に保存
-      const newAnswers = [...answers];
-      newAnswers[navigation.currentIndex] = answerIndex;
-      setAnswers(newAnswers);
+      setAnswers(prev => {
+        const newAnswers = [...prev];
+        newAnswers[navigation.currentIndex] = answerIndex;
+        return newAnswers;
+      });
     }
-  }, [showFeedback, mode, answers, navigation.currentIndex]);
+  }, [showFeedback, mode, navigation.currentIndex]);
 
   // 解答提出（練習モード）
   const handleSubmitAnswer = useCallback(() => {
@@ -81,21 +88,16 @@ export default function BaseTest({
     const correct = selectedAnswer === currentQuestion.correctAnswer;
     setIsCorrect(correct);
     
-    const newAnswers = [...answers];
-    newAnswers[navigation.currentIndex] = selectedAnswer;
-    setAnswers(newAnswers);
+    setAnswers(prev => {
+      const newAnswers = [...prev];
+      newAnswers[navigation.currentIndex] = selectedAnswer;
+      return newAnswers;
+    });
     
     setShowFeedback(true);
-  }, [selectedAnswer, currentQuestion, answers, navigation.currentIndex]);
+  }, [selectedAnswer, currentQuestion, navigation.currentIndex]);
 
-  // メモ化された正解数の計算
-  const totalScore = useMemo(() => {
-    return answers.reduce<number>((score, answer, index) => {
-      return score + (answer === questions[index].correctAnswer ? 1 : 0);
-    }, 0);
-  }, [answers, questions]);
-
-  // テスト終了
+  // テスト終了（最適化版）
   const handleSubmitTest = useCallback(() => {
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
     const iqScore = calculateIQScore(totalScore, questions.length);
@@ -116,34 +118,34 @@ export default function BaseTest({
     onComplete?.(result);
   }, [totalScore, answers, questions, startTime, mode, onComplete]);
 
-  // 次の問題へ（練習モード）
-  const handleContinue = useCallback(() => {
-    setShowFeedback(false);
-    setSelectedAnswer(null);
-    
-    if (navigation.isLast) {
-      handleSubmitTest();
-    } else {
-      navigation.goToNext();
-    }
-  }, [navigation, handleSubmitTest]);
-
-  // 前の問題へ
-  const handlePrevious = useCallback(() => {
-    if (mode === 'practice' && showFeedback) {
+  // ナビゲーションハンドラー群（最適化版）
+  const navigationHandlers = useMemo(() => ({
+    continue: () => {
       setShowFeedback(false);
+      setSelectedAnswer(null);
+      
+      if (navigation.isLast) {
+        handleSubmitTest();
+      } else {
+        navigation.goToNext();
+      }
+    },
+    
+    previous: () => {
+      if (mode === 'practice' && showFeedback) {
+        setShowFeedback(false);
+      }
+      navigation.goToPrevious();
+    },
+    
+    next: () => {
+      if (mode === 'practice' && !showFeedback && selectedAnswer !== null) {
+        handleSubmitAnswer();
+      } else if (mode === 'exam' || showFeedback) {
+        navigation.goToNext();
+      }
     }
-    navigation.goToPrevious();
-  }, [mode, showFeedback, navigation]);
-
-  // 次の問題へ
-  const handleNext = useCallback(() => {
-    if (mode === 'practice' && !showFeedback && selectedAnswer !== null) {
-      handleSubmitAnswer();
-    } else if (mode === 'exam' || showFeedback) {
-      navigation.goToNext();
-    }
-  }, [mode, showFeedback, selectedAnswer, navigation, handleSubmitAnswer]);
+  }), [mode, showFeedback, selectedAnswer, navigation, handleSubmitAnswer, handleSubmitTest]);
 
   return (
     <TestLayout
@@ -180,7 +182,7 @@ export default function BaseTest({
           } as DetailedQuestion}
           userAnswer={selectedAnswer}
           isCorrect={isCorrect}
-          onContinue={handleContinue}
+          onContinue={navigationHandlers.continue}
           showFeedback={showFeedback}
         />
       )}
@@ -192,7 +194,7 @@ export default function BaseTest({
         className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 p-4 sm:p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 mt-6 sm:mt-8"
       >
         <button
-          onClick={handlePrevious}
+          onClick={navigationHandlers.previous}
           disabled={navigation.isFirst}
           className={`
             flex items-center justify-center sm:justify-start space-x-2 px-4 sm:px-6 py-3.5 sm:py-3 rounded-xl transition-all duration-300 w-full sm:w-auto
@@ -239,7 +241,7 @@ export default function BaseTest({
         </div>
 
         <button
-          onClick={handleNext}
+          onClick={navigationHandlers.next}
           disabled={navigation.isLast || (mode === 'practice' && !showFeedback && selectedAnswer === null)}
           className={`
             flex items-center justify-center sm:justify-start space-x-2 px-4 sm:px-6 py-3.5 sm:py-3 rounded-xl transition-all duration-300 w-full sm:w-auto

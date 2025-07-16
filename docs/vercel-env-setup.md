@@ -14,7 +14,7 @@
 
 ### STABILITY_API_KEY
 - **Key**: `STABILITY_API_KEY`
-- **Value**: `sk-UdV4Y6kiwUp2HfKfKWm6WajTEgop6MFVy3YCDrxnhY5dhfvS`
+- **Value**: `[YOUR_STABILITY_API_KEY]` （Stability AIダッシュボードから取得）
 - **Environment**: すべてにチェック
   - ✅ Production
   - ✅ Preview

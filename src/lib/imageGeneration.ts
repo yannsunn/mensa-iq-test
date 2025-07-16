@@ -17,6 +17,7 @@ class ImageGenerationService {
   private baseUrl: string = 'https://cl.imagineapi.dev/items/images/';
   private cache: Map<string, ImageCache> = new Map();
   private readonly CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24時間
+  private readonly MAX_CACHE_SIZE = 100; // キャッシュサイズ制限
 
   constructor() {
     // プロバイダーの選択（Stability AIを優先）
@@ -31,7 +32,7 @@ class ImageGenerationService {
     }
   }
 
-  // キャッシュからの画像取得
+  // キャッシュからの画像取得（最適化版）
   private getCachedImage(questionId: string): ImageCache | null {
     const cached = this.cache.get(questionId);
     if (!cached) return null;
@@ -49,8 +50,27 @@ class ImageGenerationService {
     return cached;
   }
 
-  // キャッシュへの画像保存
+  // キャッシュサイズ管理
+  private evictOldestCache(): void {
+    if (this.cache.size >= this.MAX_CACHE_SIZE) {
+      const entries = Array.from(this.cache.entries());
+      const sorted = entries.sort((a, b) => 
+        new Date(a[1].lastAccessed).getTime() - new Date(b[1].lastAccessed).getTime()
+      );
+      
+      // 古いエントリの25%を削除
+      const toDelete = Math.floor(this.MAX_CACHE_SIZE * 0.25);
+      for (let i = 0; i < toDelete; i++) {
+        this.cache.delete(sorted[i][0]);
+      }
+    }
+  }
+
+  // キャッシュへの画像保存（最適化版）
   private setCachedImage(questionId: string, imageUrl: string, prompt: string, style: string): void {
+    // キャッシュサイズ管理
+    this.evictOldestCache();
+    
     const now = new Date().toISOString();
     const cacheEntry: ImageCache = {
       questionId,

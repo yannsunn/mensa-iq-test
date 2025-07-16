@@ -95,10 +95,7 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
             `}
           >
             <div className="flex items-center space-x-4">
-              <div className={`
-                w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold
-                ${getOptionIconStyle(index, selectedAnswer, showExplanation, isCorrect, question.correctAnswer)}
-              `}>
+              <div className={getOptionIconStyle(index, selectedAnswer, showExplanation, isCorrect, question.correctAnswer)}>
                 {String.fromCharCode(65 + index)}
               </div>
               <span className="text-responsive flex-1">{option}</span>
@@ -124,55 +121,60 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
 
 export default QuestionDisplay;
 
-// 選択肢のスタイルを取得
-function getOptionStyle(
+// 選択肢のスタイルを取得（最適化版）
+const getOptionStyle = React.useCallback((
   index: number,
   selectedAnswer: number | null,
   showExplanation: boolean,
   isCorrect: boolean,
   correctAnswer: number
-): string {
+): string => {
+  // 基本クラス
+  const baseClasses = 'border-2 transition-all duration-300 backdrop-blur-sm';
+  
   if (showExplanation) {
     if (index === correctAnswer) {
-      return 'border-green-400 bg-green-400/20 text-white';
+      return `${baseClasses} border-green-400 bg-green-400/20 text-white`;
     }
     if (index === selectedAnswer && !isCorrect) {
-      return 'border-red-400 bg-red-400/20 text-white';
+      return `${baseClasses} border-red-400 bg-red-400/20 text-white`;
     }
-    return 'border-white/20 bg-white/5 text-white/50';
+    return `${baseClasses} border-white/20 bg-white/5 text-white/50`;
   }
 
   if (selectedAnswer === index) {
-    return 'border-blue-400 bg-blue-400/20 text-white shadow-xl backdrop-blur-sm';
+    return `${baseClasses} border-blue-400 bg-blue-400/20 text-white shadow-xl`;
   }
 
-  return 'border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10 backdrop-blur-sm';
-}
+  return `${baseClasses} border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10`;
+}, []);
 
-// 選択肢アイコンのスタイルを取得
-function getOptionIconStyle(
+// 選択肢アイコンのスタイルを取得（最適化版）
+const getOptionIconStyle = React.useCallback((
   index: number,
   selectedAnswer: number | null,
   showExplanation: boolean,
   isCorrect: boolean,
   correctAnswer: number
-): string {
+): string => {
+  const baseClasses = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold';
+  
   if (showExplanation) {
     if (index === correctAnswer) {
-      return 'border-green-400 bg-green-400 text-white';
+      return `${baseClasses} border-green-400 bg-green-400 text-white`;
     }
     if (index === selectedAnswer && !isCorrect) {
-      return 'border-red-400 bg-red-400 text-white';
+      return `${baseClasses} border-red-400 bg-red-400 text-white`;
     }
-    return 'border-white/20 text-white/50';
+    return `${baseClasses} border-white/20 text-white/50`;
   }
 
   if (selectedAnswer === index) {
-    return 'border-blue-400 bg-blue-400 text-white';
+    return `${baseClasses} border-blue-400 bg-blue-400 text-white`;
   }
 
-  return 'border-white/40 text-white/60';
-}
+  return `${baseClasses} border-white/40 text-white/60`;
+}, []);
 
 // キューブビューの生成（空間問題用）
 interface CubeView {

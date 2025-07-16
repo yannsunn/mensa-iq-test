@@ -34,22 +34,22 @@ export async function GET() {
     try {
       console.log('[TEST] Making test API call to Stability AI...');
       
+      const formData = new FormData();
+      formData.append('prompt', 'A simple test image, minimalist design');
+      formData.append('negative_prompt', 'text, words, letters, numbers, watermark');
+      formData.append('cfg_scale', '7');
+      formData.append('height', '512');
+      formData.append('width', '512');
+      formData.append('steps', '20');
+      formData.append('samples', '1');
+      
       const response = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
         },
-        body: JSON.stringify({
-          prompt: 'A simple test image, minimalist design',
-          negative_prompt: 'text, words, letters, numbers, watermark',
-          cfg_scale: 7,
-          height: 512,
-          width: 512,
-          steps: 20,
-          samples: 1
-        })
+        body: formData
       });
       
       const responseData = await response.text();
