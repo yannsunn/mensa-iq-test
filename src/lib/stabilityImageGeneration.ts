@@ -70,13 +70,13 @@ class StabilityImageGenerationService {
       },
       'geometric': {
         'draft': 'sdxl-1.0',
-        'standard': 'sd-3.5-medium',
+        'standard': 'sd3.5-medium',
         'high': 'stable-image-core'
       },
       'matrix': {
         'draft': 'sdxl-1.0',
         'standard': 'sd3.5-large-turbo',
-        'high': 'sd-3.5-large'
+        'high': 'sd3.5-large'
       },
       'default': {
         'draft': 'sd-1.6',

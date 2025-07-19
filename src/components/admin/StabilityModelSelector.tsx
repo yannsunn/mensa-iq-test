@@ -9,7 +9,7 @@ import Badge from '@/components/ui/Badge';
 import { stabilityImageService } from '@/lib/stabilityImageGeneration';
 
 export default function StabilityModelSelector() {
-  const [selectedModel, setSelectedModel] = useState<StabilityAIModel>('sd-3.5-medium');
+  const [selectedModel, setSelectedModel] = useState<StabilityAIModel>('sd3.5-medium');
   const [questionsPerDay, setQuestionsPerDay] = useState(100);
 
   const models = Object.entries(STABILITY_AI_MODELS).map(([key, config]) => ({
