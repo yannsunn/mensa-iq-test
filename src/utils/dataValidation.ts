@@ -8,8 +8,8 @@ import { UnifiedQuestion } from '@/types/question';
 /**
  * 安全な配列アクセス
  */
-export function safeArray<T>(value: T[] | undefined | null): T[] {
-  return Array.isArray(value) ? value : [];
+export function safeArray<T>(value: T[] | readonly T[] | undefined | null): T[] {
+  return Array.isArray(value) ? [...value] : [];
 }
 
 /**

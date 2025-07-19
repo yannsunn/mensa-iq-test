@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     let body: ImageGenerationRequest;
     try {
       body = await request.json();
-    } catch (parseError) {
+    } catch {
       return createErrorResponse('Invalid JSON in request body', 400);
     }
     

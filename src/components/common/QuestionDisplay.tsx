@@ -119,10 +119,8 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
   );
 });
 
-export default QuestionDisplay;
-
 // 選択肢のスタイルを取得（最適化版）
-const getOptionStyle = React.useCallback((
+const getOptionStyle = (
   index: number,
   selectedAnswer: number | null,
   showExplanation: boolean,
@@ -147,10 +145,10 @@ const getOptionStyle = React.useCallback((
   }
 
   return `${baseClasses} border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10`;
-}, []);
+};
 
 // 選択肢アイコンのスタイルを取得（最適化版）
-const getOptionIconStyle = React.useCallback((
+const getOptionIconStyle = (
   index: number,
   selectedAnswer: number | null,
   showExplanation: boolean,
@@ -174,7 +172,7 @@ const getOptionIconStyle = React.useCallback((
   }
 
   return `${baseClasses} border-white/40 text-white/60`;
-}, []);
+};
 
 // キューブビューの生成（空間問題用）
 interface CubeView {
@@ -198,7 +196,9 @@ function generateCubeViews(question: UnifiedQuestion): CubeView[] {
     }
     // 他のビューも追加
   ];
-}
+};
+
+export default QuestionDisplay;
 
 // 画像生成が必要かどうかを判定
 function shouldShowGeneratedImage(question: UnifiedQuestion): boolean {

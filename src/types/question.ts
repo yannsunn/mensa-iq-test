@@ -6,7 +6,7 @@ export interface BaseQuestion {
   readonly category: QuestionCategory;
   readonly difficulty: number; // 1-20
   readonly question: string;
-  readonly options: readonly string[];
+  readonly options: string[];
   readonly correctAnswer: number;
   readonly timeLimit: number;
   readonly explanation: string;
