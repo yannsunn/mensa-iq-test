@@ -55,18 +55,18 @@ class StabilityImageGenerationService {
     const modelSelection: Record<string, Record<string, StabilityAIModel>> = {
       'pattern': {
         'draft': 'sdxl-1.0',
-        'standard': 'sd-3.5-medium',
-        'high': 'sd-3.5-large'
+        'standard': 'sd3.5-medium',
+        'high': 'sd3.5-large'
       },
       'spatial': {
         'draft': 'sdxl-1.0',
-        'standard': 'sd-3.5-large-turbo',
+        'standard': 'sd3.5-large-turbo',
         'high': 'stable-image-core'
       },
       'abstract': {
         'draft': 'sd-1.6',
-        'standard': 'sd-3.5-medium',
-        'high': 'sd-3.5-large'
+        'standard': 'sd3.5-medium',
+        'high': 'sd3.5-large'
       },
       'geometric': {
         'draft': 'sdxl-1.0',
@@ -75,13 +75,13 @@ class StabilityImageGenerationService {
       },
       'matrix': {
         'draft': 'sdxl-1.0',
-        'standard': 'sd-3.5-large-turbo',
+        'standard': 'sd3.5-large-turbo',
         'high': 'sd-3.5-large'
       },
       'default': {
         'draft': 'sd-1.6',
         'standard': 'sdxl-1.0',
-        'high': 'sd-3.5-medium'
+        'high': 'sd3.5-medium'
       }
     };
 
@@ -148,9 +148,9 @@ class StabilityImageGenerationService {
     const endpointMap: Record<string, string> = {
       'stable-image-core': 'core',
       'stable-image-ultra': 'ultra',
-      'sd-3.5-large': 'sd3',
-      'sd-3.5-large-turbo': 'sd3',
-      'sd-3.5-medium': 'sd3',
+      'sd3.5-large': 'sd3',
+      'sd3.5-large-turbo': 'sd3',
+      'sd3.5-medium': 'sd3',
       'sdxl-1.0': 'core', // SDXLはcore endpointで処理
       'sd-1.6': 'core'   // SD1.6もcore endpointで処理
     };
@@ -414,7 +414,7 @@ class StabilityImageGenerationService {
   // 月間コスト予測
   estimateMonthlyCost(questionsPerDay: number): { development: number; production: number } {
     const devModel = 'sdxl-1.0';
-    const prodModel = 'sd-3.5-medium';
+    const prodModel = 'sd3.5-medium';
     
     const monthlyQuestions = questionsPerDay * 30;
     

@@ -79,26 +79,26 @@ export const STABILITY_AI_MODELS = {
     description: 'バランス型、商用利用最適',
     endpoint: 'stable-image-core'
   },
-  'sd-3.5-large': {
+  'sd3.5-large': {
     name: 'SD 3.5 Large',
     maxResolution: 1536,
     cost: 0.065,
     description: '最新モデル、プロンプト理解力最高',
-    endpoint: 'sd-3.5-large'
+    endpoint: 'sd3.5-large'
   },
-  'sd-3.5-large-turbo': {
+  'sd3.5-large-turbo': {
     name: 'SD 3.5 Large Turbo',
     maxResolution: 1024,
     cost: 0.04,
     description: '高速版、品質維持',
-    endpoint: 'sd-3.5-large-turbo'
+    endpoint: 'sd3.5-large-turbo'
   },
-  'sd-3.5-medium': {
+  'sd3.5-medium': {
     name: 'SD 3.5 Medium',
     maxResolution: 1024,
     cost: 0.035,
     description: 'コスパ最強、十分な品質',
-    endpoint: 'sd-3.5-medium'
+    endpoint: 'sd3.5-medium'
   },
   'sdxl-1.0': {
     name: 'SDXL 1.0',
