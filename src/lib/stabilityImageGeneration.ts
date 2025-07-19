@@ -200,6 +200,15 @@ class StabilityImageGenerationService {
         formData.append('samples', request.samples.toString());
       }
       
+      console.log('[StabilityAI] Sending request to:', endpoint);
+      console.log('[StabilityAI] Request details:', {
+        prompt: request.prompt.substring(0, 100) + '...',
+        width: request.width,
+        height: request.height,
+        model: model,
+        hasNegativePrompt: !!request.negative_prompt
+      });
+      
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -334,7 +343,12 @@ class StabilityImageGenerationService {
         };
       }
     } catch (error) {
-      console.error('Image generation failed:', error);
+      console.error('[StabilityAI] Image generation failed:', error);
+      console.error('[StabilityAI] Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        type: error instanceof Error ? error.constructor.name : typeof error
+      });
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

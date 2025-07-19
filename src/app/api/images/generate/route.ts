@@ -70,7 +70,15 @@ export async function POST(request: NextRequest) {
       return createErrorResponse(result.error || 'Unknown error', 500);
     }
   } catch (error) {
+    console.error('[ImageAPI] Unhandled error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    const errorDetails = {
+      message: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+      provider: imageGenerationService.getCurrentProvider(),
+      timestamp: new Date().toISOString()
+    };
+    console.error('[ImageAPI] Error details:', errorDetails);
     return createErrorResponse(errorMessage, 500);
   }
 }
@@ -132,7 +140,15 @@ export async function GET(request: NextRequest) {
       return createErrorResponse(result.error || 'Unknown error', 500);
     }
   } catch (error) {
+    console.error('[ImageAPI] Unhandled error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    const errorDetails = {
+      message: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+      provider: imageGenerationService.getCurrentProvider(),
+      timestamp: new Date().toISOString()
+    };
+    console.error('[ImageAPI] Error details:', errorDetails);
     return createErrorResponse(errorMessage, 500);
   }
 }
