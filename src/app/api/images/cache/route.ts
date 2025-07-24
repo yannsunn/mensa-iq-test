@@ -1,6 +1,6 @@
 // 画像キャッシュ管理API（セキュアエラーハンドリング版）
 
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 import { imageGenerationService } from '@/lib/imageGeneration';
 import { logger } from '@/utils/logger';
 import { 

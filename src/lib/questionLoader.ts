@@ -1,5 +1,5 @@
 // 改善された質問データの遅延読み込みシステム（型安全性強化版）
-import { UnifiedQuestion, RawQuestionData, QuestionCategory } from '@/types/question';
+import { UnifiedQuestion, RawQuestionData, QuestionCategory, MensaLevel, VisualType, CubeVisualType } from '@/types/question';
 
 // 高性能キャッシュ管理システム
 const questionCache = new Map<string, UnifiedQuestion[]>();
@@ -95,7 +95,7 @@ function normalizeQuestions(questions: RawQuestionData[], category: QuestionCate
       practiceDetails: q.practiceMode,
       mensaInfo: {
         source: q.source || 'MENSA International',
-        mensaLevel: (q.mensaLevel as any) || 'standard',
+        mensaLevel: (q.mensaLevel as MensaLevel) || 'standard',
         cognitiveSkills: q.cognitiveSkills || []
       }
     };
@@ -103,10 +103,10 @@ function normalizeQuestions(questions: RawQuestionData[], category: QuestionCate
     // ビジュアルデータの型安全な処理
     if (q.visualData || q.visualType || q.cubeType) {
       unifiedQuestion.visualData = {
-        type: (q.visualData as any)?.type || (q.cubeType ? 'cube' : 'pattern'),
-        data: (q.visualData as any)?.data || q.visualData,
-        visualType: q.visualType as any || q.cubeType as any,
-        cubeData: q.cubeData as any || (q.netLabels ? { netLabels: q.netLabels } : undefined)
+        type: (typeof q.visualData === 'object' && q.visualData !== null && 'type' in q.visualData) ? (q.visualData.type as VisualType) : (q.cubeType ? 'cube' : 'pattern'),
+        data: (typeof q.visualData === 'object' && q.visualData !== null && 'data' in q.visualData) ? q.visualData.data : q.visualData,
+        visualType: (q.visualType || q.cubeType) as CubeVisualType | undefined,
+        cubeData: q.cubeData || (q.netLabels ? { netLabels: q.netLabels } : undefined)
       };
     }
     

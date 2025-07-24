@@ -8,7 +8,7 @@ import { Loader2, RefreshCw, AlertCircle, Image as ImageIcon, WifiOff } from 'lu
 import { ImageGenerationResponse } from '@/types/image';
 import { useImageCache } from '@/hooks/useImageCache';
 import { logger } from '@/utils/logger';
-import { isApiErrorResponse, ApiErrorResponse } from '@/types/error';
+import { isApiErrorResponse } from '@/types/error';
 import { useErrorHandler } from '@/components/ErrorBoundary';
 
 interface GeneratedImageProps {
@@ -132,7 +132,6 @@ export default function GeneratedImage({
       const responseData = await response.json();
 
       if (!response.ok) {
-        const errorType = categorizeError(null, response);
         let errorMessage = `HTTP error! status: ${response.status}`;
         
         if (isApiErrorResponse(responseData)) {
@@ -353,7 +352,7 @@ export default function GeneratedImage({
         <div className="mt-2 text-xs text-gray-500">
           <p>スタイル: {imageData.style}</p>
           <p>生成日時: {new Date(imageData.generatedAt).toLocaleString('ja-JP')}</p>
-          {(imageData as any).cacheMetadata?.cached && (
+          {'cacheMetadata' in imageData && (imageData as ImageGenerationResponse & { cacheMetadata?: { cached?: boolean } }).cacheMetadata?.cached && (
             <p className="text-green-600">キャッシュから読み込み</p>
           )}
         </div>

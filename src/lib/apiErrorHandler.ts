@@ -138,7 +138,7 @@ export function createSuccessResponse<T>(
 }
 
 // APIハンドラーラッパー（エラーハンドリングを自動適用）
-export function withErrorHandling<T extends any[], R>(
+export function withErrorHandling<T extends unknown[], R>(
   handler: (...args: T) => Promise<NextResponse<R>>
 ) {
   return async (...args: T): Promise<NextResponse<R | ApiErrorResponse>> => {

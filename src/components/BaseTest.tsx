@@ -75,7 +75,7 @@ const BaseTestComponent = memo(function BaseTest({
     };
   }, [answers, questions]);
   
-  const { answeredCount, totalScore, progressPercentage } = statisticsData;
+  const { answeredCount, totalScore } = statisticsData;
 
   // 解答選択（メモ化最適化版）
   const handleAnswerSelect = useCallback((answerIndex: number) => {
@@ -135,7 +135,7 @@ const BaseTestComponent = memo(function BaseTest({
     };
 
     onComplete?.(result);
-  }, [totalScore, answers, questions.length, startTime, mode, onComplete, statisticsData.completionRate]);
+  }, [totalScore, answers, questions, startTime, mode, onComplete, statisticsData.completionRate]);
 
   // ナビゲーションハンドラー群（メモ化強化版）
   const navigationHandlers = useMemo(() => ({
@@ -168,9 +168,7 @@ const BaseTestComponent = memo(function BaseTest({
     mode, 
     showFeedback, 
     selectedAnswer, 
-    navigation.isLast, 
-    navigation.goToNext,
-    navigation.goToPrevious,
+    navigation,
     handleSubmitAnswer, 
     handleSubmitTest
   ]);

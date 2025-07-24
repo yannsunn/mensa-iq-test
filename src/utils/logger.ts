@@ -2,7 +2,7 @@
  * Enhanced logger utility with production error logging and monitoring
  */
 
-import { AppError, createAppError, ErrorTypes, ErrorCodes } from '@/types/error';
+import { AppError } from '@/types/error';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isProduction = process.env.NODE_ENV === 'production';

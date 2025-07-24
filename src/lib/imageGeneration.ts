@@ -11,6 +11,7 @@ import {
 } from '@/types/image';
 import { stabilityImageService } from './stabilityImageGeneration';
 import { logger } from '@/utils/logger';
+import { createHash } from 'crypto';
 
 class ImageGenerationService {
   private provider: 'imagineapi' | 'stabilityai';
@@ -100,7 +101,7 @@ class ImageGenerationService {
   // ETag生成（Vercelエッジキャッシュ用）
   private generateETag(questionId: string, prompt: string, style: string): string {
     const content = `${questionId}-${prompt}-${style}`;
-    return require('crypto').createHash('md5').update(content).digest('hex');
+    return createHash('md5').update(content).digest('hex');
   }
 
   // プロンプトテンプレートの適用

@@ -1,6 +1,6 @@
 // Stability AI直接テスト用エンドポイント（セキュアエラーハンドリング版）
 
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getEnvVariable, initializeEnv } from '@/lib/env';
 import { logger } from '@/utils/logger';
 import { 
@@ -8,10 +8,6 @@ import {
   createSuccessResponse,
   checkRateLimit
 } from '@/lib/apiErrorHandler';
-import { 
-  createServerError,
-  ErrorCodes
-} from '@/types/error';
 
 // Client IPアドレス取得（レート制限用）
 const getClientIP = (request: NextRequest): string => {

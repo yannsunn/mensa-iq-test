@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { AlertTriangle, RefreshCw, Home, Bug, Send } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home, Send } from 'lucide-react';
 import { logger } from '@/utils/logger';
-import { createAppError, ErrorTypes, ErrorCodes, isAppError } from '@/types/error';
+import { createAppError, ErrorTypes, ErrorCodes } from '@/types/error';
 
 interface ErrorBoundaryState {
   hasError: boolean;
