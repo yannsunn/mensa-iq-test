@@ -332,20 +332,37 @@ export default function GeneratedImage({
 
   // 画像表示成功
   if (imageData?.imageUrl) {
+    // SVG画像かどうかを判定
+    const isSVG = imageData.imageUrl.startsWith('data:image/svg+xml');
+    
     return (
       <div className={`relative ${className}`}>
         <div className="relative overflow-hidden rounded-lg">
-          <Image
-            src={imageData.imageUrl}
-            alt={`Generated image for question ${questionId}`}
-            width={400}
-            height={400}
-            className="w-full h-auto object-contain"
-            priority
-            onError={() => {
-              setError('Image failed to load');
-            }}
-          />
+          {isSVG ? (
+            // SVG画像の場合は直接埋め込み（より高品質な表示）
+            <div 
+              className="w-full h-auto"
+              dangerouslySetInnerHTML={{
+                __html: Buffer.from(
+                  imageData.imageUrl.replace('data:image/svg+xml;base64,', ''), 
+                  'base64'
+                ).toString('utf-8')
+              }}
+            />
+          ) : (
+            // 通常の画像の場合はImageコンポーネントを使用
+            <Image
+              src={imageData.imageUrl}
+              alt={`Generated image for question ${questionId}`}
+              width={400}
+              height={400}
+              className="w-full h-auto object-contain"
+              priority
+              onError={() => {
+                setError('Image failed to load');
+              }}
+            />
+          )}
         </div>
         
         {/* 画像情報 */}

@@ -12,6 +12,7 @@ import {
 import { stabilityImageService } from './stabilityImageGeneration';
 import { logger } from '@/utils/logger';
 import { createHash } from 'crypto';
+import { generateSVGDiagram, svgToBase64, DiagramType } from './svgDiagramGenerator';
 
 class ImageGenerationService {
   private provider: 'imagineapi' | 'stabilityai';
@@ -255,6 +256,11 @@ class ImageGenerationService {
 
   // 特定の問題カテゴリ向けの画像生成
   async generateQuestionImage(questionId: string, category: string, description: string, style: string = 'minimal'): Promise<ImageGenerationResponse> {
+    // 数学的図形が必要な場合はSVG生成を使用
+    if (this.shouldUseSVG(category, description)) {
+      return this.generateSVGImage(questionId, category, description, style);
+    }
+    
     // Stability AIを使用する場合は委譲
     if (this.provider === 'stabilityai') {
       return stabilityImageService.generateQuestionImage(questionId, category, description, style);
@@ -270,6 +276,133 @@ class ImageGenerationService {
       aspectRatio: '1:1',
       quality: 'standard'
     });
+  }
+
+  // SVG生成が適切かどうかを判断
+  private shouldUseSVG(category: string, description: string): boolean {
+    const lowerDesc = description.toLowerCase();
+    const lowerCat = category.toLowerCase();
+    
+    // 数学的・幾何学的な図形のキーワード
+    const svgKeywords = [
+      '断面', 'cross section', 'cross-section',
+      '球', 'sphere', 'ball',
+      '立方体', 'cube', 'cubic',
+      '幾何学', 'geometric', 'geometry',
+      'パターン', 'pattern', 'tessellation',
+      '対称', 'symmetry', 'symmetric',
+      'マトリックス', 'matrix',
+      '変換', 'transformation', 'transform',
+      '回転', 'rotation', 'rotate',
+      '反射', 'reflection', 'reflect',
+      '平行移動', 'translation',
+      'フラクタル', 'fractal',
+      '正確な', 'exact', 'precise', 'mathematical'
+    ];
+    
+    // カテゴリベースのチェック
+    if (['geometric', 'spatial', 'matrix'].includes(lowerCat)) {
+      return true;
+    }
+    
+    // キーワードベースのチェック
+    return svgKeywords.some(keyword => 
+      lowerDesc.includes(keyword) || lowerCat.includes(keyword)
+    );
+  }
+
+  // SVG画像生成
+  private async generateSVGImage(
+    questionId: string, 
+    category: string, 
+    description: string, 
+    style: string
+  ): Promise<ImageGenerationResponse> {
+    try {
+      // カテゴリをDiagramTypeにマップ
+      const diagramType = this.mapCategoryToDiagramType(category, description);
+      
+      // SVGオプションの設定
+      const svgOptions = {
+        style: style as 'minimal' | 'detailed' | 'abstract' | 'geometric',
+        width: 400,
+        height: 400,
+        strokeWidth: 2,
+        strokeColor: '#000000',
+        fillColor: style === 'minimal' ? 'none' : '#f0f0f0',
+        backgroundColor: '#ffffff'
+      };
+      
+      // SVG生成
+      const svg = generateSVGDiagram(description, diagramType, svgOptions);
+      const base64Image = svgToBase64(svg);
+      
+      // キャッシュに保存
+      const cacheKey = `svg-${questionId}`;
+      this.setCachedImage(cacheKey, base64Image, description, style);
+      
+      return {
+        success: true,
+        imageUrl: base64Image,
+        generatedAt: new Date().toISOString(),
+        prompt: description,
+        style,
+        fromCache: false,
+        cacheMetadata: {
+          etag: this.generateETag(questionId, description, style),
+          maxAge: this.EDGE_CACHE_TTL,
+          staleWhileRevalidate: 86400
+        }
+      };
+    } catch (error) {
+      logger.error('SVG generation failed:', error);
+      
+      // フォールバック：通常の画像生成APIを使用
+      if (this.provider === 'stabilityai') {
+        return stabilityImageService.generateQuestionImage(questionId, category, description, style);
+      }
+      
+      const prompt = this.applyPromptTemplate(category, description);
+      return this.generateImage({
+        questionId,
+        prompt,
+        style: style as 'minimal' | 'detailed' | 'abstract' | 'geometric',
+        aspectRatio: '1:1',
+        quality: 'standard'
+      });
+    }
+  }
+
+  // カテゴリをDiagramTypeにマップ
+  private mapCategoryToDiagramType(category: string, description: string): DiagramType {
+    const lowerCat = category.toLowerCase();
+    const lowerDesc = description.toLowerCase();
+    
+    if (lowerDesc.includes('断面') || lowerDesc.includes('cross section')) {
+      return 'cross-section';
+    }
+    if (lowerDesc.includes('立体') || lowerDesc.includes('3d') || lowerDesc.includes('cube')) {
+      return '3d-shapes';
+    }
+    if (lowerDesc.includes('変換') || lowerDesc.includes('transformation')) {
+      return 'transformations';
+    }
+    if (lowerDesc.includes('パターン') || lowerDesc.includes('pattern')) {
+      return 'patterns';
+    }
+    
+    // カテゴリベースのマッピング
+    const categoryMap: Record<string, DiagramType> = {
+      'matrix': 'matrix',
+      'geometric': 'geometric',
+      'numerical': 'numerical',
+      'spatial': 'spatial',
+      'pattern': 'patterns',
+      'cube': '3d-shapes',
+      'logical': 'geometric'
+    };
+    
+    return categoryMap[lowerCat] || 'geometric';
   }
 
   // キャッシュの統計情報

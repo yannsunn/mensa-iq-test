@@ -152,7 +152,11 @@ export const PROMPT_TEMPLATES = {
   geometric: "Design geometric shapes for logical reasoning test, {description}, simple lines, educational diagram style",
   numerical: "Create a mathematical visualization for numerical reasoning, {description}, clean numbers and symbols, minimalist design",
   spatial: "Generate spatial reasoning diagram, {description}, 3D perspective, technical drawing style",
-  logical: "Create logical reasoning diagram, {description}, flowchart style, clean arrows and connections"
+  logical: "Create logical reasoning diagram, {description}, flowchart style, clean arrows and connections",
+  'cross-section': "Create a precise cross-section diagram, {description}, mathematical accuracy, technical drawing style",
+  '3d-shapes': "Generate 3D shape visualization, {description}, isometric projection, clean lines",
+  transformations: "Show geometric transformation, {description}, before and after states, clear visual progression",
+  patterns: "Create repeating pattern or tessellation, {description}, mathematical precision, symmetrical design"
 } as const;
 
 export type PromptTemplate = keyof typeof PROMPT_TEMPLATES;
