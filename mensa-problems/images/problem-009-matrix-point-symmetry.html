@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENSA 行列推論問題 - 点対称パターン</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .problem-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .difficulty {
+            color: #666;
+            font-size: 14px;
+        }
+        .matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(3, 80px);
+            gap: 5px;
+            margin: 30px auto;
+            background-color: #333;
+            padding: 5px;
+        }
+        .cell {
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 1px solid #ddd;
+        }
+        .cell.missing {
+            background-color: #f8f8f8;
+            border: 2px dashed #999;
+            font-size: 30px;
+            color: #999;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .option {
+            background-color: #f8f8f8;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .option:hover {
+            background-color: #e8e8e8;
+            border-color: #999;
+        }
+        .option-letter {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+        }
+        .option-symbol {
+            font-size: 30px;
+        }
+        .instruction {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .arrow {
+            width: 0;
+            height: 0;
+            display: inline-block;
+        }
+        .arrow-up {
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 35px solid #333;
+        }
+        .arrow-down {
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 35px solid #333;
+        }
+        .arrow-left {
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 35px solid #333;
+        }
+        .arrow-right {
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 35px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="problem-container">
+        <div class="header">
+            <h1>MENSA 本番テスト - 問題 9/44</h1>
+            <h2>行列推論</h2>
+            <p class="difficulty">難易度: 7/20 | standard | 残り時間: 44:59</p>
+        </div>
+        
+        <div class="instruction">
+            <strong>3×3行列で、点対称のパターン。右下の要素は？</strong>
+        </div>
+        
+        <div class="matrix">
+            <div class="cell"><span class="arrow arrow-up"></span></div>
+            <div class="cell"><span class="arrow arrow-left"></span></div>
+            <div class="cell"><span class="arrow arrow-down"></span></div>
+            <div class="cell"><span class="arrow arrow-left"></span></div>
+            <div class="cell"><span class="arrow arrow-up"></span></div>
+            <div class="cell"><span class="arrow arrow-right"></span></div>
+            <div class="cell"><span class="arrow arrow-down"></span></div>
+            <div class="cell"><span class="arrow arrow-right"></span></div>
+            <div class="cell missing">?</div>
+        </div>
+        
+        <div class="options">
+            <div class="option">
+                <span class="option-letter">A</span>
+                <span class="option-symbol">▲</span>
+            </div>
+            <div class="option">
+                <span class="option-letter">B</span>
+                <span class="option-symbol">▼</span>
+            </div>
+            <div class="option">
+                <span class="option-letter">C</span>
+                <span class="option-symbol">◀</span>
+            </div>
+            <div class="option">
+                <span class="option-letter">D</span>
+                <span class="option-symbol">▶</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

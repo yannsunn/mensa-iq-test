@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENSA 数列・図形列問題</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .problem-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .difficulty {
+            color: #666;
+            font-size: 14px;
+        }
+        .sequence-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .sequence-item {
+            width: 100px;
+            height: 100px;
+            background-color: #f8f8f8;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+        }
+        .sequence-item.missing {
+            border: 2px dashed #999;
+            background-color: #fff;
+        }
+        .arrow-between {
+            font-size: 24px;
+            color: #666;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .option {
+            background-color: #f8f8f8;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .option:hover {
+            background-color: #e8e8e8;
+            border-color: #999;
+        }
+        .option-letter {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+        }
+        .option-content {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .instruction {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        /* Numerical sequence styles */
+        .number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+        /* Geometric sequence styles */
+        .shape-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .small {
+            transform: scale(0.6);
+        }
+        .medium {
+            transform: scale(0.8);
+        }
+        .large {
+            transform: scale(1);
+        }
+        /* Pattern variations */
+        .rotate-45 {
+            transform: rotate(45deg);
+        }
+        .rotate-90 {
+            transform: rotate(90deg);
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .rotate-270 {
+            transform: rotate(270deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="problem-container">
+        <div class="header">
+            <h1>MENSA 本番テスト - 問題 <span id="problem-number">007</span>/44</h1>
+            <h2 id="problem-type">数列・図形列</h2>
+            <p class="difficulty">難易度: <span id="difficulty">16</span>/20 | standard | 残り時間: <span id="time">44:59</span></p>
+        </div>
+        
+        <div class="instruction">
+            <strong id="instruction-text">次の数列/図形列の？に入るものは？</strong>
+        </div>
+        
+        <div class="sequence-container" id="sequence-container"><div class="sequence-item missing">?</div><span class="arrow-between">→</span><div class="sequence-item missing">?</div><span class="arrow-between">→</span><div class="sequence-item missing">?</div><span class="arrow-between">→</span><div class="sequence-item missing">?</div><span class="arrow-between">→</span><div class="sequence-item missing">?</div><span class="arrow-between">→</span><div class="sequence-item missing">?</div>
+            <!-- Sequence items will be inserted here -->
+        </div>
+        
+        <div class="options" id="options-container">
+            <div class="option">
+                <span class="option-letter">A</span>
+                <span class="option-content">43</span>
+            </div>
+            
+            <div class="option">
+                <span class="option-letter">B</span>
+                <span class="option-content">45</span>
+            </div>
+            
+            <div class="option">
+                <span class="option-letter">C</span>
+                <span class="option-content">41</span>
+            </div>
+            
+            <div class="option">
+                <span class="option-letter">D</span>
+                <span class="option-content">47</span>
+            </div>
+            
+            <!-- Options will be inserted here -->
+        </div>
+    </div>
+</body>
+</html>

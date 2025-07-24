@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENSA問題ブラウザー - 全44問</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        select, input {
+            padding: 8px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+        
+        .stats {
+            margin-left: auto;
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .problem-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .problem-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .problem-id {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .difficulty-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .difficulty-easy { background: #d4edda; color: #155724; }
+        .difficulty-medium { background: #fff3cd; color: #856404; }
+        .difficulty-hard { background: #f8d7da; color: #721c24; }
+        .difficulty-expert { background: #d1ecf1; color: #0c5460; }
+        
+        .problem-type {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .problem-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .problem-description {
+            color: #6c757d;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .problem-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f8f9fa;
+        }
+        
+        .answer-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .view-button {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .view-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+        
+        .close-button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            height: 70vh;
+            overflow: auto;
+        }
+        
+        .modal iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stats {
+                margin-left: 0;
+            }
+            
+            .problem-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MENSA問題ブラウザー</h1>
+            <p>全44問の本格的なMENSA IQテスト問題を体系的に管理・表示</p>
+        </div>
+        
+        <div class="controls">
+            <div class="filter-group">
+                <label for="typeFilter">問題タイプ:</label>
+                <select id="typeFilter">
+                    <option value="all">すべて</option>
+                    <option value="matrix-reasoning">行列推論</option>
+                    <option value="sequence-completion">数列完成</option>
+                    <option value="spatial-reasoning">空間認識</option>
+                    <option value="pattern-recognition">パターン認識</option>
+                    <option value="logical-deduction">論理推論</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="difficultyFilter">難易度:</label>
+                <select id="difficultyFilter">
+                    <option value="all">すべて</option>
+                    <option value="easy">簡単 (1-7)</option>
+                    <option value="medium">普通 (8-14)</option>
+                    <option value="hard">難しい (15-18)</option>
+                    <option value="expert">超難問 (19-20)</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="searchInput">検索:</label>
+                <input type="text" id="searchInput" placeholder="問題を検索...">
+            </div>
+            
+            <div class="stats">
+                <div>表示中: <span id="shownCount">44</span>問</div>
+                <div>総問題数: <span id="totalCount">44</span>問</div>
+            </div>
+        </div>
+        
+        <div class="problem-grid" id="problemGrid">
+            <!-- 問題カードがここに動的に生成されます -->
+        </div>
+    </div>
+    
+    <!-- モーダル -->
+    <div class="modal" id="problemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">問題を表示中...</h3>
+                <button class="close-button" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="modalFrame" src=""></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 問題データをここに埋め込み
+        const problemsData = {"problems":[{"id":"001","type":"logical-deduction","subtype":"set-theory","difficulty":5,"title":"論理推論 - set-theory","description":"もしすべてのフライパンが金属製で、すべての金属製品が電気を通すなら、フライパンについて何が言えますか？","image_file":"problem-001-set-theory.html","answer":"A","options":["フライパンは電気を通す","フライパンは電気を通さない","フライパンは時々電気を通す","判断できない"],"explanation":"三段論法の基本原理により、正解は「フライパンは電気を通す」","visual_data":null,"original_id":"logical_real_1"},{"id":"002","type":"logical-deduction","subtype":"set-theory","difficulty":8,"title":"論理推論 - set-theory","description":"「すべてのQはRである」「いくつかのPはQである」この2つが真の時、以下のうち必ず真となるのは？","image_file":"problem-002-set-theory.html","answer":"B","options":["すべてのPはRである","いくつかのPはRである","すべてのRはPである","いくつかのRはPである"],"explanation":"三段論法の基本原理により、正解は「いくつかのPはRである」","visual_data":null,"original_id":"logical_real_2"},{"id":"003","type":"logical-deduction","subtype":"conditional-logic","difficulty":12,"title":"論理推論 - conditional-logic","description":"AはBよりも背が高い。CはAよりも背が低い。DはCよりも背が高いがBよりも背が低い。身長順序として正しいのは？","image_file":"problem-003-conditional-logic.html","answer":"B","options":["A > D > C > B","A > B > D > C","A > C > D > B","A > D > B > C"],"explanation":"三段論法の基本原理により、正解は「A > B > D > C」","visual_data":null,"original_id":"logical_real_3"},{"id":"004","type":"sequence-completion","subtype":"numerical","difficulty":6,"title":"数列完成 - numerical","description":"次の数列の法則を見つけて、?に入る数字を答えてください: 1, 4, 9, 16, 25, ?","image_file":"problem-004-numerical.html","answer":"B","options":["30","36","35","49"],"explanation":"数列のパターンを分析すると、正解は「36」","visual_data":null,"original_id":"numerical_real_1"},{"id":"005","type":"sequence-completion","subtype":"numerical","difficulty":10,"title":"数列完成 - numerical","description":"数列: 2, 6, 12, 20, 30, ? の次の数は？","image_file":"problem-005-numerical.html","answer":"B","options":["40","42","38","44"],"explanation":"数列のパターンを分析すると、正解は「42」","visual_data":null,"original_id":"numerical_real_2"},{"id":"006","type":"sequence-completion","subtype":"numerical","difficulty":14,"title":"数列完成 - numerical","description":"3, 7, 15, 31, 63, ? この数列の次の項は？","image_file":"problem-006-numerical.html","answer":"B","options":["95","127","120","135"],"explanation":"数列のパターンを分析すると、正解は「127」","visual_data":null,"original_id":"numerical_real_3"},{"id":"007","type":"sequence-completion","subtype":"numerical","difficulty":16,"title":"数列完成 - numerical","description":"フィボナッチ変形数列: 1, 1, 3, 5, 11, 21, ? 次の数は？","image_file":"problem-007-numerical.html","answer":"A","options":["43","45","41","47"],"explanation":"数列のパターンを分析すると、正解は「43」","visual_data":null,"original_id":"numerical_real_4"},{"id":"008","type":"spatial-reasoning","subtype":"3d-rotation","difficulty":7,"title":"空間認識 - 3d-rotation","description":"立方体を展開した図で、面Aの向かい側にある面はどれですか？\n[A][B]\n[C][D][E][F]","image_file":"problem-008-3d-rotation.html","answer":"A","options":["面D","面E","面F","面B"],"explanation":"空間変換を考慮すると、正解は「面D」","visual_data":"cube_net","original_id":"spatial_real_1"},{"id":"009","type":"spatial-reasoning","subtype":"projection","difficulty":11,"title":"空間認識 - projection","description":"正四面体を上から見た時の影の形は？","image_file":"problem-009-projection.html","answer":"A","options":["正三角形","正方形","円","六角形"],"explanation":"空間変換を考慮すると、正解は「正三角形」","visual_data":null,"original_id":"spatial_real_2"},{"id":"010","type":"spatial-reasoning","subtype":"3d-rotation","difficulty":15,"title":"空間認識 - 3d-rotation","description":"4次元立方体（テッセラクト）の頂点数は？","image_file":"problem-010-3d-rotation.html","answer":"C","options":["8","12","16","24"],"explanation":"空間変換を考慮すると、正解は「16」","visual_data":null,"original_id":"spatial_real_3"},{"id":"011","type":"matrix-reasoning","subtype":"distribution","difficulty":8,"title":"行列推論 - distribution","description":"3×3行列で各行に○△□が1つずつ、各列に大中小が1つずつ含まれる。右下に入るのは？\n○大 △中 ？\n□中 ○小 △大\n△小 □大 ○中","image_file":"problem-011-distribution.html","answer":"A","options":["□小","○大","△中","□中"],"explanation":"問題の規則性から、正解は「□小」","visual_data":"matrix_pattern","original_id":"matrix_real_1"},{"id":"012","type":"matrix-reasoning","subtype":"rotation","difficulty":12,"title":"行列推論 - rotation","description":"パターン行列：左上から時計回りに90度ずつ回転。最後のパターンは？\n↑ → ？\n← ↓ ↑\n？ ← ↓","image_file":"problem-012-rotation.html","answer":"A","options":["↓","→","↑","←"],"explanation":"問題の規則性から、正解は「↓」","visual_data":"rotation_pattern","original_id":"matrix_real_2"},{"id":"013","type":"matrix-reasoning","subtype":"rotation","difficulty":16,"title":"行列推論 - rotation","description":"複合変換行列：図形が右に移動+拡大+回転の複合変換。次の変換は？","image_file":"problem-013-rotation.html","answer":"D","options":["移動のみ","拡大のみ","回転のみ","3つの複合"],"explanation":"問題の規則性から、正解は「3つの複合」","visual_data":"complex_transformation","original_id":"matrix_real_3"},{"id":"014","type":"pattern-recognition","subtype":"classification","difficulty":6,"title":"パターン認識 - classification","description":"医者：病院 = 教師：？","image_file":"problem-014-classification.html","answer":"A","options":["学校","生徒","授業","教科書"],"explanation":"問題の規則性から、正解は「学校」","visual_data":null,"original_id":"verbal_real_1"},{"id":"015","type":"pattern-recognition","subtype":"classification","difficulty":9,"title":"パターン認識 - classification","description":"原因：結果 = 種：？","image_file":"problem-015-classification.html","answer":"C","options":["土","水","植物","収穫"],"explanation":"問題の規則性から、正解は「植物」","visual_data":null,"original_id":"verbal_real_2"},{"id":"016","type":"pattern-recognition","subtype":"classification","difficulty":13,"title":"パターン認識 - classification","description":"「TOKYO」を「YOJKT」と変換する規則で「OSAKA」はどうなる？","image_file":"problem-016-classification.html","answer":"A","options":["AKASO","ASAKO","AKAOS","SAOAK"],"explanation":"問題の規則性から、正解は「AKASO」","visual_data":null,"original_id":"verbal_real_3"},{"id":"017","type":"matrix-reasoning","subtype":"progression","difficulty":10,"title":"行列推論 - progression","description":"概念の包含関係：「すべてのバラは花である」「すべての花は植物である」から導けるのは？","image_file":"problem-017-progression.html","answer":"A","options":["すべてのバラは植物である","すべての植物はバラである","いくつかの植物は花である","判断できない"],"explanation":"問題の規則性から、正解は「すべてのバラは植物である」","visual_data":null,"original_id":"abstract_real_1"},{"id":"018","type":"matrix-reasoning","subtype":"progression","difficulty":14,"title":"行列推論 - progression","description":"メタパターン認識：A→B→C、D→E→F、G→？→I の？に入るのは？","image_file":"problem-018-progression.html","answer":"A","options":["H","J","F","K"],"explanation":"問題の規則性から、正解は「H」","visual_data":null,"original_id":"abstract_real_2"},{"id":"019","type":"matrix-reasoning","subtype":"progression","difficulty":18,"title":"行列推論 - progression","description":"高次関数的思考：f(x) = x+1, g(x) = 2x とすると f(g(3)) = ?","image_file":"problem-019-progression.html","answer":"B","options":["6","7","8","9"],"explanation":"問題の規則性から、正解は「7」","visual_data":null,"original_id":"abstract_real_3"},{"id":"020","type":"pattern-recognition","subtype":"shape-counting","difficulty":7,"title":"パターン認識 - shape-counting","description":"次の数字を逆順で答えてください：7, 2, 9, 4, 1, 6","image_file":"problem-020-shape-counting.html","answer":"A","options":["6, 1, 4, 9, 2, 7","7, 2, 9, 4, 1, 6","1, 4, 9, 2, 7, 6","6, 2, 1, 4, 9, 7"],"explanation":"問題の規則性から、正解は「6, 1, 4, 9, 2, 7」","visual_data":null,"original_id":"memory_real_1"},{"id":"021","type":"pattern-recognition","subtype":"shape-counting","difficulty":11,"title":"パターン認識 - shape-counting","description":"次の文字列を覚えて、2文字目、4文字目、6文字目を順に答えてください：PQRSTU","image_file":"problem-021-shape-counting.html","answer":"A","options":["Q, S, U","P, R, T","R, T, U","Q, T, S"],"explanation":"問題の規則性から、正解は「Q, S, U」","visual_data":null,"original_id":"memory_real_2"},{"id":"022","type":"pattern-recognition","subtype":"shape-counting","difficulty":15,"title":"パターン認識 - shape-counting","description":"N-back記憶課題：この数列で2つ前と同じ数字はどれ？ 3, 7, 3, 9, 7, 1, 9","image_file":"problem-022-shape-counting.html","answer":"C","options":["位置3の3","位置5の7","位置7の9","該当なし"],"explanation":"問題の規則性から、正解は「位置7の9」","visual_data":null,"original_id":"memory_real_3"},{"id":"023","type":"logical-deduction","subtype":"boolean-operations","difficulty":17,"title":"論理推論 - boolean-operations","description":"論理パズル：A、B、C、Dの4人がいて、正直者と嘘つきがいる。A:「Bは嘘つき」、B:「Cは正直者」、C:「Dは嘘つき」、D:「Aは正直者」。正直者は何人？","image_file":"problem-023-boolean-operations.html","answer":"B","options":["1人","2人","3人","4人"],"explanation":"三段論法の基本原理により、正解は「2人」","visual_data":null,"original_id":"advanced_1"},{"id":"024","type":"sequence-completion","subtype":"numerical","difficulty":18,"title":"数列完成 - numerical","description":"数学的帰納法パターン：1, 8, 27, 64, 125, ? (各項の関係性を見つけて)","image_file":"problem-024-numerical.html","answer":"C","options":["186","196","216","256"],"explanation":"数列のパターンを分析すると、正解は「216」","visual_data":null,"original_id":"advanced_2"},{"id":"025","type":"spatial-reasoning","subtype":"3d-rotation","difficulty":19,"title":"空間認識 - 3d-rotation","description":"超立方体（5次元）の面の数は？","image_file":"problem-025-3d-rotation.html","answer":"C","options":["10","32","40","80"],"explanation":"空間変換を考慮すると、正解は「40」","visual_data":null,"original_id":"advanced_3"},{"id":"026","type":"matrix-reasoning","subtype":"progression","difficulty":20,"title":"行列推論 - progression","description":"メタ論理：「この文は偽である」という文の真偽は？","image_file":"problem-026-progression.html","answer":"D","options":["真","偽","不定","パラドックス"],"explanation":"問題の規則性から、正解は「パラドックス」","visual_data":null,"original_id":"advanced_4"},{"id":"027","type":"sequence-completion","subtype":"numerical","difficulty":9,"title":"数列完成 - numerical","description":"2, 3, 5, 8, 13, ? この数列の次の項は？","image_file":"problem-027-numerical.html","answer":"B","options":["18","21","20","19"],"explanation":"数列のパターンを分析すると、正解は「21」","visual_data":null,"original_id":"medium_1"},{"id":"028","type":"logical-deduction","subtype":"boolean-operations","difficulty":10,"title":"論理推論 - boolean-operations","description":"条件推論：「雨が降れば試合は中止」「試合は中止になった」から導けるのは？","image_file":"problem-028-boolean-operations.html","answer":"C","options":["雨が降った","雨は降らなかった","判断できない","試合は開催された"],"explanation":"三段論法の基本原理により、正解は「判断できない」","visual_data":null,"original_id":"medium_2"},{"id":"029","type":"spatial-reasoning","subtype":"projection","difficulty":9,"title":"空間認識 - projection","description":"サイコロの相対する面の数の和は常に7。1の向かいが6、2の向かいが5なら、3の向かいは？","image_file":"problem-029-projection.html","answer":"A","options":["4","5","6","1"],"explanation":"空間変換を考慮すると、正解は「4」","visual_data":null,"original_id":"medium_3"},{"id":"030","type":"pattern-recognition","subtype":"classification","difficulty":8,"title":"パターン認識 - classification","description":"語彙の関係：「楽観的」の反対語として最も適切なのは？","image_file":"problem-030-classification.html","answer":"A","options":["悲観的","現実的","慎重","消極的"],"explanation":"問題の規則性から、正解は「悲観的」","visual_data":null,"original_id":"medium_4"},{"id":"031","type":"logical-deduction","subtype":"set-theory","difficulty":6,"title":"論理推論 - set-theory","description":"すべてのバラは花である。すべての花は美しい。したがって、すべてのバラは美しい。この論理構造と同じものはどれか？","image_file":"problem-031-set-theory.html","answer":"A","options":["すべての鳥は動物である。すべての動物は生き物である。したがって、すべての鳥は生き物である。","いくつかの車は赤い。いくつかの赤いものは高価である。したがって、いくつかの車は高価である。","すべての学生は若い。田中は学生である。したがって、田中は若い。","いくつかの本は厚い。すべての厚い本は重い。したがって、いくつかの本は重い。"],"explanation":"三段論法の基本原理により、正解は「すべての鳥は動物である。すべての動物は生き物である。したがって、すべての鳥は生き物である。」","visual_data":null,"original_id":"logic_001"},{"id":"032","type":"logical-deduction","subtype":"set-theory","difficulty":12,"title":"論理推論 - set-theory","description":"5人の友人A、B、C、D、Eが一列に並んでいる。以下の条件をすべて満たす配置はどれか？\n・AはBの左側にいる\n・CはDの右側にいる\n・BはEより右側にいる\n・DはAより左側にいる","image_file":"problem-032-set-theory.html","answer":"A","options":["D-C-A-E-B","D-A-C-E-B","C-D-A-E-B","D-A-E-C-B"],"explanation":"三段論法の基本原理により、正解は「D-C-A-E-B」","visual_data":null,"original_id":"logic_002"},{"id":"033","type":"logical-deduction","subtype":"boolean-operations","difficulty":18,"title":"論理推論 - boolean-operations","description":"「真実を語る人」と「嘘をつく人」が混在する島で、3人に出会った。\nA：「私たちの中に真実を語る人は最低1人いる」\nB：「私たちの中に嘘をつく人は最低1人いる」\nC：「私たちの中に嘘をつく人は最低2人いる」\n真実を語る人は何人いるか？","image_file":"problem-033-boolean-operations.html","answer":"B","options":["1人","2人","3人","判定不可能"],"explanation":"三段論法の基本原理により、正解は「2人」","visual_data":null,"original_id":"logic_003"},{"id":"034","type":"sequence-completion","subtype":"numerical","difficulty":8,"title":"数列完成 - numerical","description":"数列：2, 6, 18, 54, ?, 486\n?に入る数字は？","image_file":"problem-034-numerical.html","answer":"B","options":["108","162","216","324"],"explanation":"数列のパターンを分析すると、正解は「162」","visual_data":null,"original_id":"num_001"},{"id":"035","type":"sequence-completion","subtype":"numerical","difficulty":14,"title":"数列完成 - numerical","description":"数列：1, 1, 2, 3, 5, 8, 13, 21, ?, 55\n?に入る数字は？","image_file":"problem-035-numerical.html","answer":"B","options":["29","34","38","42"],"explanation":"数列のパターンを分析すると、正解は「34」","visual_data":null,"original_id":"num_002"},{"id":"036","type":"sequence-completion","subtype":"numerical","difficulty":20,"title":"数列完成 - numerical","description":"数列：2, 6, 30, 210, 2310, ?\n次の項は？","image_file":"problem-036-numerical.html","answer":"A","options":["30030","32310","46200","60060"],"explanation":"数列のパターンを分析すると、正解は「30030」","visual_data":null,"original_id":"num_003"},{"id":"037","type":"spatial-reasoning","subtype":"3d-rotation","difficulty":10,"title":"空間認識 - 3d-rotation","description":"立方体を左に90度回転させたとき、前面に見える面はどれか？","image_file":"problem-037-3d-rotation.html","answer":"C","options":["A","B","C","反対面"],"explanation":"空間変換を考慮すると、正解は「C」","visual_data":{"type":"cube_rotation","initial_state":{"front":"A","top":"B","right":"C","back":"D","bottom":"E","left":"F"}},"original_id":"spatial_001"},{"id":"038","type":"spatial-reasoning","subtype":"3d-rotation","difficulty":16,"title":"空間認識 - 3d-rotation","description":"4次元超立方体（テッサラクト）を3次元空間に投影したとき、頂点の数はいくつか？","image_file":"problem-038-3d-rotation.html","answer":"C","options":["8","12","16","24"],"explanation":"空間変換を考慮すると、正解は「16」","visual_data":null,"original_id":"spatial_002"},{"id":"039","type":"matrix-reasoning","subtype":"rotation","difficulty":12,"title":"行列推論 - rotation","description":"3×3行列のパターンを分析し、空欄に入る図形を選択してください。\n[各行で図形が時計回りに90度ずつ回転]","image_file":"problem-039-rotation.html","answer":"B","options":["右向き三角形","下向き三角形","左向き三角形","上向き三角形"],"explanation":"問題の規則性から、正解は「下向き三角形」","visual_data":"raven_matrix","original_id":"matrix_001"},{"id":"040","type":"pattern-recognition","subtype":"classification","difficulty":9,"title":"パターン認識 - classification","description":"次の類推関係を完成させてください：\n「本：図書館 = 絵画：？」","image_file":"problem-040-classification.html","answer":"A","options":["美術館","キャンバス","額縁","画家"],"explanation":"問題の規則性から、正解は「美術館」","visual_data":null,"original_id":"verbal_001"},{"id":"041","type":"matrix-reasoning","subtype":"progression","difficulty":15,"title":"行列推論 - progression","description":"抽象的規則：図形Aに変換Tを適用すると図形Bになる。同じ変換Tを図形Cに適用した結果は？","image_file":"problem-041-progression.html","answer":"B","options":["選択肢1","選択肢2","選択肢3","選択肢4"],"explanation":"問題の規則性から、正解は「選択肢2」","visual_data":"abstract_transformation","original_id":"abstract_001"},{"id":"042","type":"pattern-recognition","subtype":"shape-counting","difficulty":11,"title":"パターン認識 - shape-counting","description":"N-back課題：以下の図形列で、2つ前と同じ図形はどの位置にありますか？\n○△□◇○★□○","image_file":"problem-042-shape-counting.html","answer":"C","options":["位置6","位置7","位置8","該当なし"],"explanation":"問題の規則性から、正解は「位置8」","visual_data":null,"original_id":"memory_001"},{"id":"043","type":"logical-deduction","subtype":"set-theory","difficulty":5,"title":"論理推論 - set-theory","description":"すべての花は美しい。すべてのバラは花である。したがって：","image_file":"problem-043-set-theory.html","answer":"A","options":["すべてのバラは美しい","すべての美しいものはバラである","いくつかの花はバラではない","美しくないバラもある"],"explanation":"三段論法の基本原理により、正解は「すべてのバラは美しい」","visual_data":null,"original_id":"logic_exp_1"},{"id":"044","type":"matrix-reasoning","subtype":"distribution","difficulty":20,"title":"行列推論 - distribution","description":"最終チャレンジ：4×4行列での複合パターン認識。右下の要素は？\n○● ●○ ○● ？\n●○ ○● ●○ ○●\n○● ●○ ○● ●○\n●○ ○● ●○ ？","image_file":"problem-044-distribution.html","answer":"B","options":["○●","●○","○○","●●"],"explanation":"問題の規則性から、正解は「●○」","visual_data":"complex_matrix","original_id":"final_challenge"}]};
+        
+        let allProblems = problemsData.problems;
+        let filteredProblems = allProblems;
+        
+        // 問題の種類翻訳
+        const typeTranslations = {
+            'matrix-reasoning': '行列推論',
+            'sequence-completion': '数列完成',
+            'spatial-reasoning': '空間認識',
+            'pattern-recognition': 'パターン認識',
+            'logical-deduction': '論理推論'
+        };
+        
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProblems();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('typeFilter').addEventListener('change', filterProblems);
+            document.getElementById('difficultyFilter').addEventListener('change', filterProblems);
+            document.getElementById('searchInput').addEventListener('input', filterProblems);
+        }
+        
+        function filterProblems() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const difficultyFilter = document.getElementById('difficultyFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredProblems = allProblems.filter(problem => {
+                // タイプフィルター
+                if (typeFilter !== 'all' && problem.type !== typeFilter) {
+                    return false;
+                }
+                
+                // 難易度フィルター
+                if (difficultyFilter !== 'all') {
+                    const difficulty = problem.difficulty;
+                    switch (difficultyFilter) {
+                        case 'easy':
+                            if (difficulty > 7) return false;
+                            break;
+                        case 'medium':
+                            if (difficulty < 8 || difficulty > 14) return false;
+                            break;
+                        case 'hard':
+                            if (difficulty < 15 || difficulty > 18) return false;
+                            break;
+                        case 'expert':
+                            if (difficulty < 19) return false;
+                            break;
+                    }
+                }
+                
+                // 検索フィルター
+                if (searchTerm && !problem.description.toLowerCase().includes(searchTerm) && 
+                    !problem.title.toLowerCase().includes(searchTerm) &&
+                    !problem.id.includes(searchTerm)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            renderProblems();
+        }
+        
+        function renderProblems() {
+            const grid = document.getElementById('problemGrid');
+            grid.innerHTML = '';
+            
+            filteredProblems.forEach(problem => {
+                const card = createProblemCard(problem);
+                grid.appendChild(card);
+            });
+            
+            // 統計を更新
+            document.getElementById('shownCount').textContent = filteredProblems.length;
+            document.getElementById('totalCount').textContent = allProblems.length;
+        }
+        
+        function createProblemCard(problem) {
+            const card = document.createElement('div');
+            card.className = 'problem-card';
+            
+            const difficultyClass = getDifficultyClass(problem.difficulty);
+            
+            card.innerHTML = `
+                <div class="problem-header">
+                    <div class="problem-id">問題 ${problem.id}</div>
+                    <div class="difficulty-badge ${difficultyClass}">難易度 ${problem.difficulty}</div>
+                </div>
+                <div class="problem-type">${typeTranslations[problem.type] || problem.type}</div>
+                <div class="problem-title">${problem.title}</div>
+                <div class="problem-description">${problem.description}</div>
+                <div class="problem-footer">
+                    <div class="answer-badge">正解: ${problem.answer}</div>
+                    <button class="view-button" onclick="viewProblem('${problem.image_file}', '${problem.title}')">
+                        問題を表示
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function getDifficultyClass(difficulty) {
+            if (difficulty <= 7) return 'difficulty-easy';
+            if (difficulty <= 14) return 'difficulty-medium';
+            if (difficulty <= 18) return 'difficulty-hard';
+            return 'difficulty-expert';
+        }
+        
+        function viewProblem(imageFile, title) {
+            const modal = document.getElementById('problemModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalFrame = document.getElementById('modalFrame');
+            
+            modalTitle.textContent = title;
+            modalFrame.src = './images/' + imageFile;
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('problemModal');
+            modal.style.display = 'none';
+            document.getElementById('modalFrame').src = '';
+        }
+        
+        // モーダルの外側をクリックしたら閉じる
+        document.getElementById('problemModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // ESCキーでモーダルを閉じる
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
