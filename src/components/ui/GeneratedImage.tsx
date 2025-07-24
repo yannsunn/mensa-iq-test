@@ -1,13 +1,15 @@
-// 生成された画像表示コンポーネント
+// 生成された画像表示コンポーネント（強化エラーハンドリング版）
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
-import { Loader2, RefreshCw, AlertCircle } from 'lucide-react';
+import { Loader2, RefreshCw, AlertCircle, Image as ImageIcon, WifiOff } from 'lucide-react';
 import { ImageGenerationResponse } from '@/types/image';
 import { useImageCache } from '@/hooks/useImageCache';
 import { logger } from '@/utils/logger';
+import { isApiErrorResponse, ApiErrorResponse } from '@/types/error';
+import { useErrorHandler } from '@/components/ErrorBoundary';
 
 interface GeneratedImageProps {
   questionId: string;
@@ -16,6 +18,11 @@ interface GeneratedImageProps {
   style?: 'minimal' | 'detailed' | 'abstract' | 'geometric';
   fallbackComponent?: React.ReactNode;
   className?: string;
+  maxRetries?: number;
+  retryDelay?: number;
+  showFallbackOnError?: boolean;
+  onError?: (error: string, errorType: string) => void;
+  onSuccess?: (imageData: ImageGenerationResponse) => void;
 }
 
 export default function GeneratedImage({ 
@@ -24,21 +31,77 @@ export default function GeneratedImage({
   description, 
   style = 'minimal', 
   fallbackComponent,
-  className = ''
+  className = '',
+  maxRetries = 3,
+  retryDelay = 1000,
+  showFallbackOnError = true,
+  onError,
+  onSuccess
 }: GeneratedImageProps) {
   const [imageData, setImageData] = useState<ImageGenerationResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<string>('unknown');
   const [isRetrying, setIsRetrying] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [networkStatus, setNetworkStatus] = useState<'online' | 'offline'>('online');
   const { getCachedImage, setCachedImage } = useImageCache();
+  const { reportError } = useErrorHandler();
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ネットワーク状態監視
+  useEffect(() => {
+    const handleOnline = () => setNetworkStatus('online');
+    const handleOffline = () => setNetworkStatus('offline');
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // エラー分類ヘルパー
+  const categorizeError = useCallback((error: unknown, response?: Response): string => {
+    if (networkStatus === 'offline') return 'network_offline';
+    
+    if (response) {
+      if (response.status === 429) return 'rate_limit';
+      if (response.status === 403) return 'forbidden';
+      if (response.status === 500) return 'server_error';
+      if (response.status === 408) return 'timeout';
+    }
+    
+    if (error instanceof Error) {
+      if (error.message.includes('timeout')) return 'timeout';
+      if (error.message.includes('network') || error.message.includes('fetch')) return 'network_error';
+      if (error.message.includes('abort')) return 'aborted';
+    }
+    
+    return 'unknown';
+  }, [networkStatus]);
 
   // 画像生成リクエスト
-  const generateImage = async (isRetry = false) => {
+  const generateImage = useCallback(async (isRetry = false) => {
+    // オフライン時の処理
+    if (networkStatus === 'offline') {
+      setError('インターネット接続を確認してください');
+      setErrorType('network_offline');
+      return;
+    }
+
     // キャッシュから確認（再試行でない場合のみ）
     if (!isRetry) {
       const cachedImage = getCachedImage(questionId);
       if (cachedImage) {
         setImageData(cachedImage);
+        setError(null);
+        setErrorType('');
+        if (onSuccess) {
+          onSuccess(cachedImage);
+        }
         return;
       }
     }
@@ -50,48 +113,156 @@ export default function GeneratedImage({
     }
     
     setError(null);
+    setErrorType('');
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒タイムアウト
+
       const response = await fetch(`/api/images/generate?questionId=${questionId}&category=${category}&description=${encodeURIComponent(description)}&style=${style}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
+        signal: controller.signal
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      clearTimeout(timeoutId);
 
-      const data: ImageGenerationResponse = await response.json();
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        const errorType = categorizeError(null, response);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        
+        if (isApiErrorResponse(responseData)) {
+          errorMessage = responseData.error.message;
+        }
+        
+        throw new Error(errorMessage);
+      }
       
-      if (data.success && data.imageUrl) {
-        setImageData(data);
-        setCachedImage(questionId, data); // キャッシュに保存
-        setError(null);
+      // 新しいAPIレスポンス形式に対応
+      let imageData: ImageGenerationResponse;
+      if (responseData.success === true && responseData.data) {
+        imageData = responseData.data;
+      } else if (responseData.success && responseData.imageUrl) {
+        imageData = responseData;
       } else {
-        setError(data.error || 'Image generation failed');
+        throw new Error(responseData.error?.message || 'Image generation failed');
+      }
+      
+      if (imageData.imageUrl) {
+        setImageData(imageData);
+        setCachedImage(questionId, imageData);
+        setError(null);
+        setErrorType('');
+        setRetryCount(0);
+        
+        if (onSuccess) {
+          onSuccess(imageData);
+        }
+      } else {
+        throw new Error('No image URL in response');
       }
     } catch (err) {
+      const currentErrorType = categorizeError(err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      
       setError(errorMessage);
-      logger.error('Image generation error:', err);
+      setErrorType(currentErrorType);
+      
+      // エラー報告
+      reportError(err instanceof Error ? err : new Error(errorMessage), {
+        questionId,
+        category,
+        retryCount,
+        errorType: currentErrorType
+      });
+      
+      if (onError) {
+        onError(errorMessage, currentErrorType);
+      }
+      
+      logger.error('Image generation error:', {
+        error: err,
+        questionId,
+        category,
+        retryCount,
+        errorType: currentErrorType
+      });
+      
+      // 自動再試行（条件を満たす場合）
+      if (retryCount < maxRetries && ['timeout', 'network_error', 'server_error'].includes(currentErrorType)) {
+        setRetryCount(prev => prev + 1);
+        retryTimeoutRef.current = setTimeout(() => {
+          generateImage(true);
+        }, retryDelay * Math.pow(2, retryCount)); // 指数バックオフ
+      }
     } finally {
       setIsLoading(false);
       setIsRetrying(false);
     }
-  };
+  }, [questionId, category, description, style, retryCount, maxRetries, retryDelay, networkStatus, getCachedImage, setCachedImage, categorizeError, reportError, onError, onSuccess]);
 
   // 初回読み込み
   useEffect(() => {
     generateImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionId, category, description, style]);
+    
+    return () => {
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
+    };
+  }, [generateImage]);
 
   // 再試行ハンドラ
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+    }
+    setRetryCount(0);
     generateImage(true);
-  };
+  }, [generateImage]);
+
+  // エラーメッセージの取得
+  const getErrorMessage = useCallback(() => {
+    switch (errorType) {
+      case 'network_offline':
+        return 'インターネット接続がありません。接続を確認してから再試行してください。';
+      case 'network_error':
+        return 'ネットワークエラーが発生しました。しばらく待ってから再試行してください。';
+      case 'timeout':
+        return 'リクエストがタイムアウトしました。サーバーが混雑している可能性があります。';
+      case 'rate_limit':
+        return 'リクエスト制限に達しました。しばらく待ってから再試行してください。';
+      case 'server_error':
+        return 'サーバーエラーが発生しました。しばらく待ってから再試行してください。';
+      case 'forbidden':
+        return '画像生成の権限がありません。設定を確認してください。';
+      default:
+        return error || '画像生成に失敗しました。';
+    }
+  }, [error, errorType]);
+
+  // フォールバック画像コンポーネント
+  const FallbackImage = useCallback(() => {
+    if (fallbackComponent) {
+      return <>{fallbackComponent}</>;
+    }
+    
+    return (
+      <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-lg">
+        <ImageIcon className="w-16 h-16 text-gray-400 mb-4" />
+        <div className="text-center">
+          <p className="text-sm font-medium text-gray-600 mb-2">{category}</p>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            {description.length > 100 ? `${description.substring(0, 100)}...` : description}
+          </p>
+        </div>
+      </div>
+    );
+  }, [fallbackComponent, category, description]);
 
   // ローディング状態
   if (isLoading) {
@@ -107,31 +278,53 @@ export default function GeneratedImage({
 
   // エラー状態
   if (error) {
+    const canRetry = retryCount < maxRetries;
+    const isNetworkError = ['network_offline', 'network_error'].includes(errorType);
+    
     return (
-      <div className={`p-6 bg-red-50 rounded-lg border border-red-200 ${className}`}>
+      <div className={`p-6 rounded-lg border ${isNetworkError ? 'bg-orange-50 border-orange-200' : 'bg-red-50 border-red-200'} ${className}`}>
         <div className="flex items-center justify-center mb-4">
-          <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
-          <span className="text-red-700 font-medium">画像生成に失敗しました</span>
+          {errorType === 'network_offline' ? (
+            <WifiOff className="h-6 w-6 text-orange-500 mr-2" />
+          ) : (
+            <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
+          )}
+          <span className={`font-medium ${isNetworkError ? 'text-orange-700' : 'text-red-700'}`}>
+            画像生成に失敗しました
+          </span>
         </div>
-        <p className="text-sm text-red-600 mb-4 text-center">{error}</p>
-        <div className="flex justify-center space-x-2">
+        
+        <p className={`text-sm mb-4 text-center ${isNetworkError ? 'text-orange-600' : 'text-red-600'}`}>
+          {getErrorMessage()}
+        </p>
+        
+        {retryCount > 0 && (
+          <p className="text-xs text-gray-500 text-center mb-4">
+            再試行回数: {retryCount}/{maxRetries}
+          </p>
+        )}
+        
+        <div className="flex justify-center space-x-2 mb-4">
           <button
             onClick={handleRetry}
-            disabled={isRetrying}
-            className="flex items-center px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+            disabled={isRetrying || (!canRetry && errorType !== 'network_offline')}
+            className={`flex items-center px-4 py-2 text-white rounded hover:opacity-90 disabled:opacity-50 transition-opacity ${
+              isNetworkError ? 'bg-orange-500 hover:bg-orange-600' : 'bg-red-500 hover:bg-red-600'
+            }`}
           >
             {isRetrying ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
             ) : (
               <RefreshCw className="h-4 w-4 mr-2" />
             )}
-            再試行
+            {errorType === 'network_offline' ? '再接続' : '再試行'}
           </button>
         </div>
-        {fallbackComponent && (
+        
+        {showFallbackOnError && (
           <div className="mt-4 p-4 bg-gray-50 rounded">
-            <p className="text-sm text-gray-600 mb-2">フォールバック表示:</p>
-            {fallbackComponent}
+            <p className="text-sm text-gray-600 mb-2">代替表示:</p>
+            <FallbackImage />
           </div>
         )}
       </div>
@@ -160,6 +353,9 @@ export default function GeneratedImage({
         <div className="mt-2 text-xs text-gray-500">
           <p>スタイル: {imageData.style}</p>
           <p>生成日時: {new Date(imageData.generatedAt).toLocaleString('ja-JP')}</p>
+          {imageData.cacheMetadata?.cached && (
+            <p className="text-green-600">キャッシュから読み込み</p>
+          )}
         </div>
         
         {/* 再生成ボタン */}
@@ -185,11 +381,7 @@ export default function GeneratedImage({
   return (
     <div className={`p-6 bg-gray-50 rounded-lg ${className}`}>
       <p className="text-sm text-gray-600 text-center mb-4">画像を生成できませんでした</p>
-      {fallbackComponent || (
-        <div className="text-center text-gray-400">
-          <p>代替画像なし</p>
-        </div>
-      )}
+      <FallbackImage />
     </div>
   );
 }
