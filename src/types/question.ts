@@ -1,5 +1,5 @@
 // 統一された質問インターフェース（最適化版）
-export type QuestionCategory = 'logical' | 'numerical' | 'spatial' | 'pattern' | 'verbal' | 'abstract' | 'memory' | 'matrix';
+export type QuestionCategory = 'logical' | 'numerical' | 'spatial' | 'pattern' | 'verbal' | 'abstract' | 'memory' | 'matrix' | 'visual';
 
 export interface BaseQuestion {
   readonly id: string;
@@ -139,5 +139,6 @@ export const QUESTION_CATEGORIES: Record<QuestionCategory, CategoryInfo> = {
   verbal: { name: '言語推論', icon: '📝', color: 'red' },
   abstract: { name: '抽象推論', icon: '🌀', color: 'indigo' },
   memory: { name: '記憶力', icon: '🧩', color: 'pink' },
-  matrix: { name: '行列推論', icon: '⬜', color: 'yellow' }
+  matrix: { name: '行列推論', icon: '⬜', color: 'yellow' },
+  visual: { name: 'ビジュアル', icon: '👁️', color: 'cyan' }
 } as const;

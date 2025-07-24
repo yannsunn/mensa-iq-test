@@ -181,7 +181,7 @@ export async function loadPracticeQuestions(
   // 必要なカテゴリのみを読み込み
   const questionsPerCategory = Math.ceil(count / categories.length);
   const categoryPromises = categories.map(async (category) => {
-    const questions = await loadQuestionsByCategory(category);
+    const questions = await loadQuestionsByCategory(category as QuestionCategory);
     return questions
       .filter(q => q.difficulty >= range.min && q.difficulty <= range.max)
       .sort(() => Math.random() - 0.5)
@@ -204,7 +204,7 @@ export async function loadExamQuestions(count: number = 45): Promise<UnifiedQues
   // 必要なカテゴリを並列で読み込み
   const categories = ['logical', 'numerical', 'spatial', 'matrix', 'abstract'];
   const categoryQuestions = await Promise.all(
-    categories.map(category => loadQuestionsByCategory(category))
+    categories.map(category => loadQuestionsByCategory(category as QuestionCategory))
   );
 
   const allQuestions = categoryQuestions.flat();

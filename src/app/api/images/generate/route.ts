@@ -137,12 +137,12 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   
   validators.required(description, 'description');
   validators.string(description, 'description');
-  validators.maxLength(description, 1000, 'description');
+  validators.maxLength(description as string, 1000, 'description');
 
   logger.log('Image generation GET request:', {
     questionId,
     category,
-    description: description.substring(0, 100) + '...',
+    description: (description as string).substring(0, 100) + '...',
     style,
     provider: imageGenerationService.getCurrentProvider()
   });
@@ -159,9 +159,9 @@ export const GET = withErrorHandling(async (request: NextRequest) => {
   
   const result = await Promise.race([
     imageGenerationService.generateQuestionImage(
-      questionId,
-      category,
-      description,
+      questionId as string,
+      category as string,
+      description as string,
       style
     ),
     timeoutPromise

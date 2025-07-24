@@ -19,7 +19,7 @@ import { randomUUID } from 'crypto';
 const isProduction = process.env.NODE_ENV === 'production';
 
 // セキュリティヘッダーの設定
-function setSecurityHeaders(response: NextResponse): NextResponse {
+function setSecurityHeaders<T>(response: NextResponse<T>): NextResponse<T> {
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-XSS-Protection', '1; mode=block');
@@ -113,7 +113,7 @@ export function createErrorResponse(
     success: false
   };
   
-  const response = NextResponse.json(errorResponse, { status: appError.statusCode });
+  const response = NextResponse.json(errorResponse, { status: appError.statusCode }) as NextResponse<ApiErrorResponse>;
   return setSecurityHeaders(response);
 }
 

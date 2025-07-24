@@ -250,7 +250,7 @@ export const logger = {
         statusCode: appError.statusCode,
         details: appError.details,
         requestId: appError.requestId,
-        ...additionalData
+        ...(additionalData && typeof additionalData === 'object' ? additionalData : {})
       }
     );
     
@@ -271,7 +271,7 @@ export const logger = {
         name,
         duration,
         timestamp: new Date().toISOString(),
-        ...additionalData
+        ...(additionalData && typeof additionalData === 'object' ? additionalData : {})
       }
     });
   },
@@ -281,7 +281,7 @@ export const logger = {
     logger.info(`User Action: ${action}`, {
       action,
       timestamp: new Date().toISOString(),
-      ...data
+      ...(data && typeof data === 'object' ? data : {})
     });
   },
   

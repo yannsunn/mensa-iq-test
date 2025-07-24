@@ -301,4 +301,3 @@ const arePropsEqual = (prevProps: BaseTestProps, nextProps: BaseTestProps): bool
 
 // メモ化されたコンポーネントをデフォルトエクスポート
 export default memo(BaseTestComponent, arePropsEqual);
-}

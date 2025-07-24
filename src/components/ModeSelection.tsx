@@ -381,4 +381,3 @@ const ModeSelection = memo(function ModeSelection({ onSelectMode }: ModeSelectio
 });
 
 export default ModeSelection;
-}

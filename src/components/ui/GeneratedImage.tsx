@@ -353,7 +353,7 @@ export default function GeneratedImage({
         <div className="mt-2 text-xs text-gray-500">
           <p>スタイル: {imageData.style}</p>
           <p>生成日時: {new Date(imageData.generatedAt).toLocaleString('ja-JP')}</p>
-          {imageData.cacheMetadata?.cached && (
+          {(imageData as any).cacheMetadata?.cached && (
             <p className="text-green-600">キャッシュから読み込み</p>
           )}
         </div>

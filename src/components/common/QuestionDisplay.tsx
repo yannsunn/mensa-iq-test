@@ -135,7 +135,7 @@ const QuestionDisplay = memo(function QuestionDisplay({
 });
 
 // 選択肢のスタイルを取得（メモ化最適化版）
-const getOptionStyle = useMemo(() => {
+const getOptionStyle = (() => {
   const styleCache = new Map<string, string>();
   
   return (
@@ -171,10 +171,10 @@ const getOptionStyle = useMemo(() => {
     styleCache.set(cacheKey, result);
     return result;
   };
-}, []);
+})();
 
 // 選択肢アイコンのスタイルを取得（メモ化最適化版）
-const getOptionIconStyle = useMemo(() => {
+const getOptionIconStyle = (() => {
   const iconStyleCache = new Map<string, string>();
   
   return (
@@ -210,7 +210,7 @@ const getOptionIconStyle = useMemo(() => {
     iconStyleCache.set(cacheKey, result);
     return result;
   };
-}, []);
+})();
 
 // キューブビューの生成（空間問題用）
 interface CubeView {

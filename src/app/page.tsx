@@ -118,4 +118,3 @@ const Home = memo(function Home() {
 });
 
 export default Home;
-}
