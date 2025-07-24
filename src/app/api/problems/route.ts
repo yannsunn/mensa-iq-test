@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CONSOLIDATED_MENSA_QUESTIONS, ConsolidatedMensaQuestion, getProblemsByCategory, getProblemsByDifficulty } from '@/data/consolidatedQuestions';
+import { CONSOLIDATED_MENSA_QUESTIONS, getProblemsByCategory, getProblemsByDifficulty } from '@/data/consolidatedQuestions';
 
 export async function GET(request: NextRequest) {
   try {
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'analytics':
-        return handleAnalytics(data);
+        return handleAnalytics();
       
       case 'progress':
         return handleProgress(data);
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handleAnalytics(data: any) {
+async function handleAnalytics() {
   // Calculate comprehensive analytics
   const stats = {
     totalProblems: CONSOLIDATED_MENSA_QUESTIONS.length,
@@ -160,9 +160,9 @@ async function handleAnalytics(data: any) {
   });
 }
 
-async function handleProgress(data: any) {
+async function handleProgress(data: { userId: string; problemId?: string; answer?: number; correct?: boolean; timeSpent?: number }) {
   // Mock user progress tracking (in real app, would use database)
-  const { userId, problemId, answer, correct, timeSpent } = data;
+  const { userId } = data;
   
   // Here you would save to database
   // For now, return mock progress data
@@ -200,12 +200,16 @@ async function handleProgress(data: any) {
   });
 }
 
-async function handleGenerateTest(data: any) {
+async function handleGenerateTest(data: { 
+  count?: number; 
+  categories?: string[]; 
+  difficultRange?: { min: number; max: number }; 
+  randomize?: boolean 
+}) {
   const { 
     count = 20, 
     categories, 
     difficultRange, 
-    timeLimit, 
     randomize = true 
   } = data;
 

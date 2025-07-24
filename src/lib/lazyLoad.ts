@@ -1,27 +1,35 @@
 // 動的インポートユーティリティ
-import { UnifiedQuestion } from '@/types/question';
+import { ConsolidatedMensaQuestion } from '@/data/consolidatedQuestions';
 
 // 質問データの遅延読み込み
 export async function loadQuestionsByCategory(
   category: string
-): Promise<UnifiedQuestion[]> {
-  const { getQuestionsByCategory } = await import('@/data/unifiedQuestions');
-  return getQuestionsByCategory(category);
+): Promise<ConsolidatedMensaQuestion[]> {
+  const { getProblemsByCategory } = await import('@/data/consolidatedQuestions');
+  return getProblemsByCategory(category);
 }
 
 export async function loadPracticeQuestions(
   difficulty: 'easy' | 'medium' | 'hard',
   count: number = 10
-): Promise<UnifiedQuestion[]> {
-  const { generatePracticeSet } = await import('@/data/unifiedQuestions');
-  return generatePracticeSet(difficulty, count);
+): Promise<ConsolidatedMensaQuestion[]> {
+  const { getProblemsByDifficulty } = await import('@/data/consolidatedQuestions');
+  const difficultyRange = {
+    easy: { min: 1, max: 7 },
+    medium: { min: 8, max: 14 },
+    hard: { min: 15, max: 20 }
+  };
+  const range = difficultyRange[difficulty];
+  const problems = getProblemsByDifficulty(range.min, range.max);
+  return problems.slice(0, count);
 }
 
 export async function loadExamQuestions(
-  count: number = 45
-): Promise<UnifiedQuestion[]> {
-  const { generateExamSet } = await import('@/data/unifiedQuestions');
-  return generateExamSet(count);
+  count: number = 20
+): Promise<ConsolidatedMensaQuestion[]> {
+  const { CONSOLIDATED_MENSA_QUESTIONS } = await import('@/data/consolidatedQuestions');
+  const shuffled = [...CONSOLIDATED_MENSA_QUESTIONS].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
 
 // コンポーネントの遅延読み込み

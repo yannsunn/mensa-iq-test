@@ -45,3 +45,4 @@ const Badge = React.memo(function Badge({
 });
 
 export default Badge;
+export { Badge };

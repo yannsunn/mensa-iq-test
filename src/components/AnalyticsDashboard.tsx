@@ -132,7 +132,7 @@ export const AnalyticsDashboard: React.FC = () => {
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'overview' | 'progress' | 'insights')}
               className={`
                 py-2 px-1 border-b-2 font-medium text-sm transition-colors
                 ${activeTab === tab.id
@@ -346,7 +346,7 @@ export const AnalyticsDashboard: React.FC = () => {
               <h3 className="text-xl font-bold mb-4 text-red-600">🎯 改善分野</h3>
               <div className="space-y-2">
                 {progress.weaknesses.map(weakness => (
-                  <Badge key={weakness} variant="error" className="mr-2 mb-2">
+                  <Badge key={weakness} variant="danger" className="mr-2 mb-2">
                     {getCategoryName(weakness)}
                   </Badge>
                 ))}

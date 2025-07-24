@@ -100,13 +100,13 @@ export default function ProblemsPage() {
     if (!testSession) return;
     
     // Calculate score
-    const correctAnswers = testSession.answers.reduce((count, answer, index) => {
-      return count + (answer === testSession.problems[index].correctAnswer ? 1 : 0);
+    const correctAnswers = testSession.answers.reduce((acc, answer, index) => {
+      return (acc || 0) + (answer === testSession.problems[index].correctAnswer ? 1 : 0);
     }, 0);
     
-    const score = Math.round((correctAnswers / testSession.problems.length) * 100);
+    const score = Math.round(((correctAnswers || 0) / testSession.problems.length) * 100);
     
-    alert(`テスト完了！\n正解数: ${correctAnswers}/${testSession.problems.length}\nスコア: ${score}%`);
+    alert(`テスト完了！\n正解数: ${correctAnswers || 0}/${testSession.problems.length}\nスコア: ${score}%`);
     
     setTestSession(null);
     setViewMode('browser');
@@ -123,14 +123,14 @@ export default function ProblemsPage() {
         {/* Navigation */}
         <div className="flex gap-4">
           <Button
-            variant={viewMode === 'browser' ? 'primary' : 'outline'}
+            variant={viewMode === 'browser' ? 'primary' : 'secondary'}
             onClick={() => setViewMode('browser')}
             className="text-white border-white hover:bg-white hover:text-blue-600"
           >
             問題ブラウザー
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => handleStartTest()}
             className="text-white border-white hover:bg-white hover:text-blue-600"
           >
@@ -221,7 +221,7 @@ export default function ProblemsPage() {
         <div className="bg-white border-b shadow-sm p-4">
           <div className="max-w-4xl mx-auto">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={() => setViewMode('browser')}
               className="mb-4"
             >

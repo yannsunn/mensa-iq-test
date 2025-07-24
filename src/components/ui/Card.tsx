@@ -49,3 +49,4 @@ const Card = React.memo(function Card({
 });
 
 export default Card;
+export { Card };

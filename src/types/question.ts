@@ -43,6 +43,8 @@ export interface VisualData {
   readonly visualType?: CubeVisualType;
   readonly cubeData?: CubeData;
   readonly generatedImage?: GeneratedImage;
+  readonly displayMode?: string;
+  readonly interactionMode?: string;
 }
 
 // 練習モード用の詳細情報（最適化版）

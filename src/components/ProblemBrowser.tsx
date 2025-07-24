@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ConsolidatedMensaQuestion, getProblemsByCategory, getProblemsByDifficulty } from '@/data/consolidatedQuestions';
+import { ConsolidatedMensaQuestion } from '@/data/consolidatedQuestions';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -31,7 +31,7 @@ export const ProblemBrowser: React.FC<ProblemBrowserProps> = ({
     search: ''
   });
 
-  const [selectedProblem, setSelectedProblem] = useState<ConsolidatedMensaQuestion | null>(null);
+  // Removed unused selectedProblem state
 
   // Get unique values for filters
   const { categories, subtypes, difficultyLevels } = useMemo(() => {
@@ -92,15 +92,14 @@ export const ProblemBrowser: React.FC<ProblemBrowserProps> = ({
   };
 
   const handleProblemClick = (problem: ConsolidatedMensaQuestion) => {
-    setSelectedProblem(problem);
     onProblemSelect?.(problem);
   };
 
   const getDifficultyBadgeVariant = (difficulty: number) => {
     if (difficulty <= 7) return 'success';
     if (difficulty <= 14) return 'warning';  
-    if (difficulty <= 18) return 'error';
-    return 'secondary';
+    if (difficulty <= 18) return 'danger';
+    return 'default';
   };
 
   const getCategoryIcon = (category: string) => {
@@ -271,8 +270,7 @@ export const ProblemBrowser: React.FC<ProblemBrowserProps> = ({
               表示中: {filteredProblems.length}問 / 総問題数: {problems.length}問
             </div>
             <Button 
-              variant="outline" 
-              size="sm"
+              variant="secondary" 
               onClick={() => setFilters({ category: 'all', difficulty: 'all', subtype: 'all', search: '' })}
             >
               フィルターをリセット
@@ -294,7 +292,7 @@ export const ProblemBrowser: React.FC<ProblemBrowserProps> = ({
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{getCategoryIcon(problem.category)}</span>
-                  <Badge variant="secondary">
+                  <Badge variant="default">
                     問題 {problem.problemNumber}
                   </Badge>
                 </div>
@@ -323,7 +321,7 @@ export const ProblemBrowser: React.FC<ProblemBrowserProps> = ({
                 <div className="text-xs text-gray-500">
                   正解: {problem.answerKey}
                 </div>
-                <Button size="sm" variant="primary">
+                <Button variant="primary">
                   問題を表示
                 </Button>
               </div>
@@ -343,7 +341,7 @@ export const ProblemBrowser: React.FC<ProblemBrowserProps> = ({
             フィルター条件を調整して再度お試しください
           </p>
           <Button 
-            variant="outline"
+            variant="secondary"
             onClick={() => setFilters({ category: 'all', difficulty: 'all', subtype: 'all', search: '' })}
           >
             フィルターをリセット

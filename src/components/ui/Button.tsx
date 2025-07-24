@@ -77,3 +77,4 @@ const Button = React.memo(function Button({
 });
 
 export default Button;
+export { Button };

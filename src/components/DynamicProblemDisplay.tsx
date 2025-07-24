@@ -5,7 +5,6 @@ import { ConsolidatedMensaQuestion } from '@/data/consolidatedQuestions';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { RavenMatrix } from '@/components/RavenMatrix';
 import { CubeQuestion } from '@/components/CubeQuestion';
 
 interface DynamicProblemDisplayProps {
@@ -19,7 +18,6 @@ interface DynamicProblemDisplayProps {
 
 interface SequenceDisplayProps {
   sequence: (string | number)[];
-  pattern?: string;
 }
 
 interface MatrixPatternProps {
@@ -27,7 +25,7 @@ interface MatrixPatternProps {
 }
 
 // Sequence Display Component
-const SequenceDisplay: React.FC<SequenceDisplayProps> = ({ sequence, pattern }) => {
+const SequenceDisplay: React.FC<SequenceDisplayProps> = ({ sequence }) => {
   return (
     <div className="flex justify-center items-center gap-4 flex-wrap">
       {sequence.map((item, index) => (
@@ -157,14 +155,12 @@ const SpatialDisplay: React.FC<{ problem: ConsolidatedMensaQuestion }> = ({ prob
     return (
       <div className="flex justify-center">
         <CubeQuestion 
-          cubeData={visualData?.cubeData || {
-            initialState: {
-              front: 'A', top: 'B', right: 'C',
-              back: 'D', bottom: 'E', left: 'F'
-            }
-          }}
-          visualType={visualData?.visualType || 'cube_rotation'}
-          onAnswer={() => {}}
+          type="cube_rotation"
+          question={problem.question}
+          options={problem.options}
+          onSelect={() => {}}
+          selectedAnswer={null}
+          netLabels={['A', 'B', 'C', 'D', 'E', 'F']}
         />
       </div>
     );
@@ -298,8 +294,8 @@ export const DynamicProblemDisplay: React.FC<DynamicProblemDisplayProps> = ({
   const getDifficultyColor = (difficulty: number) => {
     if (difficulty <= 7) return 'success';
     if (difficulty <= 14) return 'warning';
-    if (difficulty <= 18) return 'error';
-    return 'secondary';
+    if (difficulty <= 18) return 'danger';
+    return 'default';
   };
 
   const getCategoryName = (category: string) => {
@@ -314,7 +310,7 @@ export const DynamicProblemDisplay: React.FC<DynamicProblemDisplayProps> = ({
   };
 
   const renderVisualization = () => {
-    const { category, subtype, visualData } = problem;
+    const { category, subtype } = problem;
 
     // Matrix reasoning problems
     if (category === 'matrix' || subtype.includes('matrix') || subtype.includes('symmetry') || subtype.includes('rotation') || subtype.includes('distribution')) {
@@ -332,7 +328,7 @@ export const DynamicProblemDisplay: React.FC<DynamicProblemDisplayProps> = ({
           return isNaN(num) ? s : num;
         });
         sequence.push('?');
-        return <SequenceDisplay sequence={sequence} pattern={subtype} />;
+        return <SequenceDisplay sequence={sequence} />;
       }
       
       // Default numerical display
@@ -383,7 +379,7 @@ export const DynamicProblemDisplay: React.FC<DynamicProblemDisplayProps> = ({
         <div className="flex justify-between items-start mb-4">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <Badge variant="secondary">問題 {problem.problemNumber}</Badge>
+              <Badge variant="default">問題 {problem.problemNumber}</Badge>
               <Badge variant={getDifficultyColor(problem.difficulty)}>
                 難易度 {problem.difficulty}/20
               </Badge>
@@ -523,7 +519,7 @@ export const DynamicProblemDisplay: React.FC<DynamicProblemDisplayProps> = ({
       {/* Navigation */}
       <div className="flex justify-between items-center">
         <Button 
-          variant="outline" 
+          variant="secondary" 
           onClick={onPrevious}
           disabled={!onPrevious}
         >
@@ -541,7 +537,7 @@ export const DynamicProblemDisplay: React.FC<DynamicProblemDisplayProps> = ({
           )}
           
           <Button 
-            variant="outline"
+            variant="secondary"
             onClick={onNext}
             disabled={!onNext}
           >

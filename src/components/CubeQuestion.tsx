@@ -16,7 +16,7 @@ interface CubeQuestionProps {
   }>;
 }
 
-export default function CubeQuestion({
+function CubeQuestion({
   type,
   options,
   onSelect,
@@ -146,3 +146,6 @@ export default function CubeQuestion({
     </div>
   );
 }
+
+export default CubeQuestion;
+export { CubeQuestion };
