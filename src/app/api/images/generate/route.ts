@@ -9,10 +9,29 @@ import { logger } from '@/utils/logger';
 // APIルート初期化時に環境変数をチェック
 initializeEnv();
 
-// レスポンスのキャッシュヘッダー設定
-const setCacheHeaders = (response: NextResponse) => {
-  response.headers.set('Cache-Control', 'public, max-age=3600'); // 1時間キャッシュ
+// Vercelエッジキャッシュ対応のヘッダー設定
+const setCacheHeaders = (response: NextResponse, cacheMetadata?: any) => {
+  const maxAge = cacheMetadata?.maxAge || 3600;
+  const staleWhileRevalidate = cacheMetadata?.staleWhileRevalidate || 86400;
+  
+  // Vercelエッジキャッシュ最適化
+  response.headers.set(
+    'Cache-Control', 
+    `public, max-age=${maxAge}, s-maxage=${maxAge * 2}, stale-while-revalidate=${staleWhileRevalidate}`
+  );
+  
+  // ETag設定（ブラウザキャッシュ効率化）
+  if (cacheMetadata?.etag) {
+    response.headers.set('ETag', `"${cacheMetadata.etag}"`);
+  }
+  
+  // セキュリティヘッダー
   response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  
+  // CDN最適化
+  response.headers.set('Vary', 'Accept-Encoding');
+  
   return response;
 };
 
@@ -66,7 +85,7 @@ export async function POST(request: NextRequest) {
     
     if (result.success) {
       const response = NextResponse.json(result, { status: 200 });
-      return setCacheHeaders(response);
+      return setCacheHeaders(response, result.cacheMetadata);
     } else {
       return createErrorResponse(result.error || 'Unknown error', 500);
     }
@@ -136,7 +155,7 @@ export async function GET(request: NextRequest) {
     
     if (result.success) {
       const response = NextResponse.json(result, { status: 200 });
-      return setCacheHeaders(response);
+      return setCacheHeaders(response, result.cacheMetadata);
     } else {
       return createErrorResponse(result.error || 'Unknown error', 500);
     }

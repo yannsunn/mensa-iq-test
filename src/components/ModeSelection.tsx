@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Trophy, Brain, ChevronRight, Timer, CheckCircle, Zap, Shield, Star, TrendingUp, Users, Award } from 'lucide-react';
 import { Button, Card, Container, GlowText } from '@/components/ui';
@@ -9,29 +9,32 @@ interface ModeSelectionProps {
   onSelectMode: (mode: 'practice' | 'exam', difficulty?: 'easy' | 'medium' | 'hard') => void;
 }
 
-export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
+// メモ化されたコンポーネントでパフォーマンス最適化
+const ModeSelection = memo(function ModeSelection({ onSelectMode }: ModeSelectionProps) {
   const [selectedMode, setSelectedMode] = useState<'practice' | 'exam' | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   
-  // ニューロマーケティングに基づく統計情報
-  const stats = { 
+  // 統計情報のメモ化（再計算を防ぐ）
+  const stats = useMemo(() => ({ 
     total: 268, 
     avgIQ: 130,
     successRate: 92,
     users: '50,000+'
-  };
+  }), []);
 
-  const practiceFeatures = [
-    { icon: CheckCircle, text: '即座にフィードバック', highlight: true },
-    { icon: Brain, text: '詳細な解説付き' },
-    { icon: Zap, text: 'スキル別分析' }
-  ];
-
-  const examFeatures = [
-    { icon: Timer, text: '45問45分', highlight: true },
-    { icon: Trophy, text: 'IQスコア算出' },
-    { icon: Shield, text: 'MENSA基準' }
-  ];
+  // 機能情報のメモ化
+  const features = useMemo(() => ({
+    practice: [
+      { icon: CheckCircle, text: '即座にフィードバック', highlight: true },
+      { icon: Brain, text: '詳細な解説付き' },
+      { icon: Zap, text: 'スキル別分析' }
+    ],
+    exam: [
+      { icon: Timer, text: '45問45分', highlight: true },
+      { icon: Trophy, text: 'IQスコア算出' },
+      { icon: Shield, text: 'MENSA基準' }
+    ]
+  }), []);
 
   return (
     <div className="min-h-screen bg-gradient-radial flex flex-col relative" style={{ overflow: 'visible' }}>
@@ -194,7 +197,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 </div>
               
                 <div className="space-y-3 mb-4 md:mb-6">
-                  {practiceFeatures.map((feature, index) => (
+                  {features.practice.map((feature, index) => (
                     <motion.div 
                       key={index} 
                       className="flex items-center"
@@ -278,7 +281,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
                 </div>
               
                 <div className="space-y-3 mb-4 md:mb-6">
-                  {examFeatures.map((feature, index) => (
+                  {features.exam.map((feature, index) => (
                     <motion.div 
                       key={index} 
                       className="flex items-center"
@@ -375,4 +378,7 @@ export default function ModeSelection({ onSelectMode }: ModeSelectionProps) {
       </div>
     </div>
   );
+});
+
+export default ModeSelection;
 }

@@ -15,6 +15,12 @@ export interface ImageGenerationResponse {
   generatedAt: string;
   prompt: string;
   style: string;
+  fromCache?: boolean;
+  cacheMetadata?: {
+    etag?: string;
+    maxAge?: number;
+    staleWhileRevalidate?: number;
+  };
 }
 
 export interface ImageCache {
@@ -24,7 +30,9 @@ export interface ImageCache {
   style: string;
   generatedAt: string;
   lastAccessed: string;
+  accessCount?: number;
   size: number;
+  etag?: string;
 }
 
 export interface ImageGenerationSettings {

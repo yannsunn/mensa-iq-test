@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { UnifiedQuestion } from '@/types/question';
 import CubeQuestion from '../CubeQuestion';
@@ -14,13 +14,28 @@ interface QuestionDisplayProps {
   isCorrect?: boolean;
 }
 
-const QuestionDisplay = React.memo(function QuestionDisplay({
+const QuestionDisplay = memo(function QuestionDisplay({
   question,
   selectedAnswer,
   onAnswerSelect,
   showExplanation = false,
   isCorrect = false
 }: QuestionDisplayProps) {
+  
+  // 選択肢ハンドラーのメモ化
+  const handleAnswerSelect = useCallback((index: number) => {
+    if (!showExplanation) {
+      onAnswerSelect(index);
+    }
+  }, [onAnswerSelect, showExplanation]);
+  
+  // 設定のメモ化
+  const displaySettings = useMemo(() => ({
+    shouldShowImage: shouldShowGeneratedImage(question),
+    imageDescription: shouldShowGeneratedImage(question) ? generateImageDescription(question) : '',
+    imageStyle: getImageStyle(question.category),
+    cubeViews: question.visualData?.type === 'cube' ? generateCubeViews(question) : []
+  }), [question]);
   // ビジュアル問題の特別な表示
   if (question.visualData) {
     if (question.visualData.type === 'cube' && question.visualData.visualType) {
@@ -31,7 +46,7 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
           options={question.options}
           onSelect={onAnswerSelect}
           selectedAnswer={selectedAnswer}
-          cubeViews={generateCubeViews(question)}
+          cubeViews={displaySettings.cubeViews}
         />
       );
     }
@@ -57,8 +72,8 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
         </h2>
       </motion.div>
 
-      {/* 生成画像の表示 */}
-      {shouldShowGeneratedImage(question) && (
+      {/* 生成画像の表示（メモ化最適化版） */}
+      {displaySettings.shouldShowImage && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -68,8 +83,8 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
           <GeneratedImage
             questionId={question.id}
             category={question.category}
-            description={generateImageDescription(question)}
-            style={getImageStyle(question.category)}
+            description={displaySettings.imageDescription}
+            style={displaySettings.imageStyle}
             className="max-w-md mx-auto"
           />
         </motion.div>
@@ -87,7 +102,7 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
             key={index}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => onAnswerSelect(index)}
+            onClick={() => handleAnswerSelect(index)}
             disabled={showExplanation}
             className={`
               option-button p-responsive-lg text-left border-2 rounded-2xl transition-all duration-300
@@ -119,60 +134,83 @@ const QuestionDisplay = React.memo(function QuestionDisplay({
   );
 });
 
-// 選択肢のスタイルを取得（最適化版）
-const getOptionStyle = (
-  index: number,
-  selectedAnswer: number | null,
-  showExplanation: boolean,
-  isCorrect: boolean,
-  correctAnswer: number
-): string => {
-  // 基本クラス
-  const baseClasses = 'border-2 transition-all duration-300 backdrop-blur-sm';
+// 選択肢のスタイルを取得（メモ化最適化版）
+const getOptionStyle = useMemo(() => {
+  const styleCache = new Map<string, string>();
   
-  if (showExplanation) {
-    if (index === correctAnswer) {
-      return `${baseClasses} border-green-400 bg-green-400/20 text-white`;
+  return (
+    index: number,
+    selectedAnswer: number | null,
+    showExplanation: boolean,
+    isCorrect: boolean,
+    correctAnswer: number
+  ): string => {
+    const cacheKey = `${index}-${selectedAnswer}-${showExplanation}-${isCorrect}-${correctAnswer}`;
+    
+    if (styleCache.has(cacheKey)) {
+      return styleCache.get(cacheKey)!;
     }
-    if (index === selectedAnswer && !isCorrect) {
-      return `${baseClasses} border-red-400 bg-red-400/20 text-white`;
+    
+    const baseClasses = 'border-2 transition-all duration-300 backdrop-blur-sm';
+    let result: string;
+    
+    if (showExplanation) {
+      if (index === correctAnswer) {
+        result = `${baseClasses} border-green-400 bg-green-400/20 text-white`;
+      } else if (index === selectedAnswer && !isCorrect) {
+        result = `${baseClasses} border-red-400 bg-red-400/20 text-white`;
+      } else {
+        result = `${baseClasses} border-white/20 bg-white/5 text-white/50`;
+      }
+    } else if (selectedAnswer === index) {
+      result = `${baseClasses} border-blue-400 bg-blue-400/20 text-white shadow-xl`;
+    } else {
+      result = `${baseClasses} border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10`;
     }
-    return `${baseClasses} border-white/20 bg-white/5 text-white/50`;
-  }
+    
+    styleCache.set(cacheKey, result);
+    return result;
+  };
+}, []);
 
-  if (selectedAnswer === index) {
-    return `${baseClasses} border-blue-400 bg-blue-400/20 text-white shadow-xl`;
-  }
-
-  return `${baseClasses} border-white/20 bg-white/5 text-white/90 hover:border-white/30 hover:bg-white/10`;
-};
-
-// 選択肢アイコンのスタイルを取得（最適化版）
-const getOptionIconStyle = (
-  index: number,
-  selectedAnswer: number | null,
-  showExplanation: boolean,
-  isCorrect: boolean,
-  correctAnswer: number
-): string => {
-  const baseClasses = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold';
+// 選択肢アイコンのスタイルを取得（メモ化最適化版）
+const getOptionIconStyle = useMemo(() => {
+  const iconStyleCache = new Map<string, string>();
   
-  if (showExplanation) {
-    if (index === correctAnswer) {
-      return `${baseClasses} border-green-400 bg-green-400 text-white`;
+  return (
+    index: number,
+    selectedAnswer: number | null,
+    showExplanation: boolean,
+    isCorrect: boolean,
+    correctAnswer: number
+  ): string => {
+    const cacheKey = `icon-${index}-${selectedAnswer}-${showExplanation}-${isCorrect}-${correctAnswer}`;
+    
+    if (iconStyleCache.has(cacheKey)) {
+      return iconStyleCache.get(cacheKey)!;
     }
-    if (index === selectedAnswer && !isCorrect) {
-      return `${baseClasses} border-red-400 bg-red-400 text-white`;
+    
+    const baseClasses = 'w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold';
+    let result: string;
+    
+    if (showExplanation) {
+      if (index === correctAnswer) {
+        result = `${baseClasses} border-green-400 bg-green-400 text-white`;
+      } else if (index === selectedAnswer && !isCorrect) {
+        result = `${baseClasses} border-red-400 bg-red-400 text-white`;
+      } else {
+        result = `${baseClasses} border-white/20 text-white/50`;
+      }
+    } else if (selectedAnswer === index) {
+      result = `${baseClasses} border-blue-400 bg-blue-400 text-white`;
+    } else {
+      result = `${baseClasses} border-white/40 text-white/60`;
     }
-    return `${baseClasses} border-white/20 text-white/50`;
-  }
-
-  if (selectedAnswer === index) {
-    return `${baseClasses} border-blue-400 bg-blue-400 text-white`;
-  }
-
-  return `${baseClasses} border-white/40 text-white/60`;
-};
+    
+    iconStyleCache.set(cacheKey, result);
+    return result;
+  };
+}, []);
 
 // キューブビューの生成（空間問題用）
 interface CubeView {

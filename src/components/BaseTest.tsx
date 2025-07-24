@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { UnifiedQuestion, TestResult } from '@/types/question';
@@ -21,7 +21,8 @@ interface BaseTestProps {
   timeLimit?: number; // 全体の制限時間（秒）
 }
 
-export default function BaseTest({
+// メモ化されたコンポーネント（props変更時のみ再レンダリング）
+const BaseTestComponent = memo(function BaseTest({
   mode,
   questions,
   onComplete,
@@ -56,48 +57,64 @@ export default function BaseTest({
 
   const currentQuestion = questions[navigation.currentIndex];
   
-  // メモ化された統計情報（パフォーマンス最適化）
-  const { answeredCount, totalScore } = useMemo(() => {
+  // メモ化された統計情報（最適化強化版）
+  const statisticsData = useMemo(() => {
     const answeredCount = answers.filter(answer => answer !== null).length;
     const totalScore = answers.reduce<number>((score, answer, index) => {
       return score + (answer === questions[index].correctAnswer ? 1 : 0);
     }, 0);
     
-    return { answeredCount, totalScore };
+    // 進捗率も計算
+    const progressPercentage = (answeredCount / questions.length) * 100;
+    
+    return { 
+      answeredCount, 
+      totalScore,
+      progressPercentage,
+      completionRate: answeredCount / questions.length
+    };
   }, [answers, questions]);
+  
+  const { answeredCount, totalScore, progressPercentage } = statisticsData;
 
-  // 解答選択（最適化版）
+  // 解答選択（メモ化最適化版）
   const handleAnswerSelect = useCallback((answerIndex: number) => {
     if (showFeedback) return;
     setSelectedAnswer(answerIndex);
     
     if (mode === 'exam') {
-      // 試験モードでは即座に保存
-      setAnswers(prev => {
-        const newAnswers = [...prev];
+      // 試験モードでは即座に保存（バッチ更新回避）
+      setAnswers(prevAnswers => {
+        if (prevAnswers[navigation.currentIndex] === answerIndex) {
+          return prevAnswers; // 同じ値の場合は更新しない
+        }
+        const newAnswers = [...prevAnswers];
         newAnswers[navigation.currentIndex] = answerIndex;
         return newAnswers;
       });
     }
   }, [showFeedback, mode, navigation.currentIndex]);
 
-  // 解答提出（練習モード）
+  // 解答提出（メモ化最適化版）
   const handleSubmitAnswer = useCallback(() => {
     if (selectedAnswer === null) return;
 
     const correct = selectedAnswer === currentQuestion.correctAnswer;
     setIsCorrect(correct);
     
-    setAnswers(prev => {
-      const newAnswers = [...prev];
+    setAnswers(prevAnswers => {
+      if (prevAnswers[navigation.currentIndex] === selectedAnswer) {
+        return prevAnswers; // 既に同じ値がある場合は更新しない
+      }
+      const newAnswers = [...prevAnswers];
       newAnswers[navigation.currentIndex] = selectedAnswer;
       return newAnswers;
     });
     
     setShowFeedback(true);
-  }, [selectedAnswer, currentQuestion, navigation.currentIndex]);
+  }, [selectedAnswer, currentQuestion.correctAnswer, navigation.currentIndex]);
 
-  // テスト終了（最適化版）
+  // テスト終了（メモ化・計算最適化版）
   const handleSubmitTest = useCallback(() => {
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
     const iqScore = calculateIQScore(totalScore, questions.length);
@@ -112,13 +129,15 @@ export default function BaseTest({
       categoryScores,
       timeSpent,
       difficulty: mode === 'practice' ? 'practice' : 'standard',
-      mensaQualified: iqScore >= 130
+      mensaQualified: iqScore >= 130,
+      completionRate: statisticsData.completionRate,
+      averageTimePerQuestion: timeSpent / questions.length
     };
 
     onComplete?.(result);
-  }, [totalScore, answers, questions, startTime, mode, onComplete]);
+  }, [totalScore, answers, questions.length, startTime, mode, onComplete, statisticsData.completionRate]);
 
-  // ナビゲーションハンドラー群（最適化版）
+  // ナビゲーションハンドラー群（メモ化強化版）
   const navigationHandlers = useMemo(() => ({
     continue: () => {
       setShowFeedback(false);
@@ -145,7 +164,16 @@ export default function BaseTest({
         navigation.goToNext();
       }
     }
-  }), [mode, showFeedback, selectedAnswer, navigation, handleSubmitAnswer, handleSubmitTest]);
+  }), [
+    mode, 
+    showFeedback, 
+    selectedAnswer, 
+    navigation.isLast, 
+    navigation.goToNext,
+    navigation.goToPrevious,
+    handleSubmitAnswer, 
+    handleSubmitTest
+  ]);
 
   return (
     <TestLayout
@@ -259,4 +287,18 @@ export default function BaseTest({
       </motion.div>
     </TestLayout>
   );
+});
+
+// パフォーマンス最適化のためのprops比較関数
+const arePropsEqual = (prevProps: BaseTestProps, nextProps: BaseTestProps): boolean => {
+  return (
+    prevProps.mode === nextProps.mode &&
+    prevProps.questions.length === nextProps.questions.length &&
+    prevProps.timeLimit === nextProps.timeLimit &&
+    prevProps.onComplete === nextProps.onComplete
+  );
+};
+
+// メモ化されたコンポーネントをデフォルトエクスポート
+export default memo(BaseTestComponent, arePropsEqual);
 }

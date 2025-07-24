@@ -90,6 +90,38 @@ export interface TestResult {
   readonly timeSpent: number;
   readonly difficulty: string;
   readonly mensaQualified: boolean;
+  readonly completionRate?: number;
+  readonly averageTimePerQuestion?: number;
+}
+
+// Rawデータ用の型定義を追加
+export interface RawQuestionData {
+  readonly id?: string;
+  readonly category?: string;
+  readonly difficulty?: number;
+  readonly question?: string;
+  readonly options?: string[];
+  readonly correctAnswer?: number;
+  readonly timeLimit?: number;
+  readonly explanation?: string;
+  readonly practiceMode?: PracticeDetails;
+  readonly source?: string;
+  readonly mensaLevel?: string;
+  readonly cognitiveSkills?: string[];
+  readonly visualData?: unknown;
+  readonly visualType?: string;
+  readonly cubeType?: string;
+  readonly cubeData?: unknown;
+  readonly netLabels?: string[];
+}
+
+// カテゴリーローダー用の型
+export type CategoryLoader = () => Promise<RawQuestionData[]>;
+
+export interface CategoryLoadResult {
+  readonly questions: UnifiedQuestion[];
+  readonly loadTime: number;
+  readonly category: QuestionCategory;
 }
 
 // カテゴリ情報（最適化版）

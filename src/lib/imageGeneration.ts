@@ -18,7 +18,8 @@ class ImageGenerationService {
   private baseUrl: string = 'https://cl.imagineapi.dev/items/images/';
   private cache: Map<string, ImageCache> = new Map();
   private readonly CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24時間
-  private readonly MAX_CACHE_SIZE = 100; // キャッシュサイズ制限
+  private readonly MAX_CACHE_SIZE = 500; // キャッシュサイズ制限（増加）
+  private readonly EDGE_CACHE_TTL = 7 * 24 * 60 * 60; // Vercelエッジキャッシュ7日間
 
   constructor() {
     // プロバイダーの選択（Stability AIを優先）
@@ -33,7 +34,7 @@ class ImageGenerationService {
     }
   }
 
-  // キャッシュからの画像取得（最適化版）
+  // キャッシュからの画像取得（エッジキャッシュ対応版）
   private getCachedImage(questionId: string): ImageCache | null {
     const cached = this.cache.get(questionId);
     if (!cached) return null;
@@ -46,28 +47,35 @@ class ImageGenerationService {
       return null;
     }
 
-    // アクセス時間を更新
+    // アクセス時間を更新（LRU戦略）
     cached.lastAccessed = new Date().toISOString();
+    cached.accessCount = (cached.accessCount || 0) + 1;
     return cached;
   }
 
-  // キャッシュサイズ管理
+  // キャッシュサイズ管理（改善版LRU）
   private evictOldestCache(): void {
     if (this.cache.size >= this.MAX_CACHE_SIZE) {
       const entries = Array.from(this.cache.entries());
-      const sorted = entries.sort((a, b) => 
-        new Date(a[1].lastAccessed).getTime() - new Date(b[1].lastAccessed).getTime()
-      );
       
-      // 古いエントリの25%を削除
-      const toDelete = Math.floor(this.MAX_CACHE_SIZE * 0.25);
+      // LRU + アクセス頻度を考慮したスマートな削除
+      const sorted = entries.sort((a, b) => {
+        const aScore = new Date(a[1].lastAccessed).getTime() + (a[1].accessCount || 0) * 3600000;
+        const bScore = new Date(b[1].lastAccessed).getTime() + (b[1].accessCount || 0) * 3600000;
+        return aScore - bScore;
+      });
+      
+      // 古いエントリの30%を削除（より積極的な削除）
+      const toDelete = Math.floor(this.MAX_CACHE_SIZE * 0.3);
       for (let i = 0; i < toDelete; i++) {
         this.cache.delete(sorted[i][0]);
       }
+      
+      logger.log(`Evicted ${toDelete} cache entries, remaining: ${this.cache.size}`);
     }
   }
 
-  // キャッシュへの画像保存（最適化版）
+  // キャッシュへの画像保存（エッジキャッシュ対応版）
   private setCachedImage(questionId: string, imageUrl: string, prompt: string, style: string): void {
     // キャッシュサイズ管理
     this.evictOldestCache();
@@ -80,10 +88,19 @@ class ImageGenerationService {
       style,
       generatedAt: now,
       lastAccessed: now,
-      size: 0 // 実際のサイズは後で計算
+      accessCount: 1,
+      size: 0, // 実際のサイズは後で計算
+      etag: this.generateETag(questionId, prompt, style) // ETags for Vercel edge cache
     };
     
     this.cache.set(questionId, cacheEntry);
+    logger.log(`Cached image for ${questionId}, cache size: ${this.cache.size}`);
+  }
+
+  // ETag生成（Vercelエッジキャッシュ用）
+  private generateETag(questionId: string, prompt: string, style: string): string {
+    const content = `${questionId}-${prompt}-${style}`;
+    return require('crypto').createHash('md5').update(content).digest('hex');
   }
 
   // プロンプトテンプレートの適用
@@ -137,7 +154,13 @@ class ImageGenerationService {
         imageUrl: cachedImage.imageUrl,
         generatedAt: cachedImage.generatedAt,
         prompt: cachedImage.prompt,
-        style: cachedImage.style
+        style: cachedImage.style,
+        fromCache: true,
+        cacheMetadata: {
+          etag: cachedImage.etag,
+          maxAge: this.EDGE_CACHE_TTL,
+          staleWhileRevalidate: 86400
+        }
       };
     }
 
@@ -174,7 +197,12 @@ class ImageGenerationService {
           imageUrl: response.url,
           generatedAt: response.created_at,
           prompt,
-          style
+          style,
+          cacheMetadata: {
+            etag: this.generateETag(questionId, prompt, style),
+            maxAge: this.EDGE_CACHE_TTL,
+            staleWhileRevalidate: 86400 // 1日のstale-while-revalidate
+          }
         };
       } else {
         return {

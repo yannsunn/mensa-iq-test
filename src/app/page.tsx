@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, lazy, Suspense } from 'react';
-import ModeSelection from '@/components/ModeSelection';
+import { useState, lazy, Suspense, memo, useCallback } from 'react';
 import { Skeleton } from '@/components/ui';
+
+// Dynamic importsでバンドルサイズを最適化
+const ModeSelection = lazy(() => import('@/components/ModeSelection'));
 
 // 重いコンポーネントの遅延読み込み
 const PracticeTest = lazy(() => import('@/components/PracticeTest'));
@@ -22,8 +24,8 @@ interface ExamResult {
   mensaQualified: boolean;
 }
 
-// ローディングコンポーネント
-function LoadingFallback() {
+// メモ化されたローディングコンポーネント
+const LoadingFallback = memo(function LoadingFallback() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-radial">
       <div className="text-center">
@@ -39,36 +41,38 @@ function LoadingFallback() {
       </div>
     </div>
   );
-}
+});
 
-export default function Home() {
+// メモ化されたメインコンポーネント
+const Home = memo(function Home() {
   const [currentMode, setCurrentMode] = useState<AppMode>('home');
   const [practiceDifficulty, setPracticeDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [examResult, setExamResult] = useState<ExamResult | null>(null);
 
-  const handleModeSelect = (mode: 'practice' | 'exam', difficulty?: 'easy' | 'medium' | 'hard') => {
+  // イベントハンドラーのメモ化
+  const handleModeSelect = useCallback((mode: 'practice' | 'exam', difficulty?: 'easy' | 'medium' | 'hard') => {
     if (mode === 'practice' && difficulty) {
       setPracticeDifficulty(difficulty);
       setCurrentMode('practice');
     } else if (mode === 'exam') {
       setCurrentMode('exam');
     }
-  };
+  }, []);
 
-  const handleExamComplete = (result: ExamResult) => {
+  const handleExamComplete = useCallback((result: ExamResult) => {
     setExamResult(result);
     setCurrentMode('results');
-  };
+  }, []);
 
-  const handleBackToHome = () => {
+  const handleBackToHome = useCallback(() => {
     setCurrentMode('home');
     setExamResult(null);
-  };
+  }, []);
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     setCurrentMode('home');
     setExamResult(null);
-  };
+  }, []);
 
   // 各モードの表示
   if (currentMode === 'practice') {
@@ -106,5 +110,12 @@ export default function Home() {
   }
 
   // ホーム画面（モード選択）
-  return <ModeSelection onSelectMode={handleModeSelect} />;
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ModeSelection onSelectMode={handleModeSelect} />
+    </Suspense>
+  );
+});
+
+export default Home;
 }
