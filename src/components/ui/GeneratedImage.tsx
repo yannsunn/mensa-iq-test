@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Loader2, RefreshCw, AlertCircle } from 'lucide-react';
 import { ImageGenerationResponse } from '@/types/image';
 import { useImageCache } from '@/hooks/useImageCache';
+import { logger } from '@/utils/logger';
 
 interface GeneratedImageProps {
   questionId: string;
@@ -74,7 +75,7 @@ export default function GeneratedImage({
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
-      console.error('Image generation error:', err);
+      logger.error('Image generation error:', err);
     } finally {
       setIsLoading(false);
       setIsRetrying(false);

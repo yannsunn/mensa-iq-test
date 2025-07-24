@@ -2,9 +2,10 @@
 
 import { NextResponse } from 'next/server';
 import { getEnvVariable, initializeEnv } from '@/lib/env';
+import { logger } from '@/utils/logger';
 
 export async function GET() {
-  console.log('[TEST] Starting Stability AI test...');
+  logger.log('[TEST] Starting Stability AI test...');
   
   // 環境変数を初期化
   const envStatus = initializeEnv();
@@ -32,7 +33,7 @@ export async function GET() {
   // APIキーが存在する場合、実際にAPIを呼び出してみる
   if (apiKey) {
     try {
-      console.log('[TEST] Making test API call to Stability AI...');
+      logger.log('[TEST] Making test API call to Stability AI...');
       
       const formData = new FormData();
       formData.append('prompt', 'A simple test image, minimalist design');
@@ -63,14 +64,14 @@ export async function GET() {
         responsePreview: responseData.substring(0, 200)
       };
       
-      console.log('[TEST] API call completed:', testResult.testApiCall);
+      logger.log('[TEST] API call completed:', testResult.testApiCall);
       
     } catch (error) {
       testResult.testApiCall = {
         error: error instanceof Error ? error.message : 'Unknown error',
         errorType: error instanceof Error ? error.constructor.name : typeof error
       };
-      console.error('[TEST] API call failed:', error);
+      logger.error('[TEST] API call failed:', error);
     }
   } else {
     testResult.testApiCall = {

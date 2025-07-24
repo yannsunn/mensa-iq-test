@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import BaseTest from './BaseTest';
 import { UnifiedQuestion } from '@/types/question';
 import { loadPracticeQuestions } from '@/lib/questionLoader';
+import { logger } from '@/utils/logger';
 
 interface PracticeTestProps {
   difficulty: 'easy' | 'medium' | 'hard';
@@ -21,7 +22,7 @@ export default function PracticeTest({ difficulty, onBack }: PracticeTestProps) 
         const practiceQuestions = await loadPracticeQuestions(difficulty, 10);
         setQuestions(practiceQuestions);
       } catch (error) {
-        console.error('Failed to load questions:', error);
+        logger.error('Failed to load questions:', error);
       } finally {
         setIsLoading(false);
       }

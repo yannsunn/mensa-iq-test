@@ -12,6 +12,7 @@ import {
   PromptTemplate
 } from '@/types/image';
 import { getEnvVariable, initializeEnv, isVercelEnvironment } from '@/lib/env';
+import { logger } from '@/utils/logger';
 
 class StabilityImageGenerationService {
   private apiKey: string;
@@ -27,19 +28,19 @@ class StabilityImageGenerationService {
     this.apiKey = getEnvVariable('STABILITY_API_KEY') || '';
     
     // デバッグ情報を詳細に出力
-    console.log('[StabilityAI] Constructor called');
-    console.log('[StabilityAI] Environment:', process.env.NODE_ENV);
-    console.log('[StabilityAI] Is Vercel:', isVercelEnvironment());
-    console.log('[StabilityAI] Env Status:', envStatus);
-    console.log('[StabilityAI] API Key present:', !!this.apiKey);
-    console.log('[StabilityAI] API Key length:', this.apiKey ? this.apiKey.length : 0);
-    console.log('[StabilityAI] API Key prefix:', this.apiKey ? this.apiKey.substring(0, 10) + '...' : 'not set');
+    logger.log('[StabilityAI] Constructor called');
+    logger.log('[StabilityAI] Environment:', process.env.NODE_ENV);
+    logger.log('[StabilityAI] Is Vercel:', isVercelEnvironment());
+    logger.log('[StabilityAI] Env Status:', envStatus);
+    logger.log('[StabilityAI] API Key present:', !!this.apiKey);
+    logger.log('[StabilityAI] API Key length:', this.apiKey ? this.apiKey.length : 0);
+    logger.log('[StabilityAI] API Key prefix:', this.apiKey ? this.apiKey.substring(0, 10) + '...' : 'not set');
     
     if (!this.apiKey) {
-      console.error('[StabilityAI] ERROR: STABILITY_API_KEY not found');
-      console.log('[StabilityAI] Please ensure STABILITY_API_KEY is set in your environment variables');
+      logger.error('[StabilityAI] ERROR: STABILITY_API_KEY not found');
+      logger.log('[StabilityAI] Please ensure STABILITY_API_KEY is set in your environment variables');
       if (isVercelEnvironment()) {
-        console.log('[StabilityAI] Running on Vercel - make sure the env var is added in Vercel dashboard');
+        logger.log('[StabilityAI] Running on Vercel - make sure the env var is added in Vercel dashboard');
       }
     }
   }
@@ -158,7 +159,7 @@ class StabilityImageGenerationService {
     const modelEndpoint = endpointMap[model] || 'core';
     const endpoint = `${this.baseUrl}/${modelEndpoint}`;
 
-    console.log('[StabilityAI] API Call:', {
+    logger.log('[StabilityAI] API Call:', {
       model,
       modelEndpoint,
       endpoint,
@@ -200,8 +201,8 @@ class StabilityImageGenerationService {
         formData.append('samples', request.samples.toString());
       }
       
-      console.log('[StabilityAI] Sending request to:', endpoint);
-      console.log('[StabilityAI] Request details:', {
+      logger.log('[StabilityAI] Sending request to:', endpoint);
+      logger.log('[StabilityAI] Request details:', {
         prompt: request.prompt.substring(0, 100) + '...',
         width: request.width,
         height: request.height,
@@ -228,7 +229,7 @@ class StabilityImageGenerationService {
           errorData = { message: errorText };
         }
         
-        console.error('[StabilityAI] API Response Error:', {
+        logger.error('[StabilityAI] API Response Error:', {
           status: response.status,
           statusText: response.statusText,
           headers: Object.fromEntries(response.headers.entries()),
@@ -241,7 +242,7 @@ class StabilityImageGenerationService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Stability API call failed:', error);
+      logger.error('Stability API call failed:', error);
       throw error;
     }
   }
@@ -268,7 +269,7 @@ class StabilityImageGenerationService {
     }
 
     if (!this.apiKey) {
-      console.error('[StabilityAI] Cannot generate image: API key not configured');
+      logger.error('[StabilityAI] Cannot generate image: API key not configured');
       return {
         success: false,
         error: 'Stability API key not configured. Please check environment variables.',
@@ -301,7 +302,7 @@ class StabilityImageGenerationService {
       const response = await this.callStabilityAPI(model, apiRequest);
       
       // レスポンスのデバッグ情報を出力
-      console.log('[StabilityAI] API Response:', {
+      logger.log('[StabilityAI] API Response:', {
         hasImages: !!(response.images && response.images.length > 0),
         hasImage: !!response.image,
         responseKeys: Object.keys(response),
@@ -343,8 +344,8 @@ class StabilityImageGenerationService {
         };
       }
     } catch (error) {
-      console.error('[StabilityAI] Image generation failed:', error);
-      console.error('[StabilityAI] Error details:', {
+      logger.error('[StabilityAI] Image generation failed:', error);
+      logger.error('[StabilityAI] Error details:', {
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
         type: error instanceof Error ? error.constructor.name : typeof error

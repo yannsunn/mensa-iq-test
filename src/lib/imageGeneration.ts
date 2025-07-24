@@ -10,6 +10,7 @@ import {
   PromptTemplate
 } from '@/types/image';
 import { stabilityImageService } from './stabilityImageGeneration';
+import { logger } from '@/utils/logger';
 
 class ImageGenerationService {
   private provider: 'imagineapi' | 'stabilityai';
@@ -28,7 +29,7 @@ class ImageGenerationService {
       this.imagineApiKey = process.env.IMAGINE_API_KEY;
     } else {
       this.provider = 'stabilityai'; // デフォルト
-      console.warn('No API keys found for image generation');
+      logger.warn('No API keys found for image generation');
     }
   }
 
@@ -113,7 +114,7 @@ class ImageGenerationService {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('ImagineAPI call failed:', error);
+      logger.error('ImagineAPI call failed:', error);
       throw error;
     }
   }
@@ -185,7 +186,7 @@ class ImageGenerationService {
         };
       }
     } catch (error) {
-      console.error('Image generation failed:', error);
+      logger.error('Image generation failed:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { imageGenerationService } from '@/lib/imageGeneration';
 import { ImageGenerationRequest } from '@/types/image';
 import { initializeEnv } from '@/lib/env';
+import { logger } from '@/utils/logger';
 
 // APIルート初期化時に環境変数をチェック
 initializeEnv();
@@ -17,12 +18,12 @@ const setCacheHeaders = (response: NextResponse) => {
 
 // エラーレスポンスの統一処理
 const createErrorResponse = (error: string, status: number = 500) => {
-  console.error(`[ImageAPI] Error: ${error}`);
+  logger.error(`[ImageAPI] Error: ${error}`);
   return NextResponse.json({ error }, { status });
 };
 
 export async function POST(request: NextRequest) {
-  console.log('[API] POST /api/images/generate called');
+  logger.log('[API] POST /api/images/generate called');
   
   try {
     // リクエストボディのパース
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
       return createErrorResponse('prompt is too long (max 2000 characters)', 400);
     }
 
-    console.log('Image generation request:', {
+    logger.log('Image generation request:', {
       questionId: body.questionId,
       prompt: body.prompt.substring(0, 100) + '...',
       style: body.style || 'minimal',
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
       return createErrorResponse(result.error || 'Unknown error', 500);
     }
   } catch (error) {
-    console.error('[ImageAPI] Unhandled error:', error);
+    logger.error('[ImageAPI] Unhandled error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     const errorDetails = {
       message: errorMessage,
@@ -78,13 +79,13 @@ export async function POST(request: NextRequest) {
       provider: imageGenerationService.getCurrentProvider(),
       timestamp: new Date().toISOString()
     };
-    console.error('[ImageAPI] Error details:', errorDetails);
+    logger.error('[ImageAPI] Error details:', errorDetails);
     return createErrorResponse(errorMessage, 500);
   }
 }
 
 export async function GET(request: NextRequest) {
-  console.log('[API] GET /api/images/generate called');
+  logger.log('[API] GET /api/images/generate called');
   
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -110,7 +111,7 @@ export async function GET(request: NextRequest) {
       return createErrorResponse('description is too long (max 1000 characters)', 400);
     }
 
-    console.log('Image generation GET request:', {
+    logger.log('Image generation GET request:', {
       questionId,
       category,
       description: description.substring(0, 100) + '...',
@@ -140,7 +141,7 @@ export async function GET(request: NextRequest) {
       return createErrorResponse(result.error || 'Unknown error', 500);
     }
   } catch (error) {
-    console.error('[ImageAPI] Unhandled error:', error);
+    logger.error('[ImageAPI] Unhandled error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     const errorDetails = {
       message: errorMessage,
@@ -148,7 +149,7 @@ export async function GET(request: NextRequest) {
       provider: imageGenerationService.getCurrentProvider(),
       timestamp: new Date().toISOString()
     };
-    console.error('[ImageAPI] Error details:', errorDetails);
+    logger.error('[ImageAPI] Error details:', errorDetails);
     return createErrorResponse(errorMessage, 500);
   }
 }

@@ -1,6 +1,8 @@
 // 環境変数管理ユーティリティ
 // Next.js App RouterとVercelで確実に環境変数を読み込むため
 
+import { logger } from '@/utils/logger';
+
 export function getEnvVariable(key: string): string | undefined {
   // 複数の方法で環境変数を取得
   const value = process.env[key] || 
@@ -8,7 +10,7 @@ export function getEnvVariable(key: string): string | undefined {
                 (typeof window === 'undefined' ? undefined : (window as unknown as { env?: Record<string, string> }).env?.[key]);
   
   if (!value && typeof window === 'undefined') {
-    console.warn(`[ENV] Variable ${key} not found in server environment`);
+    logger.warn(`[ENV] Variable ${key} not found in server environment`);
   }
   
   return value;
@@ -26,7 +28,7 @@ export function getRequiredEnvVariable(key: string): string {
 
 // 環境変数の初期化とチェック
 export function initializeEnv() {
-  console.log('[ENV] Initializing environment variables...');
+  logger.log('[ENV] Initializing environment variables...');
   
   const requiredVars = ['STABILITY_API_KEY'];
   const optionalVars = ['IMAGINE_API_KEY', 'NEXT_PUBLIC_ENABLE_IMAGE_GENERATION'];
@@ -41,9 +43,9 @@ export function initializeEnv() {
     const value = getEnvVariable(varName);
     status.required[varName] = !!value;
     if (!value) {
-      console.error(`[ENV] Required variable ${varName} is missing!`);
+      logger.error(`[ENV] Required variable ${varName} is missing!`);
     } else {
-      console.log(`[ENV] ${varName} is set (length: ${value.length})`);
+      logger.log(`[ENV] ${varName} is set (length: ${value.length})`);
     }
   }
   
@@ -51,7 +53,7 @@ export function initializeEnv() {
   for (const varName of optionalVars) {
     const value = getEnvVariable(varName);
     status.optional[varName] = !!value;
-    console.log(`[ENV] ${varName}: ${value ? 'set' : 'not set'}`);
+    logger.log(`[ENV] ${varName}: ${value ? 'set' : 'not set'}`);
   }
   
   return status;

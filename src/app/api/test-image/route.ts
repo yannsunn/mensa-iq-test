@@ -2,6 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import { imageGenerationService } from '@/lib/imageGeneration';
+import { logger } from '@/utils/logger';
 
 export async function GET() {
   try {
@@ -26,7 +27,7 @@ export async function GET() {
     }, { status: 200 });
     
   } catch (error) {
-    console.error('Test image generation error:', error);
+    logger.error('Test image generation error:', error);
     return NextResponse.json(
       { 
         error: 'Test failed', 

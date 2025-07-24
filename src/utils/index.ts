@@ -1,6 +1,7 @@
 // ユーティリティ関数のエクスポート
 
 export * from './scoring';
+import { logger } from './logger';
 
 // 共通ユーティリティ関数
 
@@ -67,7 +68,7 @@ export const storage = {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch {
       // ストレージがフルの場合など
-      console.error('Failed to save to localStorage');
+      logger.error('Failed to save to localStorage');
     }
   },
   

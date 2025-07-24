@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import BaseTest from './BaseTest';
 import { UnifiedQuestion, TestResult } from '@/types/question';
 import { loadExamQuestions } from '@/lib/questionLoader';
+import { logger } from '@/utils/logger';
 
 interface ExamTestProps {
   onBack: () => void;
@@ -21,7 +22,7 @@ export default function ExamTest({ onComplete }: ExamTestProps) {
         const examQuestions = await loadExamQuestions(45);
         setQuestions(examQuestions);
       } catch (error) {
-        console.error('Failed to load questions:', error);
+        logger.error('Failed to load questions:', error);
       } finally {
         setIsLoading(false);
       }

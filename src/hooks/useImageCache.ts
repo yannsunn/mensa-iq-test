@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ImageGenerationResponse } from '@/types/image';
+import { logger } from '@/utils/logger';
 
 interface ImageCacheItem {
   questionId: string;
@@ -50,7 +51,7 @@ export function useImageCache(): UseImageCacheReturn {
         setCache(newCache);
       }
     } catch (error) {
-      console.error('Failed to load image cache:', error);
+      logger.error('Failed to load image cache:', error);
     }
   }, []);
 
@@ -60,7 +61,7 @@ export function useImageCache(): UseImageCacheReturn {
       const obj = Object.fromEntries(newCache);
       localStorage.setItem(CACHE_KEY, JSON.stringify(obj));
     } catch (error) {
-      console.error('Failed to save image cache:', error);
+      logger.error('Failed to save image cache:', error);
     }
   }, []);
 
@@ -122,7 +123,7 @@ export function useImageCache(): UseImageCacheReturn {
     try {
       localStorage.removeItem(CACHE_KEY);
     } catch (error) {
-      console.error('Failed to clear image cache:', error);
+      logger.error('Failed to clear image cache:', error);
     }
   }, []);
 

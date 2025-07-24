@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -28,15 +29,14 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     this.setState({ error, errorInfo });
     
     // エラーログの記録（本番環境では外部サービスに送信）
-    console.error('Error caught by boundary:', error, errorInfo);
+    logger.error('Error caught by boundary:', error, errorInfo);
     
     // 開発環境でのデバッグ情報
     if (process.env.NODE_ENV === 'development') {
-      console.group('ErrorBoundary Debug Info');
-      console.log('Error:', error);
-      console.log('Error Info:', errorInfo);
-      console.log('Component Stack:', errorInfo.componentStack);
-      console.groupEnd();
+      logger.log('ErrorBoundary Debug Info');
+      logger.log('Error:', error);
+      logger.log('Error Info:', errorInfo);
+      logger.log('Component Stack:', errorInfo.componentStack);
     }
   }
 
