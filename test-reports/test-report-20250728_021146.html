@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MENSA IQ Test - Test Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #555; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        .status-pass { color: #28a745; font-weight: bold; }
+        .status-fail { color: #dc3545; font-weight: bold; }
+        .status-warning { color: #ffc107; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:hover { background-color: #f5f5f5; }
+        .metric { display: inline-block; margin: 10px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #007bff; }
+        .chart { margin: 20px 0; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MENSA IQ Test - Test Report</h1>
+        <p>Generated on: <strong>{{TIMESTAMP}}</strong></p>
+        
+        <h2>Project Overview</h2>
+        <div>
+            <div class="metric">
+                <div>Total Components</div>
+                <div class="metric-value">{{TOTAL_COMPONENTS}}</div>
+            </div>
+            <div class="metric">
+                <div>Total Lines of Code</div>
+                <div class="metric-value">{{TOTAL_LOC}}</div>
+            </div>
+            <div class="metric">
+                <div>TypeScript Files</div>
+                <div class="metric-value">{{TS_FILES}}</div>
+            </div>
+        </div>
+        
+        <h2>Build Status</h2>
+        <table>
+            <tr>
+                <th>Check</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+            <tr>
+                <td>TypeScript Compilation</td>
+                <td class="{{TS_STATUS_CLASS}}">{{TS_STATUS}}</td>
+                <td>{{TS_DETAILS}}</td>
+            </tr>
+            <tr>
+                <td>ESLint</td>
+                <td class="{{LINT_STATUS_CLASS}}">{{LINT_STATUS}}</td>
+                <td>{{LINT_DETAILS}}</td>
+            </tr>
+            <tr>
+                <td>Build Process</td>
+                <td class="{{BUILD_STATUS_CLASS}}">{{BUILD_STATUS}}</td>
+                <td>{{BUILD_DETAILS}}</td>
+            </tr>
+        </table>
+        
+        <h2>Component Health</h2>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Status</th>
+                <th>Location</th>
+            </tr>
+            {{COMPONENT_ROWS}}
+        </table>
+        
+        <h2>API Endpoints</h2>
+        <table>
+            <tr>
+                <th>Endpoint</th>
+                <th>Status</th>
+                <th>Response Time</th>
+            </tr>
+            {{API_ROWS}}
+        </table>
+        
+        <h2>Recent Issues</h2>
+        <pre>{{RECENT_ISSUES}}</pre>
+        
+        <h2>Recommendations</h2>
+        <ul>
+            {{RECOMMENDATIONS}}
+        </ul>
+    </div>
+</body>
+</html>
