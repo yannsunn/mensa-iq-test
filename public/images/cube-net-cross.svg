@@ -1,0 +1,23 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="white"/>
+    <g transform="translate(50,50)">
+      <!-- 十字型展開図 -->
+      <rect x="60" y="0" width="60" height="60" fill="none" stroke="black" stroke-width="2"/>
+      <text x="90" y="35" text-anchor="middle" font-size="20">上</text>
+      
+      <rect x="0" y="60" width="60" height="60" fill="none" stroke="black" stroke-width="2"/>
+      <text x="30" y="95" text-anchor="middle" font-size="20">左</text>
+      
+      <rect x="60" y="60" width="60" height="60" fill="none" stroke="black" stroke-width="2"/>
+      <text x="90" y="95" text-anchor="middle" font-size="20">前</text>
+      
+      <rect x="120" y="60" width="60" height="60" fill="none" stroke="black" stroke-width="2"/>
+      <text x="150" y="95" text-anchor="middle" font-size="20">右</text>
+      
+      <rect x="180" y="60" width="60" height="60" fill="none" stroke="black" stroke-width="2"/>
+      <text x="210" y="95" text-anchor="middle" font-size="20">後</text>
+      
+      <rect x="60" y="120" width="60" height="60" fill="none" stroke="black" stroke-width="2"/>
+      <text x="90" y="155" text-anchor="middle" font-size="20">下</text>
+    </g>
+  </svg>

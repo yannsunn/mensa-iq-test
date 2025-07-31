@@ -1,0 +1,16 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="300" fill="white"/>
+    <!-- 立方体の等角投影図 -->
+    <g transform="translate(150,150)">
+      <!-- 後面 -->
+      <path d="M -50,-50 L 0,-75 L 50,-50 L 50,0 L 0,25 L -50,0 Z" 
+            fill="none" stroke="black" stroke-width="2" stroke-dasharray="5,5"/>
+      <!-- 前面 -->
+      <path d="M -50,0 L 0,-25 L 50,0 L 50,50 L 0,75 L -50,50 Z" 
+            fill="none" stroke="black" stroke-width="2"/>
+      <!-- 接続線 -->
+      <line x1="-50" y1="-50" x2="-50" y2="0" stroke="black" stroke-width="2"/>
+      <line x1="0" y1="-75" x2="0" y2="-25" stroke="black" stroke-width="2"/>
+      <line x1="50" y1="-50" x2="50" y2="0" stroke="black" stroke-width="2"/>
+    </g>
+  </svg>

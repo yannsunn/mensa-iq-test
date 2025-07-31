@@ -1,0 +1,13 @@
+<svg width="350" height="100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="350" height="100" fill="white"/>
+    <!-- パターンシーケンス -->
+    <circle cx="40" cy="50" r="25" fill="none" stroke="black" stroke-width="2"/>
+    
+    <rect x="90" y="25" width="50" height="50" fill="none" stroke="black" stroke-width="2"/>
+    
+    <polygon points="190,25 215,75 165,75" fill="none" stroke="black" stroke-width="2"/>
+    
+    <circle cx="265" cy="50" r="25" fill="black"/>
+    
+    <text x="315" y="60" text-anchor="middle" font-size="36" font-weight="bold">?</text>
+  </svg>

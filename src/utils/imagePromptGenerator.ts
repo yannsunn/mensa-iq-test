@@ -36,6 +36,36 @@ export const generateVisualContent = async (question: UnifiedQuestion): Promise<
 const generateSVGForQuestion = async (question: UnifiedQuestion): Promise<string | null> => {
   const { category, question: questionText, visualData } = question;
 
+  // 立方体問題のSVG生成
+  if (category === 'spatial' && visualData?.type === 'cube') {
+    const { generateCubeSVG } = await import('@/lib/svgCubeGenerator');
+    
+    if (visualData.visualType === 'cube_rotation') {
+      return generateCubeSVG('rotation', {
+        state: visualData.cubeData?.initialState || {
+          front: { label: 'A' },
+          top: { label: 'B' },
+          right: { label: 'C' }
+        },
+        rotationX: 0,
+        rotationY: 90
+      });
+    } else if (visualData.visualType === 'net_to_cube') {
+      const labels = visualData.cubeData?.netLabels || ['1', '2', '3', '4', '5', '6'];
+      return generateCubeSVG('net', {
+        faces: labels.map(label => ({ label }))
+      });
+    } else {
+      return generateCubeSVG('isometric', {
+        state: visualData.cubeData?.initialState || {
+          front: { label: '前' },
+          top: { label: '上' },
+          right: { label: '右' }
+        }
+      });
+    }
+  }
+
   // 行列問題のSVG生成
   if (category === 'matrix' && visualData?.data) {
     const data = visualData.data as any;
@@ -78,7 +108,82 @@ const generateMatrixSVG = (rows: number, cols: number, pattern: string): string 
   }
   
   // パターンに応じて図形を配置
-  // 実装は省略（実際には各セルに図形を配置）
+  const shapes = ['circle', 'square', 'triangle'];
+  const fillPatterns = ['none', 'black', 'striped'];
+  
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const centerX = 20 + col * cellSize + cellSize / 2;
+      const centerY = 20 + row * cellSize + cellSize / 2;
+      const size = cellSize * 0.6;
+      
+      // パターンに基づいて図形を選択
+      let shapeIndex = 0;
+      let fillIndex = 0;
+      
+      switch (pattern) {
+        case 'rotation':
+          shapeIndex = (row + col) % shapes.length;
+          fillIndex = row % fillPatterns.length;
+          break;
+        case 'symmetry':
+          shapeIndex = (row === col) ? 0 : (row < col) ? 1 : 2;
+          fillIndex = Math.abs(row - col) % fillPatterns.length;
+          break;
+        case 'logical':
+          shapeIndex = (row * cols + col) % shapes.length;
+          fillIndex = ((row + col) % 2 === 0) ? 0 : 1;
+          break;
+        case 'numerical':
+          const value = row * cols + col + 1;
+          shapeIndex = (value % 3);
+          fillIndex = (value % 5 < 2) ? 0 : 1;
+          break;
+        default:
+          shapeIndex = (row + col) % shapes.length;
+          fillIndex = 0;
+      }
+      
+      // 最後のセルを？マークにする（問題用）
+      if (row === rows - 1 && col === cols - 1) {
+        svg += `<text x="${centerX}" y="${centerY + 10}" text-anchor="middle" font-size="36" font-weight="bold">?</text>`;
+      } else {
+        // 図形を描画
+        const shape = shapes[shapeIndex];
+        const fill = fillPatterns[fillIndex];
+        
+        switch (shape) {
+          case 'circle':
+            svg += `<circle cx="${centerX}" cy="${centerY}" r="${size/2}" fill="${fill === 'black' ? 'black' : 'none'}" stroke="black" stroke-width="2"`;
+            if (fill === 'striped') {
+              svg += ` fill="url(#stripes${row}${col})"`;
+            }
+            svg += '/>';
+            break;
+          case 'square':
+            svg += `<rect x="${centerX - size/2}" y="${centerY - size/2}" width="${size}" height="${size}" fill="${fill === 'black' ? 'black' : 'none'}" stroke="black" stroke-width="2"`;
+            if (fill === 'striped') {
+              svg += ` fill="url(#stripes${row}${col})"`;
+            }
+            svg += '/>';
+            break;
+          case 'triangle':
+            const points = `${centerX},${centerY - size/2} ${centerX - size/2},${centerY + size/2} ${centerX + size/2},${centerY + size/2}`;
+            svg += `<polygon points="${points}" fill="${fill === 'black' ? 'black' : 'none'}" stroke="black" stroke-width="2"`;
+            if (fill === 'striped') {
+              svg += ` fill="url(#stripes${row}${col})"`;
+            }
+            svg += '/>';
+            break;
+        }
+        
+        // ストライプパターンの定義
+        if (fill === 'striped') {
+          svg = `<defs><pattern id="stripes${row}${col}" patternUnits="userSpaceOnUse" width="4" height="4"><line x1="0" y1="0" x2="0" y2="4" stroke="black" stroke-width="1"/></pattern></defs>` + svg;
+        }
+      }
+    }
+  }
   
   svg += '</svg>';
   return svg;
