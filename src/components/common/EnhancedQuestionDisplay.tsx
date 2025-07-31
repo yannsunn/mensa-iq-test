@@ -31,7 +31,7 @@ const EnhancedQuestionDisplay = memo(function EnhancedQuestionDisplay({
   
   // 画像コンテンツの状態管理
   const [visualContent, setVisualContent] = useState<{
-    type: 'svg' | 'ai' | 'none';
+    type: 'svg' | 'ai' | 'image' | 'none';
     content: string;
     loading: boolean;
     error?: string;
@@ -52,7 +52,7 @@ const EnhancedQuestionDisplay = memo(function EnhancedQuestionDisplay({
       const preGenerated = getPreGeneratedImage(question.id);
       if (preGenerated) {
         setVisualContent({
-          type: 'svg',
+          type: 'image',
           content: preGenerated.imageUrl,
           loading: false
         });
@@ -148,6 +148,18 @@ const EnhancedQuestionDisplay = memo(function EnhancedQuestionDisplay({
               <div className="text-center">
                 <AlertCircle className="w-8 h-8 text-red-400 mx-auto mb-2" />
                 <p className="text-red-300">{visualContent.error}</p>
+              </div>
+            </div>
+          ) : visualContent.type === 'image' ? (
+            <div className="flex justify-center">
+              <div className="bg-white rounded-xl p-4 shadow-lg">
+                <Image 
+                  src={visualContent.content} 
+                  alt="Question visual"
+                  width={300}
+                  height={300}
+                  className="max-w-full h-auto"
+                />
               </div>
             </div>
           ) : visualContent.type === 'svg' ? (

@@ -302,20 +302,41 @@ export const generateImagePrompt = (question: UnifiedQuestion): string => {
 
 // 特定のキーワードから画像が必要かどうかを判定
 export const needsVisualRepresentation = (question: UnifiedQuestion): boolean => {
+  // 立方体問題の特別なケースをチェック
+  if (question.visualData?.type === 'cube') {
+    return true;
+  }
+
   const visualKeywords = [
     '立方体', '展開図', '回転', '対称', '3×3', '4×4', '行列', 'マトリックス',
     'パターン', '図形', '幾何', 'ベン図', '視覚', '空間', '3D', '断面',
-    'cube', 'rotation', 'matrix', 'pattern', 'spatial', 'visual', 'geometric'
+    'cube', 'rotation', 'matrix', 'pattern', 'spatial', 'visual', 'geometric',
+    '次の図形', '?に入る', '空欄', 'シーケンス'
   ];
 
   const questionLower = question.question.toLowerCase();
   
-  // カテゴリーで判定
-  if (['spatial', 'matrix', 'visual', 'pattern'].includes(question.category)) {
+  // より具体的な判定
+  // 空間認識カテゴリーで立方体関連のキーワードがある場合
+  if (question.category === 'spatial' && 
+      (questionLower.includes('立方体') || questionLower.includes('展開図') || 
+       questionLower.includes('回転') || questionLower.includes('面'))) {
+    return true;
+  }
+  
+  // 行列カテゴリーで行列パターンのキーワードがある場合
+  if (question.category === 'matrix' && 
+      (questionLower.includes('行列') || questionLower.includes('×') || 
+       questionLower.includes('パターン') || questionLower.includes('?'))) {
+    return true;
+  }
+  
+  // パターンカテゴリーは常に画像が必要
+  if (question.category === 'pattern') {
     return true;
   }
 
-  // キーワードで判定
+  // その他のキーワードで判定
   return visualKeywords.some(keyword => questionLower.includes(keyword.toLowerCase()));
 };
 
