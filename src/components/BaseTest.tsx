@@ -9,7 +9,7 @@ import { useTimer } from '@/hooks/useTimer';
 import { useQuestionNavigation } from '@/hooks/useQuestionNavigation';
 import { getCognitiveSkills } from '@/utils/dataValidation';
 import TestLayout from './common/TestLayout';
-import QuestionDisplay from './common/QuestionDisplay';
+import QuestionDisplay from './common/EnhancedQuestionDisplay';
 import PracticeFeedback from './PracticeFeedback';
 import { DetailedQuestion } from '@/data/internationalMensaQuestions';
 
