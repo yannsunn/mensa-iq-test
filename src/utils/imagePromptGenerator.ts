@@ -1,7 +1,74 @@
 // 問題カテゴリーに応じた画像プロンプト生成ユーティリティ
 
 import { UnifiedQuestion } from '@/types/question';
-import { generateSVGDiagram, DiagramType } from '@/lib/svgDiagramGenerator';
+
+// CubeDataからCubeStateへの変換関数
+interface CubeState {
+  front: { label: string };
+  top: { label: string };
+  right: { label: string };
+  back?: { label: string };
+  bottom?: { label: string };
+  left?: { label: string };
+}
+
+interface CubeDataInput {
+  front?: string | { label: string };
+  top?: string | { label: string };
+  right?: string | { label: string };
+  back?: string | { label: string };
+  bottom?: string | { label: string };
+  left?: string | { label: string };
+}
+
+const transformCubeDataToState = (cubeData: CubeDataInput | undefined): CubeState | null => {
+  if (!cubeData) return null;
+  
+  const result: Partial<CubeState> = {};
+  
+  if (typeof cubeData.front === 'string') {
+    result.front = { label: cubeData.front };
+  } else if (cubeData.front?.label) {
+    result.front = cubeData.front;
+  }
+  
+  if (typeof cubeData.top === 'string') {
+    result.top = { label: cubeData.top };
+  } else if (cubeData.top?.label) {
+    result.top = cubeData.top;
+  }
+  
+  if (typeof cubeData.right === 'string') {
+    result.right = { label: cubeData.right };
+  } else if (cubeData.right?.label) {
+    result.right = cubeData.right;
+  }
+  
+  if (typeof cubeData.back === 'string') {
+    result.back = { label: cubeData.back };
+  } else if (cubeData.back?.label) {
+    result.back = cubeData.back;
+  }
+  
+  if (typeof cubeData.bottom === 'string') {
+    result.bottom = { label: cubeData.bottom };
+  } else if (cubeData.bottom?.label) {
+    result.bottom = cubeData.bottom;
+  }
+  
+  if (typeof cubeData.left === 'string') {
+    result.left = { label: cubeData.left };
+  } else if (cubeData.left?.label) {
+    result.left = cubeData.left;
+  }
+  
+  // 必須プロパティが存在するか確認
+  if (!result.front || !result.top || !result.right) {
+    return null;
+  }
+  
+  return result as CubeState;
+};
 
 // SVGまたはAI画像生成の判定と実行
 export const generateVisualContent = async (question: UnifiedQuestion): Promise<{
@@ -42,7 +109,7 @@ const generateSVGForQuestion = async (question: UnifiedQuestion): Promise<string
     
     if (visualData.visualType === 'cube_rotation') {
       return generateCubeSVG('rotation', {
-        state: visualData.cubeData?.initialState || {
+        state: transformCubeDataToState(visualData.cubeData?.initialState) || {
           front: { label: 'A' },
           top: { label: 'B' },
           right: { label: 'C' }
@@ -57,7 +124,7 @@ const generateSVGForQuestion = async (question: UnifiedQuestion): Promise<string
       });
     } else {
       return generateCubeSVG('isometric', {
-        state: visualData.cubeData?.initialState || {
+        state: transformCubeDataToState(visualData.cubeData?.initialState) || {
           front: { label: '前' },
           top: { label: '上' },
           right: { label: '右' }
@@ -68,18 +135,18 @@ const generateSVGForQuestion = async (question: UnifiedQuestion): Promise<string
 
   // 行列問題のSVG生成
   if (category === 'matrix' && visualData?.data) {
-    const data = visualData.data as any;
+    const data = visualData.data as { size?: string; pattern?: string };
     if (data.size === '3x3') {
-      return generateMatrixSVG(3, 3, data.pattern);
+      return generateMatrixSVG(3, 3, data.pattern || 'pattern');
     } else if (data.size === '4x4') {
-      return generateMatrixSVG(4, 4, data.pattern);
+      return generateMatrixSVG(4, 4, data.pattern || 'pattern');
     }
   }
 
   // パターン問題のSVG生成
   if (category === 'pattern' && visualData?.data) {
-    const data = visualData.data as any;
-    return generatePatternSVG(data.elements || [], data.sequence);
+    const data = visualData.data as { elements?: string[]; sequence?: string };
+    return generatePatternSVG(data.elements || []);
   }
 
   // 数値問題のSVG生成
@@ -190,7 +257,7 @@ const generateMatrixSVG = (rows: number, cols: number, pattern: string): string 
 };
 
 // パターンシーケンスのSVG生成
-const generatePatternSVG = (elements: string[], sequence: string): string => {
+const generatePatternSVG = (elements: string[]): string => {
   const elementSize = 50;
   const spacing = 20;
   const width = elements.length * (elementSize + spacing) + spacing;

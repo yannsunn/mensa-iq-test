@@ -279,7 +279,12 @@ const getOptionIconStyle = (
   }
 };
 
-const generateCubeViews = (question: UnifiedQuestion): any[] => {
+interface CubeView {
+  showFaces: string[];
+  colors: Record<string, string>;
+}
+
+const generateCubeViews = (question: UnifiedQuestion): CubeView[] => {
   if (!question.visualData?.cubeData) return [];
   
   return [

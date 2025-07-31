@@ -113,29 +113,55 @@ const extractNetLabels = (text: string): string[] => {
   return ['1', '2', '3', '4', '5', '6'];
 };
 
-const extractCubeFaces = (text: string): any => {
-  const faces: any = {};
+interface CubeFaceData {
+  readonly front: string;
+  readonly top: string;
+  readonly right: string;
+  readonly back?: string;
+  readonly bottom?: string;
+  readonly left?: string;
+}
+
+const extractCubeFaces = (text: string): CubeFaceData => {
+  let front = 'A';
+  let top = 'B';
+  let right = 'C';
+  let back: string | undefined;
+  let bottom: string | undefined;
+  let left: string | undefined;
   
   // 面の情報を抽出
   if (text.includes('前面') || text.includes('front')) {
-    faces.front = extractFaceValue(text, 'front');
+    front = extractFaceValue(text);
   }
   if (text.includes('上面') || text.includes('top')) {
-    faces.top = extractFaceValue(text, 'top');
+    top = extractFaceValue(text);
   }
   if (text.includes('右面') || text.includes('right')) {
-    faces.right = extractFaceValue(text, 'right');
+    right = extractFaceValue(text);
+  }
+  if (text.includes('後面') || text.includes('back')) {
+    back = extractFaceValue(text);
+  }
+  if (text.includes('下面') || text.includes('bottom')) {
+    bottom = extractFaceValue(text);
+  }
+  if (text.includes('左面') || text.includes('left')) {
+    left = extractFaceValue(text);
   }
   
-  // デフォルト値
+  // 必須プロパティを含むオブジェクトを返す
   return {
-    front: faces.front || 'A',
-    top: faces.top || 'B',
-    right: faces.right || 'C'
-  };
+    front,
+    top,
+    right,
+    ...(back && { back }),
+    ...(bottom && { bottom }),
+    ...(left && { left })
+  } as CubeFaceData;
 };
 
-const extractFaceValue = (text: string, face: string): string => {
+const extractFaceValue = (text: string): string => {
   // 実装を簡略化
   const patterns = ['○', '△', '□', '◇', '☆', 'A', 'B', 'C', 'D'];
   for (const pattern of patterns) {

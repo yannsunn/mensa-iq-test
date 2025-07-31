@@ -232,24 +232,43 @@ export class CubeSVGGenerator {
 }
 
 // 便利な関数
+interface CubeSVGData {
+  state?: CubeState;
+  rotationX?: number;
+  rotationY?: number;
+  faces?: CubeFace[];
+}
+
 export const generateCubeSVG = (
   type: 'isometric' | 'rotation' | 'net',
-  cubeData: any
+  cubeData: CubeSVGData
 ): string => {
   const generator = new CubeSVGGenerator();
   
   switch (type) {
     case 'isometric':
-      return generator.generateIsometricCube(cubeData.state);
+      return generator.generateIsometricCube(cubeData.state || {
+        front: { label: 'F' },
+        top: { label: 'T' },
+        right: { label: 'R' }
+      });
     case 'rotation':
       return generator.generateRotatedCube(
-        cubeData.state,
+        cubeData.state || {
+          front: { label: 'F' },
+          top: { label: 'T' },
+          right: { label: 'R' }
+        },
         cubeData.rotationX || 0,
         cubeData.rotationY || 0
       );
     case 'net':
-      return generator.generateCubeNet(cubeData.faces);
+      return generator.generateCubeNet(cubeData.faces || []);
     default:
-      return generator.generateIsometricCube(cubeData.state);
+      return generator.generateIsometricCube(cubeData.state || {
+        front: { label: 'F' },
+        top: { label: 'T' },
+        right: { label: 'R' }
+      });
   }
 };
